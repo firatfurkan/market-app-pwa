@@ -1,0 +1,1306 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Market App - PWA</title>
+    
+    <!-- PWA Meta Tags -->
+    <meta name="description" content="Akıllı alışveriş asistanınız - AI destekli market uygulaması">
+    <meta name="theme-color" content="#4CAF50">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Market App">
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
+    
+    <!-- iOS Specific -->
+    <link rel="apple-touch-icon" href="icon-192.png">
+    
+    <style>
+        :root {
+            --primary-color: #4CAF50;
+            --secondary-color: #FF9800;
+            --background-color: #ffffff;
+            --text-color: #333333;
+            --card-background: #ffffff;
+            --border-color: #f0f0f0;
+            --shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+
+        [data-theme="dark"] {
+            --primary-color: #66BB6A;
+            --secondary-color: #FFB74D;
+            --background-color: #121212;
+            --text-color: #ffffff;
+            --card-background: #1e1e1e;
+            --border-color: #333333;
+            --shadow: 0 4px 20px rgba(255,255,255,0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--background-color);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            min-height: 100vh;
+            color: var(--text-color);
+            transition: all 0.3s ease;
+        }
+
+        body.large-text {
+            font-size: 1.2em;
+        }
+
+        body.high-contrast {
+            filter: contrast(150%);
+        }
+
+        .app-container {
+            max-width: 420px;
+            margin: 0 auto;
+            min-height: 100vh;
+            background: var(--background-color);
+            position: relative;
+            box-shadow: var(--shadow);
+        }
+
+        /* PWA Install Banner */
+        .install-banner {
+            position: fixed;
+            bottom: 90px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 25px;
+            box-shadow: 0 4px 20px rgba(76, 175, 80, 0.3);
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            gap: 12px;
+            font-weight: 500;
+            max-width: 380px;
+            width: 90%;
+        }
+
+        .install-banner.show {
+            display: flex;
+            animation: slideUp 0.3s ease-out;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateX(-50%) translateY(100px); opacity: 0; }
+            to { transform: translateX(-50%) translateY(0); opacity: 1; }
+        }
+
+        .install-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .install-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .close-banner {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+            padding: 4px;
+        }
+
+        /* Login Sayfası */
+        .login-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+        }
+
+        .login-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            background: rgba(255, 255, 255, 0.15);
+            padding: 40px 30px;
+            border-radius: 24px;
+            backdrop-filter: blur(20px);
+            width: 100%;
+            max-width: 320px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .login-form h1 {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .login-form p {
+            text-align: center;
+            opacity: 0.9;
+            font-weight: 400;
+            margin-bottom: 20px;
+        }
+
+        .login-form input {
+            padding: 16px 20px;
+            border: none;
+            border-radius: 16px;
+            font-size: 16px;
+            font-weight: 500;
+            background: rgba(255, 255, 255, 0.9);
+            color: #333;
+        }
+
+        .login-form button {
+            padding: 16px;
+            border: none;
+            border-radius: 16px;
+            font-size: 16px;
+            font-weight: 600;
+            background: #4CAF50;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .login-form button:hover {
+            background: #45a049;
+            transform: translateY(-2px);
+        }
+
+        /* Header */
+        .app-header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, #45a049 100%);
+            color: white;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .app-header h1 {
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 500;
+        }
+
+        .user-info button {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        /* Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 420px;
+            background: var(--card-background);
+            display: flex;
+            justify-content: space-around;
+            padding: 12px 0;
+            border-top: 1px solid var(--border-color);
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.1);
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            cursor: pointer;
+            padding: 8px 12px;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            font-size: 11px;
+            color: var(--text-color);
+        }
+
+        .nav-item.active {
+            background: rgba(76, 175, 80, 0.1);
+            color: var(--primary-color);
+        }
+
+        .nav-icon {
+            font-size: 20px;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 20px;
+            padding-bottom: 100px;
+            min-height: calc(100vh - 140px);
+        }
+
+        /* Cards */
+        .card {
+            background: var(--card-background);
+            border-radius: 20px;
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+        }
+
+        .card-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text-color);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Stats */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 16px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 28px;
+            font-weight: 700;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            opacity: 0.9;
+            font-weight: 500;
+        }
+
+        /* Input Groups */
+        .input-group {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .input-group input, .input-group select {
+            flex: 1;
+            padding: 16px 20px;
+            border: 2px solid var(--border-color);
+            border-radius: 16px;
+            font-size: 16px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            background: var(--card-background);
+            color: var(--text-color);
+        }
+
+        .input-group input:focus, .input-group select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-color) 0%, #45a049 100%);
+            color: white;
+            border: none;
+            padding: 16px 24px;
+            border-radius: 16px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, var(--secondary-color) 0%, #F57C00 100%);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        /* AI Suggestions */
+        .ai-suggestions {
+            background: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%);
+            padding: 20px;
+            border-radius: 16px;
+            border-left: 4px solid #2196F3;
+            animation: slideIn 0.4s ease-out;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .recipe-categories {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .category-btn {
+            padding: 16px;
+            background: var(--card-background);
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            text-align: center;
+            color: var(--text-color);
+        }
+
+        .category-btn:hover, .category-btn.active {
+            background: rgba(76, 175, 80, 0.1);
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .recipe-list {
+            display: grid;
+            gap: 12px;
+        }
+
+        .recipe-item {
+            padding: 16px;
+            background: var(--card-background);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .recipe-item:hover {
+            border-color: var(--primary-color);
+            transform: translateY(-2px);
+        }
+
+        .recipe-title {
+            font-weight: 600;
+            margin-bottom: 4px;
+            color: var(--text-color);
+        }
+
+        .recipe-description {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 8px;
+        }
+
+        .recipe-tags {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .recipe-tag {
+            background: rgba(76, 175, 80, 0.1);
+            color: var(--primary-color);
+            padding: 4px 8px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        /* Settings */
+        .setting-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .setting-item:last-child {
+            border-bottom: none;
+        }
+
+        .setting-label {
+            font-weight: 500;
+            color: var(--text-color);
+        }
+
+        .setting-description {
+            font-size: 14px;
+            color: #666;
+            margin-top: 4px;
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 50px;
+            height: 24px;
+            background: #ccc;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .toggle-switch.active {
+            background: var(--primary-color);
+        }
+
+        .toggle-slider {
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 20px;
+            height: 20px;
+            background: white;
+            border-radius: 50%;
+            transition: transform 0.3s ease;
+        }
+
+        .toggle-switch.active .toggle-slider {
+            transform: translateX(26px);
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* Offline Indicator */
+        .offline-indicator {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: #f44336;
+            color: white;
+            text-align: center;
+            padding: 8px;
+            z-index: 1001;
+            transform: translateY(-100%);
+            transition: transform 0.3s ease;
+        }
+
+        .offline-indicator.show {
+            transform: translateY(0);
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .recipe-categories {
+                grid-template-columns: 1fr;
+            }
+            
+            .input-group {
+                flex-direction: column;
+            }
+        }
+
+        /* PWA Specific Styles */
+        @media (display-mode: standalone) {
+            .app-header {
+                padding-top: env(safe-area-inset-top, 20px);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Offline Indicator -->
+    <div id="offlineIndicator" class="offline-indicator">
+        📶 İnternet bağlantısı yok - Çevrimdışı modda çalışıyorsunuz
+    </div>
+
+    <!-- PWA Install Banner -->
+    <div id="installBanner" class="install-banner">
+        <span>📱 Uygulamayı telefonunuza yükleyin!</span>
+        <button id="installBtn" class="install-btn">Yükle</button>
+        <button id="closeBanner" class="close-banner">✕</button>
+    </div>
+
+    <div id="app"></div>
+
+    <script>
+        // PWA Install Logic
+        let deferredPrompt;
+        const installBanner = document.getElementById('installBanner');
+        const installBtn = document.getElementById('installBtn');
+        const closeBanner = document.getElementById('closeBanner');
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            installBanner.classList.add('show');
+        });
+
+        installBtn.addEventListener('click', async () => {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                if (outcome === 'accepted') {
+                    installBanner.classList.remove('show');
+                }
+                deferredPrompt = null;
+            }
+        });
+
+        closeBanner.addEventListener('click', () => {
+            installBanner.classList.remove('show');
+        });
+
+        // Offline/Online Detection
+        const offlineIndicator = document.getElementById('offlineIndicator');
+
+        window.addEventListener('online', () => {
+            offlineIndicator.classList.remove('show');
+        });
+
+        window.addEventListener('offline', () => {
+            offlineIndicator.classList.add('show');
+        });
+
+        // Service Worker Registration
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js')
+                    .then(registration => {
+                        console.log('SW registered: ', registration);
+                    })
+                    .catch(registrationError => {
+                        console.log('SW registration failed: ', registrationError);
+                    });
+            });
+        }
+
+        // Global state
+        let appState = {
+            user: null,
+            currentPage: 'home',
+            shoppingList: JSON.parse(localStorage.getItem('marketApp_shoppingList') || '[]'),
+            newItem: '',
+            aiQuery: '',
+            aiSuggestions: [],
+            selectedCategory: '',
+            recipeResults: [],
+            settings: JSON.parse(localStorage.getItem('marketApp_settings') || '{"darkMode":false,"voiceCommands":false,"notifications":true,"highContrast":false,"largeText":false,"locationServices":false}'),
+            isListening: false
+        };
+
+        // Save to localStorage
+        function saveToStorage() {
+            localStorage.setItem('marketApp_shoppingList', JSON.stringify(appState.shoppingList));
+            localStorage.setItem('marketApp_settings', JSON.stringify(appState.settings));
+        }
+
+        // Yemek kategorileri ve tarifleri
+        const recipeCategories = {
+            'Bebek Yemekleri (6-12 ay)': [
+                {
+                    name: 'Sebze Püresi',
+                    description: 'Havuç, kabak ve patates püresi',
+                    tags: ['6+ ay', 'Sebze', 'Püre'],
+                    ingredients: [
+                        { name: 'havuç', price: 15 },
+                        { name: 'kabak', price: 12 },
+                        { name: 'patates', price: 8 }
+                    ]
+                },
+                {
+                    name: 'Meyve Püresi',
+                    description: 'Elma ve muz karışımı',
+                    tags: ['6+ ay', 'Meyve', 'Tatlı'],
+                    ingredients: [
+                        { name: 'elma', price: 20 },
+                        { name: 'muz', price: 15 }
+                    ]
+                }
+            ],
+            'Toddler Yemekleri (1-3 yaş)': [
+                {
+                    name: 'Mini Köfte',
+                    description: 'Yumuşak dana köftesi',
+                    tags: ['1+ yaş', 'Protein', 'Parmak yemeği'],
+                    ingredients: [
+                        { name: 'dana kıyma', price: 80 },
+                        { name: 'ekmek içi', price: 5 },
+                        { name: 'yumurta', price: 25 }
+                    ]
+                },
+                {
+                    name: 'Sebzeli Makarna',
+                    description: 'Küçük makarna ve sebzeler',
+                    tags: ['1+ yaş', 'Karbonhidrat', 'Sebze'],
+                    ingredients: [
+                        { name: 'küçük makarna', price: 8 },
+                        { name: 'brokoli', price: 18 },
+                        { name: 'havuç', price: 15 }
+                    ]
+                }
+            ],
+            'Sağlıklı Yetişkin': [
+                {
+                    name: 'Quinoa Salata',
+                    description: 'Protein açısından zengin salata',
+                    tags: ['Protein', 'Gluten-free', 'Vegan'],
+                    ingredients: [
+                        { name: 'quinoa', price: 35 },
+                        { name: 'domates', price: 20 },
+                        { name: 'salatalık', price: 12 },
+                        { name: 'zeytinyağı', price: 25 }
+                    ]
+                }
+            ],
+            'Hızlı Yemekler': [
+                {
+                    name: 'Omlet',
+                    description: '5 dakikada hazır omlet',
+                    tags: ['Hızlı', 'Protein', 'Kahvaltı'],
+                    ingredients: [
+                        { name: 'yumurta', price: 25 },
+                        { name: 'süt', price: 15 },
+                        { name: 'peynir', price: 30 }
+                    ]
+                }
+            ]
+        };
+
+        // Yakın marketler
+        const nearbyMarkets = [
+            { name: 'BİM', distance: '0.2 km', status: 'Açık', busyLevel: 'Az kalabalık' },
+            { name: 'A101', distance: '0.4 km', status: 'Açık', busyLevel: 'Orta kalabalık' },
+            { name: 'Migros', distance: '0.8 km', status: 'Açık', busyLevel: 'Çok kalabalık' },
+            { name: 'ŞOK', distance: '1.2 km', status: 'Kapalı', busyLevel: '-' }
+        ];
+
+        // Utility functions
+        function updateState(newState) {
+            appState = { ...appState, ...newState };
+            saveToStorage();
+            render();
+        }
+
+        function categorizeItem(item) {
+            const categories = {
+                '🥬 Sebze & Meyve': [
+                    'domates', 'salatalık', 'elma', 'muz', 'patates', 'soğan', 
+                    'marul', 'limon', 'havuç', 'biber', 'patlıcan', 'kabak',
+                    'portakal', 'üzüm', 'çilek', 'kiraz', 'armut', 'brokoli'
+                ],
+                '🥩 Et & Süt': [
+                    'tavuk', 'dana eti', 'kuzu eti', 'balık', 'süt', 'yoğurt', 
+                    'peynir', 'yumurta', 'tereyağı', 'kıyma', 'sosis', 'sucuk',
+                    'kaşar', 'beyaz peynir', 'krema', 'dana kıyma'
+                ],
+                '🍞 Temel Gıda': [
+                    'ekmek', 'pirinç', 'makarna', 'un', 'şeker', 'tuz', 
+                    'zeytinyağı', 'mercimek', 'nohut', 'bulgur', 'yulaf',
+                    'bal', 'reçel', 'çay', 'kahve', 'quinoa', 'küçük makarna', 'ekmek içi'
+                ],
+                '🧽 Temizlik & Hijyen': [
+                    'deterjan', 'sabun', 'şampuan', 'diş macunu', 'çöp poşeti', 
+                    'çöp torbası', 'temizlik bezi', 'tuvalet kağıdı', 'peçete',
+                    'bulaşık deterjanı', 'yumuşatıcı', 'çamaşır suyu'
+                ]
+            };
+            
+            const itemLower = item.toLowerCase();
+            
+            for (const [category, items] of Object.entries(categories)) {
+                for (const keyword of items) {
+                    const regex = new RegExp('\\b' + keyword.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\b', 'i');
+                    if (regex.test(itemLower)) {
+                        return category;
+                    }
+                }
+            }
+            return '📦 Diğer';
+        }
+
+        // Event handlers
+        function handleLogin(username) {
+            updateState({
+                user: { 
+                    name: username, 
+                    id: Date.now(),
+                    trustScore: 85,
+                    reportCount: 0
+                }
+            });
+        }
+
+        function addItem(item, estimatedPrice = 0) {
+            const newShoppingItem = {
+                id: Date.now() + Math.random(),
+                name: item,
+                completed: false,
+                addedBy: appState.user?.name,
+                category: categorizeItem(item),
+                estimatedPrice: estimatedPrice,
+                addedAt: new Date().toLocaleString('tr-TR')
+            };
+            
+            updateState({
+                shoppingList: [...appState.shoppingList, newShoppingItem],
+                newItem: ''
+            });
+        }
+
+        function toggleItem(id) {
+            const updatedList = appState.shoppingList.map(item => {
+                if (item.id === id) {
+                    return { ...item, completed: !item.completed };
+                }
+                return item;
+            });
+            
+            updateState({ shoppingList: updatedList });
+        }
+
+        function handleAiQuery() {
+            const query = appState.aiQuery.toLowerCase();
+            
+            // Kategori bazlı arama
+            for (const [category, recipes] of Object.entries(recipeCategories)) {
+                if (query.includes(category.toLowerCase()) || 
+                    query.includes('bebek') || 
+                    query.includes('toddler') || 
+                    query.includes('1 yaş') ||
+                    query.includes('sağlıklı')) {
+                    updateState({
+                        selectedCategory: category,
+                        recipeResults: recipes,
+                        aiSuggestions: []
+                    });
+                    return;
+                }
+            }
+
+            // Geleneksel yemek arama
+            const recipes = {
+                'makarna': [
+                    { name: 'makarna', price: 8 },
+                    { name: 'domates sosu', price: 12 },
+                    { name: 'parmesan peyniri', price: 25 }
+                ],
+                'omlet': [
+                    { name: 'yumurta', price: 25 },
+                    { name: 'süt', price: 15 },
+                    { name: 'peynir', price: 30 }
+                ]
+            };
+
+            for (const [dish, ingredients] of Object.entries(recipes)) {
+                if (query.includes(dish)) {
+                    updateState({
+                        aiSuggestions: ingredients,
+                        recipeResults: []
+                    });
+                    return;
+                }
+            }
+
+            updateState({
+                aiSuggestions: [{ name: 'Tarif bulunamadı. Kategori seçin veya spesifik yemek adı yazın.', price: 0 }]
+            });
+        }
+
+        function selectRecipe(recipe) {
+            updateState({
+                aiSuggestions: recipe.ingredients,
+                recipeResults: []
+            });
+        }
+
+        function selectCategory(category) {
+            updateState({
+                selectedCategory: category,
+                recipeResults: recipeCategories[category] || [],
+                aiQuery: category
+            });
+        }
+
+        function addAiSuggestions() {
+            const newItems = [];
+            appState.aiSuggestions.forEach(item => {
+                if (!item.name.includes('Tarif bulunamadı')) {
+                    newItems.push({
+                        id: Date.now() + Math.random(),
+                        name: item.name,
+                        completed: false,
+                        addedBy: appState.user?.name,
+                        category: categorizeItem(item.name),
+                        estimatedPrice: item.price || 0,
+                        addedAt: new Date().toLocaleString('tr-TR')
+                    });
+                }
+            });
+            
+            updateState({
+                shoppingList: [...appState.shoppingList, ...newItems],
+                aiSuggestions: [],
+                aiQuery: ''
+            });
+        }
+
+        function toggleDarkMode() {
+            const newDarkMode = !appState.settings.darkMode;
+            updateState({
+                settings: { ...appState.settings, darkMode: newDarkMode }
+            });
+            document.documentElement.setAttribute('data-theme', newDarkMode ? 'dark' : 'light');
+        }
+
+        function toggleSetting(settingName) {
+            const newSettings = { 
+                ...appState.settings, 
+                [settingName]: !appState.settings[settingName] 
+            };
+            updateState({ settings: newSettings });
+            
+            // Ayarları uygula
+            if (settingName === 'highContrast') {
+                document.body.classList.toggle('high-contrast', newSettings.highContrast);
+            }
+            
+            if (settingName === 'largeText') {
+                document.body.classList.toggle('large-text', newSettings.largeText);
+            }
+        }
+
+        // Render functions
+        function renderLogin() {
+            return `
+                <div class="login-container">
+                    <div class="login-form">
+                        <h1>🛒 Market</h1>
+                        <p>PWA - Akıllı alışveriş asistanınız</p>
+                        <input type="text" id="loginInput" placeholder="Kullanıcı adınızı girin">
+                        <button onclick="handleLoginClick()">Başlayalım</button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderHome() {
+            const totalItems = appState.shoppingList.length;
+            const completedItems = appState.shoppingList.filter(item => item.completed).length;
+            const groupedItems = appState.shoppingList.reduce((groups, item) => {
+                const category = item.category;
+                if (!groups[category]) {
+                    groups[category] = [];
+                }
+                groups[category].push(item);
+                return groups;
+            }, {});
+            const categories = Object.keys(groupedItems).length;
+
+            return `
+                <header class="app-header">
+                    <h1>🛒 Market PWA</h1>
+                    <div class="user-info">
+                        ${appState.user.name}
+                        <span style="font-size: 12px; opacity: 0.8;">⭐ ${appState.user.trustScore}</span>
+                        <button onclick="logout()">Çıkış</button>
+                    </div>
+                </header>
+
+                <div class="main-content">
+                    <!-- İstatistikler -->
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <span class="stat-number">${totalItems}</span>
+                            <span class="stat-label">Ürün</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-number">${completedItems}</span>
+                            <span class="stat-label">Alındı</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-number">${categories}</span>
+                            <span class="stat-label">Kategori</span>
+                        </div>
+                    </div>
+
+                    <!-- PWA Status -->
+                    <div class="card">
+                        <h2 class="card-title">📱 PWA Durumu</h2>
+                        <p style="color: #4CAF50; font-weight: 500;">
+                            ✅ Çevrimdışı çalışıyor<br>
+                            ✅ Ana ekrana eklenebilir<br>
+                            ✅ Veriler yerel olarak kaydediliyor
+                        </p>
+                    </div>
+
+                    <!-- Ürün Ekleme -->
+                    <div class="card">
+                        <h2 class="card-title">➕ Ürün Ekle</h2>
+                        <div class="input-group">
+                            <input type="text" id="newItemInput" placeholder="Ürün adı girin" value="${appState.newItem}">
+                            <button class="btn-primary" onclick="addNewItem()">Ekle</button>
+                        </div>
+                    </div>
+
+                    <!-- Alışveriş Listesi -->
+                    <div class="card">
+                        <h2 class="card-title">📝 Alışveriş Listesi</h2>
+                        ${Object.keys(groupedItems).length === 0 ? `
+                            <div style="text-align: center; padding: 40px; color: #666;">
+                                <div style="font-size: 48px; margin-bottom: 16px; opacity: 0.5;">🛒</div>
+                                <p>Liste boş</p>
+                                <p>Ürün ekleyerek başlayın!</p>
+                            </div>
+                        ` : Object.entries(groupedItems).map(([category, items]) => `
+                            <div style="margin-bottom: 24px;">
+                                <div style="background: linear-gradient(135deg, var(--primary-color) 0%, #45a049 100%); color: white; padding: 16px 20px; border-radius: 16px; font-weight: 700; font-size: 16px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center;">
+                                    <span>${category}</span>
+                                    <span>${items.length} ürün</span>
+                                </div>
+                                <ul style="list-style: none; padding: 0;">
+                                    ${items.map(item => `
+                                        <li>
+                                            <div style="display: flex; align-items: center; padding: 16px 20px; background: ${item.completed ? '#e8e8e8' : 'var(--card-background)'}; border-radius: 12px; margin-bottom: 8px; gap: 12px; opacity: ${item.completed ? 0.6 : 1}; text-decoration: ${item.completed ? 'line-through' : 'none'}; border: 1px solid ${item.completed ? '#ddd' : 'var(--border-color)'};">
+                                                <input type="checkbox" ${item.completed ? 'checked' : ''} onchange="toggleItem('${item.id}')" style="width: 20px; height: 20px;">
+                                                <div style="flex: 1;">
+                                                    <div style="font-weight: 500; color: var(--text-color);">
+                                                        ${item.name}
+                                                        ${item.estimatedPrice > 0 ? `<span style="margin-left: 8px; color: var(--primary-color); font-weight: 600;">~${item.estimatedPrice}₺</span>` : ''}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    `).join('')}
+                                </ul>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderRecipes() {
+            return `
+                <header class="app-header">
+                    <h1>🛒 Market</h1>
+                    <div class="user-info">
+                        ${appState.user.name}
+                        <span style="font-size: 12px; opacity: 0.8;">⭐ ${appState.user.trustScore}</span>
+                        <button onclick="logout()">Çıkış</button>
+                    </div>
+                </header>
+
+                <div class="main-content">
+                    <!-- AI Yemek Asistanı -->
+                    <div class="card">
+                        <h2 class="card-title">🤖 AI Yemek Asistanı</h2>
+                        <div class="input-group">
+                            <input type="text" id="aiQueryInput" placeholder="Örn: 1 yaş yemekleri, sağlıklı tarifler" value="${appState.aiQuery}">
+                            <button class="btn-primary" onclick="searchRecipes()">Ara</button>
+                        </div>
+                    </div>
+
+                    <!-- Yemek Kategorileri -->
+                    <div class="card">
+                        <h2 class="card-title">🍽️ Yemek Kategorileri</h2>
+                        <div class="recipe-categories">
+                            ${Object.keys(recipeCategories).map(category => `
+                                <button class="category-btn ${appState.selectedCategory === category ? 'active' : ''}" onclick="selectCategory('${category}')">
+                                    ${category}
+                                </button>
+                            `).join('')}
+                        </div>
+                    </div>
+
+                    <!-- Tarif Sonuçları -->
+                    ${appState.recipeResults.length > 0 ? `
+                        <div class="card">
+                            <h2 class="card-title">📋 ${appState.selectedCategory} Tarifleri</h2>
+                            <div class="recipe-list">
+                                ${appState.recipeResults.map((recipe, index) => `
+                                    <div class="recipe-item" onclick="selectRecipe(${index})">
+                                        <div class="recipe-title">${recipe.name}</div>
+                                        <div class="recipe-description">${recipe.description}</div>
+                                        <div class="recipe-tags">
+                                            ${recipe.tags.map(tag => `<span class="recipe-tag">${tag}</span>`).join('')}
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    ` : ''}
+
+                    <!-- AI Önerileri -->
+                    ${appState.aiSuggestions.length > 0 ? `
+                        <div class="card">
+                            <div class="ai-suggestions">
+                                <h3 style="color: #1976D2; margin-bottom: 12px; font-weight: 700;">
+                                    Gerekli Malzemeler:
+                                </h3>
+                                <ul style="list-style: none; padding: 0; margin: 16px 0;">
+                                    ${appState.aiSuggestions.map(item => `
+                                        <li style="padding: 12px 0; border-bottom: 1px solid rgba(0,0,0,0.1); display: flex; align-items: center; font-weight: 500;">
+                                            <span style="margin-right: 12px; font-size: 18px;">🥗</span>
+                                            ${item.name}
+                                            ${item.price > 0 ? `<span style="margin-left: 8px; color: #666;">(${item.price}₺)</span>` : ''}
+                                        </li>
+                                    `).join('')}
+                                </ul>
+                                ${!appState.aiSuggestions[0].name.includes('Tarif bulunamadı') ? `
+                                    <button class="btn-secondary" onclick="addAiSuggestions()">
+                                        Hepsini Listeye Ekle (${appState.aiSuggestions.length} ürün)
+                                        <br>
+                                        <small>Toplam: ${appState.aiSuggestions.reduce((sum, item) => sum + item.price, 0)}₺</small>
+                                    </button>
+                                ` : ''}
+                            </div>
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+        }
+
+        function renderSettings() {
+            return `
+                <header class="app-header">
+                    <h1>🛒 Market</h1>
+                    <div class="user-info">
+                        ${appState.user.name}
+                        <span style="font-size: 12px; opacity: 0.8;">⭐ ${appState.user.trustScore}</span>
+                        <button onclick="logout()">Çıkış</button>
+                    </div>
+                </header>
+
+                <div class="main-content">
+                    <!-- Görünüm Ayarları -->
+                    <div class="card">
+                        <h2 class="card-title">🎨 Görünüm</h2>
+                        
+                        <div class="setting-item">
+                            <div>
+                                <div class="setting-label">Dark Mode</div>
+                                <div class="setting-description">Koyu tema kullan</div>
+                            </div>
+                            <div class="toggle-switch ${appState.settings.darkMode ? 'active' : ''}" onclick="toggleDarkMode()">
+                                <div class="toggle-slider"></div>
+                            </div>
+                        </div>
+
+                        <div class="setting-item">
+                            <div>
+                                <div class="setting-label">Yüksek Kontrast</div>
+                                <div class="setting-description">Görme zorluğu için</div>
+                            </div>
+                            <div class="toggle-switch ${appState.settings.highContrast ? 'active' : ''}" onclick="toggleSetting('highContrast')">
+                                <div class="toggle-slider"></div>
+                            </div>
+                        </div>
+
+                        <div class="setting-item">
+                            <div>
+                                <div class="setting-label">Büyük Yazı</div>
+                                <div class="setting-description">Yazı boyutunu artır</div>
+                            </div>
+                            <div class="toggle-switch ${appState.settings.largeText ? 'active' : ''}" onclick="toggleSetting('largeText')">
+                                <div class="toggle-slider"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderBottomNav() {
+            const pages = [
+                { id: 'home', icon: '🏠', label: 'Anasayfa' },
+                { id: 'recipes', icon: '👨‍🍳', label: 'Tarifler' },
+                { id: 'prices', icon: '💰', label: 'Fiyatlar' },
+                { id: 'discover', icon: '🔍', label: 'Keşfet' },
+                { id: 'settings', icon: '⚙️', label: 'Ayarlar' }
+            ];
+
+            return `
+                <div class="bottom-nav">
+                    ${pages.map(page => `
+                        <div class="nav-item ${appState.currentPage === page.id ? 'active' : ''}" onclick="changePage('${page.id}')">
+                            <div class="nav-icon">${page.icon}</div>
+                            <span>${page.label}</span>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        function render() {
+            const app = document.getElementById('app');
+            
+            if (!appState.user) {
+                app.innerHTML = renderLogin();
+                return;
+            }
+
+            let content = '';
+            switch (appState.currentPage) {
+                case 'home':
+                    content = renderHome();
+                    break;
+                case 'recipes':
+                    content = renderRecipes();
+                    break;
+                case 'settings':
+                    content = renderSettings();
+                    break;
+                default:
+                    content = renderHome();
+            }
+
+            app.innerHTML = content + renderBottomNav();
+
+            // Event listeners
+            if (appState.currentPage === 'home') {
+                const newItemInput = document.getElementById('newItemInput');
+                if (newItemInput) {
+                    newItemInput.addEventListener('input', (e) => {
+                        appState.newItem = e.target.value;
+                    });
+                    newItemInput.addEventListener('keypress', (e) => {
+                        if (e.key === 'Enter' && appState.newItem.trim()) {
+                            addItem(appState.newItem.trim());
+                        }
+                    });
+                }
+            }
+
+            if (appState.currentPage === 'recipes') {
+                const aiQueryInput = document.getElementById('aiQueryInput');
+                if (aiQueryInput) {
+                    aiQueryInput.addEventListener('input', (e) => {
+                        appState.aiQuery = e.target.value;
+                    });
+                }
+            }
+        }
+
+        // Global functions for onclick handlers
+        window.handleLoginClick = function() {
+            const input = document.getElementById('loginInput');
+            if (input && input.value.trim()) {
+                handleLogin(input.value.trim());
+            }
+        };
+
+        window.logout = function() {
+            updateState({ user: null, currentPage: 'home' });
+        };
+
+        window.changePage = function(page) {
+            updateState({ currentPage: page });
+        };
+
+        window.addNewItem = function() {
+            if (appState.newItem.trim()) {
+                addItem(appState.newItem.trim());
+            }
+        };
+
+        window.toggleItem = function(id) {
+            toggleItem(id);
+        };
+
+        window.searchRecipes = function() {
+            handleAiQuery();
+        };
+
+        window.selectCategory = function(category) {
+            selectCategory(category);
+        };
+
+        window.selectRecipe = function(index) {
+            if (appState.recipeResults[index]) {
+                selectRecipe(appState.recipeResults[index]);
+            }
+        };
+
+        window.addAiSuggestions = function() {
+            addAiSuggestions();
+        };
+
+        window.toggleDarkMode = function() {
+            toggleDarkMode();
+        };
+
+        window.toggleSetting = function(settingName) {
+            toggleSetting(settingName);
+        };
+
+        // Initialize app
+        document.addEventListener('DOMContentLoaded', function() {
+            // Apply saved settings
+            if (appState.settings.darkMode) {
+                document.documentElement.setAttribute('data-theme', 'dark');
+            }
+            if (appState.settings.highContrast) {
+                document.body.classList.add('high-contrast');
+            }
+            if (appState.settings.largeText) {
+                document.body.classList.add('large-text');
+            }
+            
+            render();
+        });
+    </script>
+</body>
+</html>
