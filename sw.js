@@ -1,8 +1,10 @@
-const CACHE_NAME = 'market-app-v1';
+const CACHE_NAME = 'akilli-sepet-v2';
 const urlsToCache = [
   './',
   './index.html',
-  './manifest.json'
+  './manifest.json',
+  './icon-192.png',
+  './icon-512.png'
 ];
 
 self.addEventListener('install', event => {
@@ -16,10 +18,20 @@ self.addEventListener('fetch', event => {
   event.respondWith(
     caches.match(event.request)
       .then(response => {
-        if (response) {
-          return response;
-        }
-        return fetch(event.request);
+        return response || fetch(event.request);
       })
+  );
+});
+
+// Push Notification Listener
+self.addEventListener('push', event => {
+  const data = event.data.json();
+  const options = {
+    body: data.body,
+    icon: 'icon-192.png',
+    badge: 'icon-192.png'
+  };
+  event.waitUntil(
+    self.registration.showNotification(data.title, options)
   );
 });
