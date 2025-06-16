@@ -1,8 +1,8 @@
 {
-  "name": "Market App - Akıllı Alışveriş Asistanı",
-  "short_name": "Market",
-  "description": "AI önerileri ile akıllı alışveriş uygulaması",
-  "start_url": "./",
+  "name": "AkıllıSepet",
+  "short_name": "AkıllıSepet",
+  "description": "AI destekli akıllı alışveriş asistanınız.",
+  "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#4CAF50",
   "theme_color": "#4CAF50",
