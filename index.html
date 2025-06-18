@@ -263,6 +263,23 @@
             font-weight: 600;
         }
 
+        /* Delete Button */
+        .delete-btn {
+            background: #f44336;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .delete-btn:hover {
+            background: #d32f2f;
+            transform: scale(1.05);
+        }
+
         /* Recipe Categories */
         .recipe-categories {
             display: grid;
@@ -296,6 +313,21 @@
             border-radius: 16px;
             border-left: 4px solid #2196F3;
             margin-bottom: 20px;
+        }
+
+        /* AI Bot Response */
+        .ai-bot-response {
+            background: linear-gradient(135deg, #f3e5f5 0%, #e8f5e8 100%);
+            padding: 20px;
+            border-radius: 16px;
+            border-left: 4px solid #9C27B0;
+            margin-bottom: 20px;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         /* Settings */
@@ -395,6 +427,7 @@
             newItem: '',
             aiQuery: '',
             aiSuggestions: [],
+            aiBotResponse: '',
             selectedCategory: '',
             recipeResults: [],
             settings: JSON.parse(localStorage.getItem('akilliSepet_settings') || '{"darkMode":false,"highContrast":false,"largeText":false}')
@@ -450,6 +483,58 @@
             ]
         };
 
+        // AI Bot Yemek Veritabanı
+        const aiMealDatabase = {
+            'makarna': {
+                ingredients: [
+                    { name: 'makarna', price: 8 },
+                    { name: 'domates sosu', price: 12 },
+                    { name: 'parmesan peyniri', price: 25 },
+                    { name: 'zeytinyağı', price: 15 }
+                ],
+                response: "🍝 Makarna için gerekli malzemeler hazırlandı! Klasik bir İtalyan lezzeti için bu malzemeler yeterli."
+            },
+            'omlet': {
+                ingredients: [
+                    { name: 'yumurta', price: 25 },
+                    { name: 'süt', price: 15 },
+                    { name: 'peynir', price: 30 },
+                    { name: 'tereyağı', price: 18 }
+                ],
+                response: "🍳 Mükemmel bir omlet için gerekli malzemeler! Protein açısından zengin ve doyurucu bir kahvaltı."
+            },
+            'salata': {
+                ingredients: [
+                    { name: 'marul', price: 8 },
+                    { name: 'domates', price: 20 },
+                    { name: 'salatalık', price: 12 },
+                    { name: 'zeytinyağı', price: 25 },
+                    { name: 'limon', price: 10 }
+                ],
+                response: "🥗 Taze ve sağlıklı salata malzemeleri! Vitamin açısından zengin bir öğün için ideal."
+            },
+            'çorba': {
+                ingredients: [
+                    { name: 'tavuk eti', price: 45 },
+                    { name: 'havuç', price: 15 },
+                    { name: 'soğan', price: 8 },
+                    { name: 'pirinç', price: 12 },
+                    { name: 'tuz', price: 3 }
+                ],
+                response: "🍲 Besleyici tavuk çorbası malzemeleri! Hasta olduğunuzda veya soğuk havalarda ideal."
+            },
+            'pizza': {
+                ingredients: [
+                    { name: 'pizza hamuru', price: 15 },
+                    { name: 'domates sosu', price: 12 },
+                    { name: 'mozzarella peyniri', price: 35 },
+                    { name: 'sucuk', price: 28 },
+                    { name: 'mantar', price: 18 }
+                ],
+                response: "🍕 Ev yapımı pizza malzemeleri! Ailenizle birlikte eğlenceli bir yemek deneyimi."
+            }
+        };
+
         // Save to localStorage
         function saveToStorage() {
             localStorage.setItem('akilliSepet_shoppingList', JSON.stringify(appState.shoppingList));
@@ -475,17 +560,17 @@
                 '🥬 Sebze & Meyve': [
                     'domates', 'salatalık', 'elma', 'muz', 'patates', 'soğan', 
                     'marul', 'limon', 'havuç', 'biber', 'patlıcan', 'kabak',
-                    'portakal', 'üzüm', 'çilek', 'kiraz', 'armut', 'brokoli'
+                    'portakal', 'üzüm', 'çilek', 'kiraz', 'armut', 'brokoli', 'mantar'
                 ],
                 '🥩 Et & Süt': [
                     'tavuk', 'dana eti', 'kuzu eti', 'balık', 'süt', 'yoğurt', 
                     'peynir', 'yumurta', 'tereyağı', 'kıyma', 'sosis', 'sucuk',
-                    'kaşar', 'beyaz peynir', 'krema'
+                    'kaşar', 'beyaz peynir', 'krema', 'tavuk eti', 'mozzarella peyniri', 'parmesan peyniri'
                 ],
                 '🍞 Temel Gıda': [
                     'ekmek', 'pirinç', 'makarna', 'un', 'şeker', 'tuz', 
                     'zeytinyağı', 'mercimek', 'nohut', 'bulgur', 'yulaf',
-                    'bal', 'reçel', 'çay', 'kahve', 'quinoa'
+                    'bal', 'reçel', 'çay', 'kahve', 'quinoa', 'domates sosu', 'pizza hamuru'
                 ],
                 '🧽 Temizlik & Hijyen': [
                     'deterjan', 'sabun', 'şampuan', 'diş macunu', 'çöp poşeti', 
@@ -554,64 +639,70 @@
             updateState({ shoppingList: updatedList });
         }
 
+        // DÜZELTME: Çöp kutusu fonksiyonu
         function deleteItem(id) {
             const updatedList = appState.shoppingList.filter(item => item.id !== id);
             updateState({ shoppingList: updatedList });
-            showNotification('Ürün silindi');
+            showNotification('Ürün silindi! 🗑️');
         }
 
+        // DÜZELTME: AI Bot Yemek Arama
         function handleAiQuery() {
-            const query = appState.aiQuery.toLowerCase();
+            const query = appState.aiQuery.toLowerCase().trim();
             
-            // Kategori bazlı arama
-            for (const [category, recipes] of Object.entries(recipeCategories)) {
-                if (query.includes(category.toLowerCase()) || 
-                    query.includes('bebek') || 
-                    query.includes('sağlıklı') ||
-                    query.includes('hızlı')) {
-                    updateState({
-                        selectedCategory: category,
-                        recipeResults: recipes,
-                        aiSuggestions: []
-                    });
-                    return;
-                }
+            if (!query) {
+                showNotification('Lütfen bir yemek adı yazın!');
+                return;
             }
 
-            // Geleneksel yemek arama
-            const recipes = {
-                'makarna': [
-                    { name: 'makarna', price: 8 },
-                    { name: 'domates sosu', price: 12 },
-                    { name: 'parmesan peyniri', price: 25 }
-                ],
-                'omlet': [
-                    { name: 'yumurta', price: 25 },
-                    { name: 'süt', price: 15 },
-                    { name: 'peynir', price: 30 }
-                ]
-            };
-
-            for (const [dish, ingredients] of Object.entries(recipes)) {
-                if (query.includes(dish)) {
+            // AI Bot veritabanında arama
+            let found = false;
+            for (const [mealName, mealData] of Object.entries(aiMealDatabase)) {
+                if (query.includes(mealName)) {
                     updateState({
-                        aiSuggestions: ingredients,
+                        aiSuggestions: mealData.ingredients,
+                        aiBotResponse: mealData.response,
                         recipeResults: []
                     });
-                    return;
+                    found = true;
+                    break;
                 }
             }
 
-            updateState({
-                aiSuggestions: [{ name: 'Tarif bulunamadı. Kategori seçin veya spesifik yemek adı yazın.', price: 0 }]
-            });
+            if (!found) {
+                // Kategori bazlı arama
+                for (const [category, recipes] of Object.entries(recipeCategories)) {
+                    if (query.includes(category.toLowerCase()) || 
+                        query.includes('bebek') || 
+                        query.includes('sağlıklı') ||
+                        query.includes('hızlı')) {
+                        updateState({
+                            selectedCategory: category,
+                            recipeResults: recipes,
+                            aiSuggestions: [],
+                            aiBotResponse: `${category} kategorisinden tarifler bulundu! Bir tarif seçin.`
+                        });
+                        found = true;
+                        break;
+                    }
+                }
+            }
+
+            if (!found) {
+                updateState({
+                    aiSuggestions: [],
+                    aiBotResponse: `"${query}" için tarif bulunamadı. Şunları deneyin: makarna, omlet, salata, çorba, pizza`,
+                    recipeResults: []
+                });
+            }
         }
 
         function selectCategory(category) {
             updateState({
                 selectedCategory: category,
                 recipeResults: recipeCategories[category] || [],
-                aiQuery: category
+                aiQuery: category,
+                aiBotResponse: `${category} kategorisi seçildi! Bir tarif seçin.`
             });
         }
 
@@ -619,7 +710,8 @@
             if (appState.recipeResults[index]) {
                 updateState({
                     aiSuggestions: appState.recipeResults[index].ingredients,
-                    recipeResults: []
+                    recipeResults: [],
+                    aiBotResponse: `${appState.recipeResults[index].name} tarifi seçildi! Malzemeler hazırlandı.`
                 });
             }
         }
@@ -627,22 +719,21 @@
         function addAiSuggestions() {
             const newItems = [];
             appState.aiSuggestions.forEach(item => {
-                if (!item.name.includes('Tarif bulunamadı')) {
-                    newItems.push({
-                        id: Date.now() + Math.random(),
-                        name: item.name,
-                        completed: false,
-                        addedBy: appState.user?.name,
-                        category: categorizeItem(item.name),
-                        estimatedPrice: item.price || 0,
-                        addedAt: new Date().toLocaleString('tr-TR')
-                    });
-                }
+                newItems.push({
+                    id: Date.now() + Math.random(),
+                    name: item.name,
+                    completed: false,
+                    addedBy: appState.user?.name,
+                    category: categorizeItem(item.name),
+                    estimatedPrice: item.price || 0,
+                    addedAt: new Date().toLocaleString('tr-TR')
+                });
             });
             
             updateState({
                 shoppingList: [...appState.shoppingList, ...newItems],
                 aiSuggestions: [],
+                aiBotResponse: '',
                 aiQuery: ''
             });
             
@@ -773,7 +864,7 @@
                                                 </div>
                                                 <div style="font-size: 12px; color: #666;">${item.addedBy} • ${item.addedAt}</div>
                                             </div>
-                                            <button onclick="deleteItem(${item.id})" style="background: #f44336; color: white; border: none; padding: 6px 8px; border-radius: 6px; cursor: pointer;">🗑️</button>
+                                            <button class="delete-btn" onclick="deleteItem(${item.id})">🗑️</button>
                                         </li>
                                     `).join('')}
                                 </ul>
@@ -787,7 +878,7 @@
         function renderRecipes() {
             return `
                 <header class="app-header">
-                    <h1>👨‍🍳 Tarifler</h1>
+                    <h1>👨‍🍳 AI Yemek Asistanı</h1>
                     <div class="user-info">
                         ${appState.user.name}
                         <button onclick="logout()">Çıkış</button>
@@ -796,12 +887,22 @@
 
                 <div class="main-content">
                     <div class="card">
-                        <h2 class="card-title">🤖 AI Yemek Asistanı</h2>
+                        <h2 class="card-title">🤖 AI Bot - Yemek Ara</h2>
                         <div class="input-group">
-                            <input type="text" id="aiQueryInput" placeholder="Örn: bebek yemekleri, sağlıklı tarifler" value="${appState.aiQuery}">
+                            <input type="text" id="aiQueryInput" placeholder="Örn: makarna, omlet, salata, çorba, pizza" value="${appState.aiQuery}">
                             <button class="btn-primary" onclick="searchRecipes()">Ara</button>
                         </div>
+                        <p style="font-size: 12px; color: #666; margin-top: 8px;">
+                            💡 İpucu: "makarna", "omlet", "salata", "çorba" veya "pizza" yazın
+                        </p>
                     </div>
+
+                    ${appState.aiBotResponse ? `
+                        <div class="ai-bot-response">
+                            <h3 style="color: #9C27B0; margin-bottom: 12px; font-weight: 700;">🤖 AI Asistan:</h3>
+                            <p style="font-weight: 500;">${appState.aiBotResponse}</p>
+                        </div>
+                    ` : ''}
                     
                     <div class="card">
                         <h2 class="card-title">🍽️ Yemek Kategorileri</h2>
@@ -834,13 +935,11 @@
                     ${appState.aiSuggestions.length > 0 ? `
                         <div class="card">
                             <div class="ai-suggestions">
-                                <h3 style="color: #1976D2; margin-bottom: 12px; font-weight: 700;">Gerekli Malzemeler:</h3>
+                                <h3 style="color: #1976D2; margin-bottom: 12px; font-weight: 700;">🛒 Gerekli Malzemeler:</h3>
                                 <ul style="list-style: none; padding: 0; margin: 16px 0;">
-                                    ${appState.aiSuggestions.map(item => `<li style="padding: 12px 0; border-bottom: 1px solid rgba(0,0,0,0.1); font-weight: 500;">🥗 ${item.name} ${item.price > 0 ? `(${item.price}₺)` : ''}</li>`).join('')}
+                                    ${appState.aiSuggestions.map(item => `<li style="padding: 12px 0; border-bottom: 1px solid rgba(0,0,0,0.1); font-weight: 500;">🥗 ${item.name} ${item.price > 0 ? `<span style="color: var(--primary-color); font-weight: 600;">(${item.price}₺)</span>` : ''}</li>`).join('')}
                                 </ul>
-                                ${!appState.aiSuggestions[0].name.includes('Tarif bulunamadı') ? `
-                                    <button class="btn-secondary" onclick="addAiSuggestions()">Hepsini Listeye Ekle</button>
-                                ` : ''}
+                                <button class="btn-secondary" onclick="addAiSuggestions()">Tüm Malzemeleri Listeye Ekle</button>
                             </div>
                         </div>
                     ` : ''}
@@ -890,7 +989,7 @@
         function renderBottomNav() {
             const pages = [
                 { id: 'home', icon: '🏠', label: 'Anasayfa' },
-                { id: 'recipes', icon: '👨‍🍳', label: 'Tarifler' },
+                { id: 'recipes', icon: '👨‍🍳', label: 'AI Asistan' },
                 { id: 'settings', icon: '⚙️', label: 'Ayarlar' }
             ];
 
@@ -951,6 +1050,11 @@
                 if (aiQueryInput) {
                     aiQueryInput.addEventListener('input', (e) => {
                         appState.aiQuery = e.target.value;
+                    });
+                    aiQueryInput.addEventListener('keypress', (e) => {
+                        if (e.key === 'Enter' && appState.aiQuery.trim()) {
+                            handleAiQuery();
+                        }
                     });
                 }
             }
