@@ -263,6 +263,41 @@
             font-weight: 600;
         }
 
+        /* Recipe Categories */
+        .recipe-categories {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .category-btn {
+            padding: 16px;
+            background: var(--card-background);
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 500;
+            text-align: center;
+            color: var(--text-color);
+            transition: all 0.3s ease;
+        }
+
+        .category-btn:hover, .category-btn.active {
+            background: rgba(76, 175, 80, 0.1);
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        /* AI Suggestions */
+        .ai-suggestions {
+            background: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%);
+            padding: 20px;
+            border-radius: 16px;
+            border-left: 4px solid #2196F3;
+            margin-bottom: 20px;
+        }
+
         /* Settings */
         .setting-item {
             display: flex;
@@ -328,6 +363,9 @@
             .input-group {
                 flex-direction: column;
             }
+            .recipe-categories {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
@@ -355,7 +393,61 @@
             currentPage: 'home',
             shoppingList: JSON.parse(localStorage.getItem('akilliSepet_shoppingList') || '[]'),
             newItem: '',
+            aiQuery: '',
+            aiSuggestions: [],
+            selectedCategory: '',
+            recipeResults: [],
             settings: JSON.parse(localStorage.getItem('akilliSepet_settings') || '{"darkMode":false,"highContrast":false,"largeText":false}')
+        };
+
+        // Yemek kategorileri ve tarifleri
+        const recipeCategories = {
+            'Bebek Yemekleri (6-12 ay)': [
+                {
+                    name: 'Sebze Püresi',
+                    description: 'Havuç, kabak ve patates püresi',
+                    tags: ['6+ ay', 'Sebze', 'Püre'],
+                    ingredients: [
+                        { name: 'havuç', price: 15 },
+                        { name: 'kabak', price: 12 },
+                        { name: 'patates', price: 8 }
+                    ]
+                },
+                {
+                    name: 'Meyve Püresi',
+                    description: 'Elma ve muz karışımı',
+                    tags: ['6+ ay', 'Meyve', 'Tatlı'],
+                    ingredients: [
+                        { name: 'elma', price: 20 },
+                        { name: 'muz', price: 15 }
+                    ]
+                }
+            ],
+            'Sağlıklı Yetişkin': [
+                {
+                    name: 'Quinoa Salata',
+                    description: 'Protein açısından zengin salata',
+                    tags: ['Protein', 'Gluten-free', 'Vegan'],
+                    ingredients: [
+                        { name: 'quinoa', price: 35 },
+                        { name: 'domates', price: 20 },
+                        { name: 'salatalık', price: 12 },
+                        { name: 'zeytinyağı', price: 25 }
+                    ]
+                }
+            ],
+            'Hızlı Yemekler': [
+                {
+                    name: 'Omlet',
+                    description: '5 dakikada hazır omlet',
+                    tags: ['Hızlı', 'Protein', 'Kahvaltı'],
+                    ingredients: [
+                        { name: 'yumurta', price: 25 },
+                        { name: 'süt', price: 15 },
+                        { name: 'peynir', price: 30 }
+                    ]
+                }
+            ]
         };
 
         // Save to localStorage
@@ -377,6 +469,42 @@
             }, 3000);
         }
 
+        // Kategori belirleme fonksiyonu
+        function categorizeItem(item) {
+            const categories = {
+                '🥬 Sebze & Meyve': [
+                    'domates', 'salatalık', 'elma', 'muz', 'patates', 'soğan', 
+                    'marul', 'limon', 'havuç', 'biber', 'patlıcan', 'kabak',
+                    'portakal', 'üzüm', 'çilek', 'kiraz', 'armut', 'brokoli'
+                ],
+                '🥩 Et & Süt': [
+                    'tavuk', 'dana eti', 'kuzu eti', 'balık', 'süt', 'yoğurt', 
+                    'peynir', 'yumurta', 'tereyağı', 'kıyma', 'sosis', 'sucuk',
+                    'kaşar', 'beyaz peynir', 'krema'
+                ],
+                '🍞 Temel Gıda': [
+                    'ekmek', 'pirinç', 'makarna', 'un', 'şeker', 'tuz', 
+                    'zeytinyağı', 'mercimek', 'nohut', 'bulgur', 'yulaf',
+                    'bal', 'reçel', 'çay', 'kahve', 'quinoa'
+                ],
+                '🧽 Temizlik & Hijyen': [
+                    'deterjan', 'sabun', 'şampuan', 'diş macunu', 'çöp poşeti', 
+                    'çöp torbası', 'temizlik bezi', 'tuvalet kağıdı', 'peçete'
+                ]
+            };
+            
+            const itemLower = item.toLowerCase();
+            
+            for (const [category, items] of Object.entries(categories)) {
+                for (const keyword of items) {
+                    if (itemLower.includes(keyword)) {
+                        return category;
+                    }
+                }
+            }
+            return '📦 Diğer';
+        }
+
         // Update state and re-render
         function updateState(newState) {
             appState = { ...appState, ...newState };
@@ -396,12 +524,14 @@
             showNotification(`Hoş geldin ${username}! 🎉`);
         }
 
-        function addItem(item) {
+        function addItem(item, estimatedPrice = 0) {
             const newShoppingItem = {
                 id: Date.now() + Math.random(),
                 name: item,
                 completed: false,
                 addedBy: appState.user?.name,
+                category: categorizeItem(item),
+                estimatedPrice: estimatedPrice,
                 addedAt: new Date().toLocaleString('tr-TR')
             };
             
@@ -428,6 +558,95 @@
             const updatedList = appState.shoppingList.filter(item => item.id !== id);
             updateState({ shoppingList: updatedList });
             showNotification('Ürün silindi');
+        }
+
+        function handleAiQuery() {
+            const query = appState.aiQuery.toLowerCase();
+            
+            // Kategori bazlı arama
+            for (const [category, recipes] of Object.entries(recipeCategories)) {
+                if (query.includes(category.toLowerCase()) || 
+                    query.includes('bebek') || 
+                    query.includes('sağlıklı') ||
+                    query.includes('hızlı')) {
+                    updateState({
+                        selectedCategory: category,
+                        recipeResults: recipes,
+                        aiSuggestions: []
+                    });
+                    return;
+                }
+            }
+
+            // Geleneksel yemek arama
+            const recipes = {
+                'makarna': [
+                    { name: 'makarna', price: 8 },
+                    { name: 'domates sosu', price: 12 },
+                    { name: 'parmesan peyniri', price: 25 }
+                ],
+                'omlet': [
+                    { name: 'yumurta', price: 25 },
+                    { name: 'süt', price: 15 },
+                    { name: 'peynir', price: 30 }
+                ]
+            };
+
+            for (const [dish, ingredients] of Object.entries(recipes)) {
+                if (query.includes(dish)) {
+                    updateState({
+                        aiSuggestions: ingredients,
+                        recipeResults: []
+                    });
+                    return;
+                }
+            }
+
+            updateState({
+                aiSuggestions: [{ name: 'Tarif bulunamadı. Kategori seçin veya spesifik yemek adı yazın.', price: 0 }]
+            });
+        }
+
+        function selectCategory(category) {
+            updateState({
+                selectedCategory: category,
+                recipeResults: recipeCategories[category] || [],
+                aiQuery: category
+            });
+        }
+
+        function selectRecipe(index) {
+            if (appState.recipeResults[index]) {
+                updateState({
+                    aiSuggestions: appState.recipeResults[index].ingredients,
+                    recipeResults: []
+                });
+            }
+        }
+
+        function addAiSuggestions() {
+            const newItems = [];
+            appState.aiSuggestions.forEach(item => {
+                if (!item.name.includes('Tarif bulunamadı')) {
+                    newItems.push({
+                        id: Date.now() + Math.random(),
+                        name: item.name,
+                        completed: false,
+                        addedBy: appState.user?.name,
+                        category: categorizeItem(item.name),
+                        estimatedPrice: item.price || 0,
+                        addedAt: new Date().toLocaleString('tr-TR')
+                    });
+                }
+            });
+            
+            updateState({
+                shoppingList: [...appState.shoppingList, ...newItems],
+                aiSuggestions: [],
+                aiQuery: ''
+            });
+            
+            showNotification(`${newItems.length} ürün listeye eklendi! 🛒`);
         }
 
         function toggleDarkMode() {
@@ -486,6 +705,15 @@
         function renderHome() {
             const totalItems = appState.shoppingList.length;
             const completedItems = appState.shoppingList.filter(item => item.completed).length;
+            const groupedItems = appState.shoppingList.reduce((groups, item) => {
+                const category = item.category;
+                if (!groups[category]) {
+                    groups[category] = [];
+                }
+                groups[category].push(item);
+                return groups;
+            }, {});
+            const categories = Object.keys(groupedItems).length;
 
             return `
                 <header class="app-header">
@@ -507,8 +735,8 @@
                             <span class="stat-label">Alındı</span>
                         </div>
                         <div class="stat-card">
-                            <span class="stat-number">${appState.user.trustScore}</span>
-                            <span class="stat-label">Puan</span>
+                            <span class="stat-number">${categories}</span>
+                            <span class="stat-label">Kategori</span>
                         </div>
                     </div>
 
@@ -522,27 +750,100 @@
 
                     <div class="card">
                         <h2 class="card-title">📝 Alışveriş Listesi</h2>
-                        ${appState.shoppingList.length === 0 ? `
+                        ${Object.keys(groupedItems).length === 0 ? `
                             <div style="text-align: center; padding: 40px; color: #666;">
                                 <div style="font-size: 48px; margin-bottom: 16px; opacity: 0.5;">🛒</div>
                                 <p>Liste boş</p>
                                 <p>Ürün ekleyerek başlayın!</p>
                             </div>
-                        ` : `
-                            <ul style="list-style: none; padding: 0;">
-                                ${appState.shoppingList.map(item => `
-                                    <li style="display: flex; align-items: center; padding: 16px; background: ${item.completed ? '#e8e8e8' : 'var(--card-background)'}; border-radius: 12px; margin-bottom: 8px; gap: 12px; border: 1px solid var(--border-color);">
-                                        <input type="checkbox" ${item.completed ? 'checked' : ''} onchange="toggleItem(${item.id})" style="width: 20px; height: 20px;">
-                                        <div style="flex: 1;">
-                                            <div style="font-weight: 500; color: var(--text-color); ${item.completed ? 'text-decoration: line-through;' : ''}">${item.name}</div>
-                                            <div style="font-size: 12px; color: #666;">${item.addedBy} • ${item.addedAt}</div>
-                                        </div>
-                                        <button onclick="deleteItem(${item.id})" style="background: #f44336; color: white; border: none; padding: 6px 8px; border-radius: 6px; cursor: pointer;">🗑️</button>
-                                    </li>
-                                `).join('')}
-                            </ul>
-                        `}
+                        ` : Object.entries(groupedItems).map(([category, items]) => `
+                            <div style="margin-bottom: 24px;">
+                                <div style="background: linear-gradient(135deg, var(--primary-color) 0%, #45a049 100%); color: white; padding: 16px 20px; border-radius: 16px; font-weight: 700; font-size: 16px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center;">
+                                    <span>${category}</span>
+                                    <span>${items.length} ürün</span>
+                                </div>
+                                <ul style="list-style: none; padding: 0;">
+                                    ${items.map(item => `
+                                        <li style="display: flex; align-items: center; padding: 16px; background: ${item.completed ? '#e8e8e8' : 'var(--card-background)'}; border-radius: 12px; margin-bottom: 8px; gap: 12px; border: 1px solid var(--border-color);">
+                                            <input type="checkbox" ${item.completed ? 'checked' : ''} onchange="toggleItem(${item.id})" style="width: 20px; height: 20px;">
+                                            <div style="flex: 1;">
+                                                <div style="font-weight: 500; color: var(--text-color); ${item.completed ? 'text-decoration: line-through;' : ''}">
+                                                    ${item.category.split(' ')[0]} ${item.name}
+                                                    ${item.estimatedPrice > 0 ? `<span style="margin-left: 8px; color: var(--primary-color); font-weight: 600;">~${item.estimatedPrice}₺</span>` : ''}
+                                                </div>
+                                                <div style="font-size: 12px; color: #666;">${item.addedBy} • ${item.addedAt}</div>
+                                            </div>
+                                            <button onclick="deleteItem(${item.id})" style="background: #f44336; color: white; border: none; padding: 6px 8px; border-radius: 6px; cursor: pointer;">🗑️</button>
+                                        </li>
+                                    `).join('')}
+                                </ul>
+                            </div>
+                        `).join('')}
                     </div>
+                </div>
+            `;
+        }
+
+        function renderRecipes() {
+            return `
+                <header class="app-header">
+                    <h1>👨‍🍳 Tarifler</h1>
+                    <div class="user-info">
+                        ${appState.user.name}
+                        <button onclick="logout()">Çıkış</button>
+                    </div>
+                </header>
+
+                <div class="main-content">
+                    <div class="card">
+                        <h2 class="card-title">🤖 AI Yemek Asistanı</h2>
+                        <div class="input-group">
+                            <input type="text" id="aiQueryInput" placeholder="Örn: bebek yemekleri, sağlıklı tarifler" value="${appState.aiQuery}">
+                            <button class="btn-primary" onclick="searchRecipes()">Ara</button>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <h2 class="card-title">🍽️ Yemek Kategorileri</h2>
+                        <div class="recipe-categories">
+                            ${Object.keys(recipeCategories).map(category => `
+                                <button class="category-btn ${appState.selectedCategory === category ? 'active' : ''}" onclick="selectCategory('${category}')">
+                                    ${category}
+                                </button>
+                            `).join('')}
+                        </div>
+                    </div>
+
+                    ${appState.recipeResults.length > 0 ? `
+                        <div class="card">
+                            <h2 class="card-title">📋 ${appState.selectedCategory} Tarifleri</h2>
+                            <div style="display: grid; gap: 12px;">
+                                ${appState.recipeResults.map((recipe, index) => `
+                                    <div style="padding: 16px; background: var(--card-background); border: 1px solid var(--border-color); border-radius: 12px; cursor: pointer;" onclick="selectRecipe(${index})">
+                                        <div style="font-weight: 600; margin-bottom: 4px; color: var(--text-color);">${recipe.name}</div>
+                                        <div style="font-size: 14px; color: #666; margin-bottom: 8px;">${recipe.description}</div>
+                                        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                                            ${recipe.tags.map(tag => `<span style="background: rgba(76, 175, 80, 0.1); color: var(--primary-color); padding: 4px 8px; border-radius: 8px; font-size: 12px;">${tag}</span>`).join('')}
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    ` : ''}
+
+                    ${appState.aiSuggestions.length > 0 ? `
+                        <div class="card">
+                            <div class="ai-suggestions">
+                                <h3 style="color: #1976D2; margin-bottom: 12px; font-weight: 700;">Gerekli Malzemeler:</h3>
+                                <ul style="list-style: none; padding: 0; margin: 16px 0;">
+                                    ${appState.aiSuggestions.map(item => `<li style="padding: 12px 0; border-bottom: 1px solid rgba(0,0,0,0.1); font-weight: 500;">🥗 ${item.name} ${item.price > 0 ? `(${item.price}₺)` : ''}</li>`).join('')}
+                                </ul>
+                                ${!appState.aiSuggestions[0].name.includes('Tarif bulunamadı') ? `
+                                    <button class="btn-secondary" onclick="addAiSuggestions()">Hepsini Listeye Ekle</button>
+                                ` : ''}
+                            </div>
+                        </div>
+                    ` : ''}
                 </div>
             `;
         }
@@ -589,6 +890,7 @@
         function renderBottomNav() {
             const pages = [
                 { id: 'home', icon: '🏠', label: 'Anasayfa' },
+                { id: 'recipes', icon: '👨‍🍳', label: 'Tarifler' },
                 { id: 'settings', icon: '⚙️', label: 'Ayarlar' }
             ];
 
@@ -617,6 +919,9 @@
                 case 'home':
                     content = renderHome();
                     break;
+                case 'recipes':
+                    content = renderRecipes();
+                    break;
                 case 'settings':
                     content = renderSettings();
                     break;
@@ -637,6 +942,15 @@
                         if (e.key === 'Enter' && appState.newItem.trim()) {
                             addItem(appState.newItem.trim());
                         }
+                    });
+                }
+            }
+
+            if (appState.currentPage === 'recipes') {
+                const aiQueryInput = document.getElementById('aiQueryInput');
+                if (aiQueryInput) {
+                    aiQueryInput.addEventListener('input', (e) => {
+                        appState.aiQuery = e.target.value;
                     });
                 }
             }
@@ -678,6 +992,22 @@
 
         window.toggleSetting = function(settingName) {
             toggleSetting(settingName);
+        };
+
+        window.searchRecipes = function() {
+            handleAiQuery();
+        };
+
+        window.selectCategory = function(category) {
+            selectCategory(category);
+        };
+
+        window.selectRecipe = function(index) {
+            selectRecipe(index);
+        };
+
+        window.addAiSuggestions = function() {
+            addAiSuggestions();
         };
 
         // Initialize app
