@@ -724,15 +724,22 @@
             showNotification(`${emoji} ${name} (${displayQuantity}) listeye eklendi! ✅`);
         }
 
-        function toggleItem(id) {
-            const updatedList = appState.shoppingList.map(item => {
-                if (item.id === id) {
-                    return { ...item, completed: !item.completed };
-                }
-                return item;
-            });
-            
-            updateState({ shoppingList: updatedList });
+
+        // DÜZELTME: Çöp kutusu fonksiyonu - Ürünü aldı olarak işaretle ve sil
+        function deleteItem(id) {
+            console.log('Ürün alındı ve siliniyor, ID:', id);
+    
+    // Önce ürünü "alındı" olarak işaretle
+    const item = appState.shoppingList.find(item => String(item.id) === String(id));
+    if (item) {
+        showNotification(`${item.emoji} ${item.name} alındı ve listeden silindi! ✅`);
+    }
+    
+    // Sonra listeden sil
+    const updatedList = appState.shoppingList.filter(item => String(item.id) !== String(id));
+    updateState({ shoppingList: updatedList });
+}
+
         }
 
         // DÜZELTME: Çöp kutusu fonksiyonu
@@ -803,27 +810,33 @@
             showNotification(`${newItems.length} ürün listeye eklendi! Anasayfaya yönlendirildiniz. 🛒`);
         }
 
-        // DÜZELTME: Ayarlar fonksiyonları - Tamamen yeniden yazıldı
-        function toggleDarkMode() {
-            const newDarkMode = !appState.settings.darkMode;
-            const newSettings = { ...appState.settings, darkMode: newDarkMode };
-            
-            // State'i güncelle
-            appState.settings = newSettings;
-            saveToStorage();
-            
-            // DOM'a anında uygula
-            if (newDarkMode) {
-                document.documentElement.setAttribute('data-theme', 'dark');
-            } else {
-                document.documentElement.removeAttribute('data-theme');
-            }
-            
-            // Render'ı tetikle
-            render();
-            
-            showNotification(newDarkMode ? 'Dark mode açıldı 🌙' : 'Light mode açıldı ☀️');
-        }
+       // DÜZELTME: Dark Mode fonksiyonu
+function toggleDarkMode() {
+    const newDarkMode = !appState.settings.darkMode;
+    
+    // State'i güncelle
+    appState.settings.darkMode = newDarkMode;
+    saveToStorage();
+    
+    // DOM'a anında uygula
+    if (newDarkMode) {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        document.body.style.background = '#121212';
+        document.body.style.color = '#ffffff';
+    } else {
+        document.documentElement.removeAttribute('data-theme');
+        document.body.style.background = '#ffffff';
+        document.body.style.color = '#333333';
+    }
+    
+    // Sayfayı yeniden render et
+    setTimeout(() => {
+        render();
+    }, 100);
+    
+    showNotification(newDarkMode ? 'Dark mode açıldı 🌙' : 'Light mode açıldı ☀️');
+}
+
 
         function toggleSetting(settingName) {
             const newSettings = { 
@@ -959,7 +972,7 @@
                                                 </div>
                                                 <div style="font-size: 12px; color: #666;">${item.addedBy} • ${item.addedAt}</div>
                                             </div>
-                                          <button class="delete-btn" onclick="event.stopPropagation(); deleteItem(${item.id});">🗑️</button>
+                                         <button class="delete-btn" onclick="event.preventDefault(); event.stopPropagation(); deleteItem('${item.id}'); return false;">🗑️</button>
                                         </li>
                                     `).join('')}
                                 </ul>
