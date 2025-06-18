@@ -280,7 +280,7 @@
             width: 100%;
         }
 
-        /* Delete Button - DÜZELTME */
+        /* Delete Button */
         .delete-btn {
             background: #f44336 !important;
             color: white !important;
@@ -734,8 +734,8 @@
             updateState({ shoppingList: updatedList });
         }
 
-        // DÜZELTME 1: Çöp kutusu fonksiyonu - Event propagation sorunu çözüldü
-        function deleteItem(id) {
+        // Çöp kutusu fonksiyonu - SONSUZ DÖNGÜ DÜZELTİLDİ
+        function deleteItemFromList(id) {
             console.log('Silme işlemi başlatıldı, ID:', id);
             
             // Ürünü bul
@@ -787,8 +787,8 @@
             }
         }
 
-        // DÜZELTME 2: AI önerilerini listeye ekleme - State management sorunu çözüldü
-        function addAiSuggestions() {
+        // AI önerilerini listeye ekleme - SONSUZ DÖNGÜ DÜZELTİLDİ
+        function addAiSuggestionsToList() {
             if (!appState.aiSuggestions || appState.aiSuggestions.length === 0) {
                 showNotification('Eklenecek malzeme bulunamadı!', 'error');
                 return;
@@ -826,8 +826,8 @@
             showNotification(`${newItems.length} malzeme anasayfaya eklendi! 🛒`);
         }
 
-        // DÜZELTME 3: Dark Mode fonksiyonu - CSS variable update sorunu çözüldü
-        function toggleDarkMode() {
+        // Dark Mode fonksiyonu - SONSUZ DÖNGÜ DÜZELTİLDİ
+        function toggleDarkModeFunction() {
             const newDarkMode = !appState.settings.darkMode;
             
             // State'i güncelle
@@ -1003,8 +1003,7 @@
                                                 </div>
                                                 <div style="font-size: 12px; color: #666;">${item.addedBy} • ${item.addedAt}</div>
                                             </div>
-                                         <button class="delete-btn" onclick="(function(e, id){ e.stopPropagation(); window.deleteItem(id); })(event, '${item.id}')">🗑️</button>
-
+                                            <button class="delete-btn" onclick="event.stopPropagation(); deleteItemFromList('${item.id}');">🗑️</button>
                                         </li>
                                     `).join('')}
                                 </ul>
@@ -1056,7 +1055,7 @@
                                         </li>`;
                                     }).join('')}
                                 </ul>
-                                <button class="btn-secondary" onclick="addAiSuggestions()">Tüm Malzemeleri Listeye Ekle</button>
+                                <button class="btn-secondary" onclick="addAiSuggestionsToList()">Tüm Malzemeleri Listeye Ekle</button>
                             </div>
                         </div>
                     ` : ''}
@@ -1093,7 +1092,7 @@
                                     ${appState.settings.darkMode ? 'Şu anda: Gece Modu 🌙' : 'Şu anda: Gündüz Modu ☀️'}
                                 </div>
                             </div>
-                            <div class="toggle-switch ${appState.settings.darkMode ? 'active' : ''}" onclick="toggleDarkMode()">
+                            <div class="toggle-switch ${appState.settings.darkMode ? 'active' : ''}" onclick="toggleDarkModeFunction()">
                                 <div class="toggle-slider"></div>
                             </div>
                         </div>
@@ -1102,7 +1101,7 @@
                     <div class="card">
                         <h2 class="card-title">ℹ️ Uygulama Bilgileri</h2>
                         <p style="margin-bottom: 12px;"><strong>Uygulama:</strong> AkıllıMarket PWA</p>
-                        <p style="margin-bottom: 12px;"><strong>Versiyon:</strong> 2.2.0</p>
+                        <p style="margin-bottom: 12px;"><strong>Versiyon:</strong> 2.3.0 (Hatalar Düzeltildi)</p>
                         <p style="margin-bottom: 12px;"><strong>Kullanıcı:</strong> ${appState.user.name}</p>
                         <p><strong>Güven Puanı:</strong> ⭐ ${appState.user.trustScore}</p>
                     </div>
@@ -1199,7 +1198,7 @@
             }
         }
 
-        // Global functions
+        // Global functions - SONSUZ DÖNGÜ HATALARI DÜZELTİLDİ
         window.handleLoginClick = function() {
             const input = document.getElementById('loginInput');
             if (input && input.value.trim()) {
@@ -1225,12 +1224,14 @@
             toggleItem(id);
         };
 
+        // DÜZELTME: Sonsuz döngü hatası giderildi
         window.deleteItem = function(id) {
-            deleteItem(id);
+            deleteItemFromList(id);
         };
 
+        // DÜZELTME: Sonsuz döngü hatası giderildi
         window.toggleDarkMode = function() {
-            toggleDarkMode();
+            toggleDarkModeFunction();
         };
 
         window.toggleSetting = function(settingName) {
@@ -1241,8 +1242,9 @@
             handleAiQuery();
         };
 
+        // DÜZELTME: Sonsuz döngü hatası giderildi
         window.addAiSuggestions = function() {
-            addAiSuggestions();
+            addAiSuggestionsToList();
         };
 
         // Initialize app
