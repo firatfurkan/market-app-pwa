@@ -280,7 +280,7 @@
             width: 100%;
         }
 
-        /* Delete Button */
+        /* Delete Button - DÜZELTME */
         .delete-btn {
             background: #f44336 !important;
             color: white !important;
@@ -389,29 +389,6 @@
 
         .notification.show {
             transform: translateX(0);
-        }
-
-        /* Dark Mode Zorla Uygulama */
-        [data-theme="dark"] body {
-            background: #121212 !important;
-            color: #ffffff !important;
-        }
-
-        [data-theme="dark"] .card {
-            background: #1e1e1e !important;
-            color: #ffffff !important;
-            border-color: #333333 !important;
-        }
-
-        [data-theme="dark"] input, [data-theme="dark"] select {
-            background: #1e1e1e !important;
-            color: #ffffff !important;
-            border-color: #333333 !important;
-        }
-
-        [data-theme="dark"] .bottom-nav {
-            background: #1e1e1e !important;
-            border-color: #333333 !important;
         }
 
         /* Responsive */
@@ -596,11 +573,12 @@
         }
 
         // Notification System
-        function showNotification(message) {
+        function showNotification(message, type = 'success') {
             const notification = document.getElementById('notification');
             const notificationText = document.getElementById('notificationText');
             
             notificationText.textContent = message;
+            notification.style.background = type === 'success' ? '#4CAF50' : '#f44336';
             notification.classList.add('show');
             
             setTimeout(() => {
@@ -756,19 +734,26 @@
             updateState({ shoppingList: updatedList });
         }
 
-        // Çöp kutusu fonksiyonu - Ürünü aldı olarak işaretle ve sil
+        // DÜZELTME 1: Çöp kutusu fonksiyonu - Event propagation sorunu çözüldü
         function deleteItem(id) {
-            console.log('Ürün alındı ve siliniyor, ID:', id);
+            console.log('Silme işlemi başlatıldı, ID:', id);
             
-            // Önce ürünü "alındı" olarak işaretle
+            // Ürünü bul
             const item = appState.shoppingList.find(item => String(item.id) === String(id));
-            if (item) {
-                showNotification(`${item.emoji} ${item.name} alındı ve listeden silindi! ✅`);
+            if (!item) {
+                console.error('Ürün bulunamadı:', id);
+                showNotification('Ürün bulunamadı!', 'error');
+                return;
             }
             
-            // Sonra listeden sil
+            // Listeden sil
             const updatedList = appState.shoppingList.filter(item => String(item.id) !== String(id));
+            
+            // State'i güncelle
             updateState({ shoppingList: updatedList });
+            
+            // Bildirim göster
+            showNotification(`${item.emoji} ${item.name} alındı ve listeden silindi! ✅`);
         }
 
         // AI Aşçı Bot Arama
@@ -776,7 +761,7 @@
             const query = appState.aiQuery.toLowerCase().trim();
             
             if (!query) {
-                showNotification('Lütfen bir yemek adı yazın!');
+                showNotification('Lütfen bir yemek adı yazın!', 'error');
                 return;
             }
 
@@ -802,12 +787,18 @@
             }
         }
 
-        // AI önerilerini listeye ekleme ve anasayfaya yönlendirme
+        // DÜZELTME 2: AI önerilerini listeye ekleme - State management sorunu çözüldü
         function addAiSuggestions() {
+            if (!appState.aiSuggestions || appState.aiSuggestions.length === 0) {
+                showNotification('Eklenecek malzeme bulunamadı!', 'error');
+                return;
+            }
+            
             const newItems = [];
+            
             appState.aiSuggestions.forEach(item => {
                 const emoji = getProductEmoji(item.name);
-                newItems.push({
+                const newItem = {
                     id: Date.now() + Math.random(),
                     name: item.name,
                     quantity: item.quantity || '1 adet',
@@ -817,21 +808,25 @@
                     addedBy: appState.user?.name,
                     category: categorizeItem(item.name),
                     addedAt: new Date().toLocaleString('tr-TR')
-                });
+                };
+                newItems.push(newItem);
             });
             
+            // State'i güncelle - Anasayfaya yönlendir
+            const updatedShoppingList = [...appState.shoppingList, ...newItems];
+            
             updateState({
-                shoppingList: [...appState.shoppingList, ...newItems],
+                shoppingList: updatedShoppingList,
                 aiSuggestions: [],
                 aiBotResponse: '',
                 aiQuery: '',
-                currentPage: 'home' // Anasayfaya yönlendir
+                currentPage: 'home'
             });
             
-            showNotification(`${newItems.length} ürün listeye eklendi! Anasayfaya yönlendirildiniz. 🛒`);
+            showNotification(`${newItems.length} malzeme anasayfaya eklendi! 🛒`);
         }
 
-        // Dark Mode fonksiyonu
+        // DÜZELTME 3: Dark Mode fonksiyonu - CSS variable update sorunu çözüldü
         function toggleDarkMode() {
             const newDarkMode = !appState.settings.darkMode;
             
@@ -839,14 +834,30 @@
             appState.settings.darkMode = newDarkMode;
             saveToStorage();
             
-            // DOM'a anında uygula
+            // DOM'a zorla uygula
+            const root = document.documentElement;
+            
             if (newDarkMode) {
-                document.documentElement.setAttribute('data-theme', 'dark');
-                document.body.style.background = '#121212';
+                // Dark mode aktif et
+                root.setAttribute('data-theme', 'dark');
+                root.style.setProperty('--background-color', '#121212');
+                root.style.setProperty('--text-color', '#ffffff');
+                root.style.setProperty('--card-background', '#1e1e1e');
+                root.style.setProperty('--border-color', '#333333');
+                
+                // Body'ye de direkt uygula
+                document.body.style.backgroundColor = '#121212';
                 document.body.style.color = '#ffffff';
             } else {
-                document.documentElement.removeAttribute('data-theme');
-                document.body.style.background = '#ffffff';
+                // Light mode aktif et
+                root.removeAttribute('data-theme');
+                root.style.setProperty('--background-color', '#ffffff');
+                root.style.setProperty('--text-color', '#333333');
+                root.style.setProperty('--card-background', '#ffffff');
+                root.style.setProperty('--border-color', '#f0f0f0');
+                
+                // Body'ye de direkt uygula
+                document.body.style.backgroundColor = '#ffffff';
                 document.body.style.color = '#333333';
             }
             
@@ -855,7 +866,7 @@
                 render();
             }, 100);
             
-            showNotification(newDarkMode ? 'Dark mode açıldı 🌙' : 'Light mode açıldı ☀️');
+            showNotification(newDarkMode ? 'Gece modu açıldı 🌙' : 'Gündüz modu açıldı ☀️');
         }
 
         function toggleSetting(settingName) {
@@ -992,7 +1003,7 @@
                                                 </div>
                                                 <div style="font-size: 12px; color: #666;">${item.addedBy} • ${item.addedAt}</div>
                                             </div>
-                                            <button class="delete-btn" onclick="event.preventDefault(); event.stopPropagation(); deleteItem('${item.id}'); return false;">🗑️</button>
+                                            <button class="delete-btn" onclick="event.stopPropagation(); deleteItem('${item.id}');">🗑️</button>
                                         </li>
                                     `).join('')}
                                 </ul>
@@ -1072,25 +1083,16 @@
 
                 <div class="main-content">
                     <div class="card">
-                        <h2 class="card-title">🎨 Görünüm Ayarları</h2>
+                        <h2 class="card-title">🌙 Görünüm Modu</h2>
                         
                         <div class="setting-item">
-                            <div class="setting-label">Dark Mode</div>
+                            <div>
+                                <div class="setting-label">Gece & Gündüz Modu</div>
+                                <div style="font-size: 12px; color: #666; margin-top: 4px;">
+                                    ${appState.settings.darkMode ? 'Şu anda: Gece Modu 🌙' : 'Şu anda: Gündüz Modu ☀️'}
+                                </div>
+                            </div>
                             <div class="toggle-switch ${appState.settings.darkMode ? 'active' : ''}" onclick="toggleDarkMode()">
-                                <div class="toggle-slider"></div>
-                            </div>
-                        </div>
-
-                        <div class="setting-item">
-                            <div class="setting-label">Yüksek Kontrast</div>
-                            <div class="toggle-switch ${appState.settings.highContrast ? 'active' : ''}" onclick="toggleSetting('highContrast')">
-                                <div class="toggle-slider"></div>
-                            </div>
-                        </div>
-
-                        <div class="setting-item">
-                            <div class="setting-label">Büyük Yazı</div>
-                            <div class="toggle-switch ${appState.settings.largeText ? 'active' : ''}" onclick="toggleSetting('largeText')">
                                 <div class="toggle-slider"></div>
                             </div>
                         </div>
@@ -1099,7 +1101,7 @@
                     <div class="card">
                         <h2 class="card-title">ℹ️ Uygulama Bilgileri</h2>
                         <p style="margin-bottom: 12px;"><strong>Uygulama:</strong> AkıllıMarket PWA</p>
-                        <p style="margin-bottom: 12px;"><strong>Versiyon:</strong> 2.1.0</p>
+                        <p style="margin-bottom: 12px;"><strong>Versiyon:</strong> 2.2.0</p>
                         <p style="margin-bottom: 12px;"><strong>Kullanıcı:</strong> ${appState.user.name}</p>
                         <p><strong>Güven Puanı:</strong> ⭐ ${appState.user.trustScore}</p>
                     </div>
@@ -1247,6 +1249,8 @@
             // Kaydedilmiş ayarları uygula
             if (appState.settings.darkMode) {
                 document.documentElement.setAttribute('data-theme', 'dark');
+                document.body.style.backgroundColor = '#121212';
+                document.body.style.color = '#ffffff';
             }
             if (appState.settings.highContrast) {
                 document.body.classList.add('high-contrast');
