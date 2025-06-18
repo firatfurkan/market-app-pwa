@@ -234,7 +234,7 @@
             opacity: 0.9;
         }
 
-        /* Input Groups - DÜZELTME: 2 Sütunlu Form */
+        /* Input Groups */
         .input-group {
             display: flex;
             gap: 12px;
@@ -280,31 +280,30 @@
             width: 100%;
         }
 
-       /* Delete Button - DÜZELTME */
-.delete-btn {
-    background: #f44336 !important;
-    color: white !important;
-    border: none !important;
-    padding: 8px 12px !important;
-    border-radius: 8px !important;
-    cursor: pointer !important;
-    font-size: 14px !important;
-    transition: all 0.3s ease !important;
-    min-width: 40px !important;
-    z-index: 999 !important;
-    position: relative !important;
-}
+        /* Delete Button */
+        .delete-btn {
+            background: #f44336 !important;
+            color: white !important;
+            border: none !important;
+            padding: 8px 12px !important;
+            border-radius: 8px !important;
+            cursor: pointer !important;
+            font-size: 14px !important;
+            transition: all 0.3s ease !important;
+            min-width: 40px !important;
+            z-index: 999 !important;
+            position: relative !important;
+        }
 
-.delete-btn:hover {
-    background: #d32f2f !important;
-    transform: scale(1.05) !important;
-}
+        .delete-btn:hover {
+            background: #d32f2f !important;
+            transform: scale(1.05) !important;
+        }
 
-.delete-btn:active {
-    background: #b71c1c !important;
-    transform: scale(0.95) !important;
-}
-
+        .delete-btn:active {
+            background: #b71c1c !important;
+            transform: scale(0.95) !important;
+        }
 
         /* AI Suggestions */
         .ai-suggestions {
@@ -330,7 +329,7 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Settings - DÜZELTME */
+        /* Settings */
         .setting-item {
             display: flex;
             justify-content: space-between;
@@ -392,6 +391,29 @@
             transform: translateX(0);
         }
 
+        /* Dark Mode Zorla Uygulama */
+        [data-theme="dark"] body {
+            background: #121212 !important;
+            color: #ffffff !important;
+        }
+
+        [data-theme="dark"] .card {
+            background: #1e1e1e !important;
+            color: #ffffff !important;
+            border-color: #333333 !important;
+        }
+
+        [data-theme="dark"] input, [data-theme="dark"] select {
+            background: #1e1e1e !important;
+            color: #ffffff !important;
+            border-color: #333333 !important;
+        }
+
+        [data-theme="dark"] .bottom-nav {
+            background: #1e1e1e !important;
+            border-color: #333333 !important;
+        }
+
         /* Responsive */
         @media (max-width: 480px) {
             .two-column-input {
@@ -432,7 +454,7 @@
             settings: JSON.parse(localStorage.getItem('akilliMarket_settings') || '{"darkMode":false,"highContrast":false,"largeText":false}')
         };
 
-        // DÜZELTME: Genişletilmiş AI Aşçı Yemek Veritabanı
+        // Genişletilmiş AI Aşçı Yemek Veritabanı
         const chefMealDatabase = {
             'makarna': {
                 ingredients: [
@@ -697,7 +719,6 @@
             showNotification(`Hoş geldin ${username}! 🎉`);
         }
 
-        // DÜZELTME: Yeni ürün ekleme fonksiyonu
         function addItem(name, quantity, unit) {
             const emoji = getProductEmoji(name);
             const displayQuantity = `${quantity} ${unit}`;
@@ -724,30 +745,30 @@
             showNotification(`${emoji} ${name} (${displayQuantity}) listeye eklendi! ✅`);
         }
 
-
-        // DÜZELTME: Çöp kutusu fonksiyonu - Ürünü aldı olarak işaretle ve sil
-        function deleteItem(id) {
-            console.log('Ürün alındı ve siliniyor, ID:', id);
-    
-    // Önce ürünü "alındı" olarak işaretle
-    const item = appState.shoppingList.find(item => String(item.id) === String(id));
-    if (item) {
-        showNotification(`${item.emoji} ${item.name} alındı ve listeden silindi! ✅`);
-    }
-    
-    // Sonra listeden sil
-    const updatedList = appState.shoppingList.filter(item => String(item.id) !== String(id));
-    updateState({ shoppingList: updatedList });
-}
-
+        function toggleItem(id) {
+            const updatedList = appState.shoppingList.map(item => {
+                if (String(item.id) === String(id)) {
+                    return { ...item, completed: !item.completed };
+                }
+                return item;
+            });
+            
+            updateState({ shoppingList: updatedList });
         }
 
-        // DÜZELTME: Çöp kutusu fonksiyonu
+        // Çöp kutusu fonksiyonu - Ürünü aldı olarak işaretle ve sil
         function deleteItem(id) {
-            console.log('Deleting item with ID:', id);
+            console.log('Ürün alındı ve siliniyor, ID:', id);
+            
+            // Önce ürünü "alındı" olarak işaretle
+            const item = appState.shoppingList.find(item => String(item.id) === String(id));
+            if (item) {
+                showNotification(`${item.emoji} ${item.name} alındı ve listeden silindi! ✅`);
+            }
+            
+            // Sonra listeden sil
             const updatedList = appState.shoppingList.filter(item => String(item.id) !== String(id));
             updateState({ shoppingList: updatedList });
-            showNotification('Ürün silindi! 🗑️');
         }
 
         // AI Aşçı Bot Arama
@@ -781,7 +802,7 @@
             }
         }
 
-        // DÜZELTME: AI önerilerini listeye ekleme ve anasayfaya yönlendirme
+        // AI önerilerini listeye ekleme ve anasayfaya yönlendirme
         function addAiSuggestions() {
             const newItems = [];
             appState.aiSuggestions.forEach(item => {
@@ -810,33 +831,32 @@
             showNotification(`${newItems.length} ürün listeye eklendi! Anasayfaya yönlendirildiniz. 🛒`);
         }
 
-       // DÜZELTME: Dark Mode fonksiyonu
-function toggleDarkMode() {
-    const newDarkMode = !appState.settings.darkMode;
-    
-    // State'i güncelle
-    appState.settings.darkMode = newDarkMode;
-    saveToStorage();
-    
-    // DOM'a anında uygula
-    if (newDarkMode) {
-        document.documentElement.setAttribute('data-theme', 'dark');
-        document.body.style.background = '#121212';
-        document.body.style.color = '#ffffff';
-    } else {
-        document.documentElement.removeAttribute('data-theme');
-        document.body.style.background = '#ffffff';
-        document.body.style.color = '#333333';
-    }
-    
-    // Sayfayı yeniden render et
-    setTimeout(() => {
-        render();
-    }, 100);
-    
-    showNotification(newDarkMode ? 'Dark mode açıldı 🌙' : 'Light mode açıldı ☀️');
-}
-
+        // Dark Mode fonksiyonu
+        function toggleDarkMode() {
+            const newDarkMode = !appState.settings.darkMode;
+            
+            // State'i güncelle
+            appState.settings.darkMode = newDarkMode;
+            saveToStorage();
+            
+            // DOM'a anında uygula
+            if (newDarkMode) {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                document.body.style.background = '#121212';
+                document.body.style.color = '#ffffff';
+            } else {
+                document.documentElement.removeAttribute('data-theme');
+                document.body.style.background = '#ffffff';
+                document.body.style.color = '#333333';
+            }
+            
+            // Sayfayı yeniden render et
+            setTimeout(() => {
+                render();
+            }, 100);
+            
+            showNotification(newDarkMode ? 'Dark mode açıldı 🌙' : 'Light mode açıldı ☀️');
+        }
 
         function toggleSetting(settingName) {
             const newSettings = { 
@@ -972,7 +992,7 @@ function toggleDarkMode() {
                                                 </div>
                                                 <div style="font-size: 12px; color: #666;">${item.addedBy} • ${item.addedAt}</div>
                                             </div>
-                                         <button class="delete-btn" onclick="event.preventDefault(); event.stopPropagation(); deleteItem('${item.id}'); return false;">🗑️</button>
+                                            <button class="delete-btn" onclick="event.preventDefault(); event.stopPropagation(); deleteItem('${item.id}'); return false;">🗑️</button>
                                         </li>
                                     `).join('')}
                                 </ul>
