@@ -959,7 +959,7 @@
                                                 </div>
                                                 <div style="font-size: 12px; color: #666;">${item.addedBy} • ${item.addedAt}</div>
                                             </div>
-                                            <button class="delete-btn" onclick="deleteItem('${item.id}')">🗑️</button>
+                                          <button class="delete-btn" onclick="event.stopPropagation(); deleteItem(${item.id});">🗑️</button>
                                         </li>
                                     `).join('')}
                                 </ul>
