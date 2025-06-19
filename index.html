@@ -747,7 +747,6 @@
                 ],
                 response: "🥟 Geleneksel mantı malzemeleri! Türk mutfağının en özel lezzetlerinden."
             },
-            // YENİ YEMEKLER EKLENDI
             'lahmacun': {
                 ingredients: [
                     { name: 'lahmacun hamuru', quantity: '8 adet' },
@@ -1125,7 +1124,7 @@
             }
 
             if (!found) {
-                const availableMeals = Object.keys(chefMealDatabase).join(', ');
+                const availableMeals = Object.keys(chefMealDatabase).slice(0, 10).join(', ') + '...';
                 updateState({
                     aiSuggestions: [],
                     aiBotResponse: `"${query}" için tarif bulunamadı. 👨‍🍳 Mevcut tarifler: ${availableMeals}`
@@ -1284,7 +1283,4 @@
                     <div class="card">
                         <h2 class="card-title">➕ Ürün Ekle</h2>
                         <div class="two-column-input">
-                            <input type="text" id="newItemInput" placeholder="Ürün adı (örn: Zeytinyağı)" value="${appState.newItem}">
-                            <div style="display: flex; gap: 12px;">
-                                <input type="number" id="newQuantityInput" placeholder="Miktar" value="${appState.newQuantity}" style="width: 80px
-
+                            <input type="text" id="newItemInput" placeholder
