@@ -8,14 +8,11 @@
     <!-- PWA Meta Tags -->
     <meta name="description" content="Akıllı alışveriş asistanınız">
     <meta name="theme-color" content="#4CAF50">
-  <meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-capable" content="yes">
-
+    <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-title" content="AkıllıMarket">
     
     <!-- PWA Manifest -->
-  <link rel="manifest" href="/market-app-pwa/manifest.json">
-
+    <link rel="manifest" href="manifest.json">
     
     <style>
  :root {
@@ -239,7 +236,29 @@
             cursor: pointer;
         }
 
-       
+        /* Header */
+        .app-header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, #45a049 100%);
+            color: white;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .app-header h1 {
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .user-info button {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 12px;
+            cursor: pointer;
+        }
 
         /* Navigation */
         .bottom-nav {
@@ -277,7 +296,29 @@
             font-size: 20px;
         }
 
-       
+        /* Main Content */
+        .main-content {
+            padding: 20px;
+            padding-bottom: 100px;
+            min-height: calc(100vh - 140px);
+        }
+
+        /* Cards */
+        .card {
+            background: var(--card-background);
+            border-radius: 20px;
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+        }
+
+        .card-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text-color);
+            margin-bottom: 16px;
+        }
 
         /* Stats */
         .stats-grid {
@@ -313,7 +354,15 @@
             margin-bottom: 20px;
         }
 
-      
+        .input-group input, .input-group select {
+            flex: 1;
+            padding: 16px 20px;
+            border: 2px solid var(--border-color);
+            border-radius: 16px;
+            font-size: 16px;
+            background: var(--card-background);
+            color: var(--text-color);
+        }
                 .two-column-input {
             display: grid;
             grid-template-columns: 2fr 1fr;
@@ -357,7 +406,16 @@
 
       
 
-        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-color) 0%, #45a049 100%);
+            color: white;
+            border: none;
+            padding: 16px 24px;
+            border-radius: 16px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+        }
 
         .btn-secondary {
             background: linear-gradient(135deg, var(--secondary-color) 0%, #F57C00 100%);
@@ -501,17 +559,14 @@
         // Service Worker Registration
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-              navigator.serviceWorker.register('/market-app-pwa/sw.js', {
-    scope: '/market-app-pwa/'
-})
-
+                navigator.serviceWorker.register('./sw.js')
                     .then(registration => console.log('SW registered'))
                     .catch(error => console.log('SW registration failed'));
             });
         }
 
         // Global state
-                let appState = {
+        let appState = {
             user: null,
             currentPage: 'home',
             shoppingList: JSON.parse(localStorage.getItem('akilliMarket_shoppingList') || '[]'),
@@ -521,10 +576,8 @@
             aiQuery: '',
             aiSuggestions: [],
             aiBotResponse: '',
-            chefName: localStorage.getItem('akilliMarket_chefName') || 'Aşçı Bey',
             settings: JSON.parse(localStorage.getItem('akilliMarket_settings') || '{"darkMode":false,"highContrast":false,"largeText":false}')
         };
-
 
         // Genişletilmiş AI Aşçı Yemek Veritabanı
         const chefMealDatabase = {
@@ -662,12 +715,10 @@
         };
 
         // Save to localStorage
-              function saveToStorage() {
+        function saveToStorage() {
             localStorage.setItem('akilliMarket_shoppingList', JSON.stringify(appState.shoppingList));
             localStorage.setItem('akilliMarket_settings', JSON.stringify(appState.settings));
-            localStorage.setItem('akilliMarket_chefName', appState.chefName);
         }
-
 
         // Notification System
         function showNotification(message, type = 'success') {
@@ -707,14 +758,8 @@
                 'ekmek içi': '🍞', 'lavash': '🫓', 'mantı': '🥟', 'domates salçası': '🍅',
                 'karabiber': '🌶️', 'sos': '🥫',
                 
-                               // İçecekler - GENİŞLETİLDİ
+                // İçecekler
                 'su': '💧', 'meyve suyu': '🧃', 'kola': '🥤', 'ayran': '🥛',
-                'gazoz': '🥤', 'şarap': '🍷', 'bira': '🍺',
-                'cola': '🥤', 'fanta': '🍊', 'sprite': '🟢', 'icetea': '🧊', 
-                'ice tea': '🧊', 'çay': '🍵', 'kahve': '☕', 'limonata': '🍋',
-                'portakal suyu': '🍊', 'elma suyu': '🍎', 'şeftali suyu': '🍑',
-                'energy drink': '⚡', 'enerji içeceği': '⚡', 'soda': '🥤',
-
                 
                 // Temizlik
                 'deterjan': '🧽', 'sabun': '🧼', 'şampuan': '🧴', 'diş macunu': '🦷',
@@ -760,13 +805,9 @@
                     'kırmızı mercimek', 'ekmek içi', 'lavash', 'mantı', 'domates salçası',
                     'karabiber', 'sos'
                 ],
-                               '💧 İçecekler': [
-                    'su', 'meyve suyu', 'kola', 'ayran', 'gazoz', 'şarap', 'bira',
-                    'cola', 'fanta', 'sprite', 'icetea', 'ice tea', 'çay', 'kahve',
-                    'limonata', 'portakal suyu', 'elma suyu', 'şeftali suyu',
-                    'energy drink', 'enerji içeceği', 'soda'
+                '💧 İçecekler': [
+                    'su', 'meyve suyu', 'kola', 'ayran', 'gazoz'
                 ],
-
                 '🧽 Temizlik & Hijyen': [
                     'deterjan', 'sabun', 'şampuan', 'diş macunu', 'çöp poşeti', 
                     'çöp torbası', 'temizlik bezi', 'tuvalet kağıdı', 'peçete'
@@ -884,24 +925,14 @@
                     break;
                 }
             }
+
             if (!found) {
-                const funnyResponses = [
-                    `Hmm, "${query}" mi? 🤔 ${appState.chefName} şu anda bu tarifi araştırıyor! Belki de yeni bir lezzet keşfedecek!`,
-                    `"${query}" için tarif bulunamadı ama ${appState.chefName} pes etmiyor! 💪 Mutfakta deneyimler yapıyor...`,
-                    `Vay be! "${query}" ilginç bir seçim! 🧐 ${appState.chefName} bu tarifi henüz öğrenmemiş, ama çalışıyor!`,
-                    `"${query}" ha? 🤨 ${appState.chefName} şu anda bu konuda araştırma yapıyor. Sabırlı olun!`,
-                    `Ups! "${query}" ${appState.chefName}'in repertuvarında yok henüz. Ama öğrenmeye hevesli! 📚`
-                ];
-                const randomResponse = funnyResponses[Math.floor(Math.random() * funnyResponses.length)];
-                const availableMeals = Object.keys(chefMealDatabase).slice(0, 8).join(', ');
-                
+                const availableMeals = Object.keys(chefMealDatabase).join(', ');
                 updateState({
                     aiSuggestions: [],
-                    aiBotResponse: `${randomResponse}\n\n👨‍🍳 Bildiği tarifler: ${availableMeals}...`
+                    aiBotResponse: `"${query}" için tarif bulunamadı. 👨‍🍳 Mevcut tarifler: ${availableMeals}`
                 });
             }
-
-         
         }
 
         // AI önerilerini listeye ekleme - SONSUZ DÖNGÜ DÜZELTİLDİ
@@ -1094,7 +1125,13 @@
                         <p style="font-size: 13px; color: var(--text-light); margin-top: 12px; text-align: center; opacity: 0.8;">
                             💡 Örnek: "Zeytinyağı" - "1" - "Şişe"
                         </p>
-                   
+                    </div>
+
+                        <button class="btn-primary" style="width: 100%;" onclick="addNewItem()">Ürün Ekle</button>
+                        <p style="font-size: 12px; color: #666; margin-top: 8px;">
+                            💡 Örnek: Ürün adı "Ekmek", Miktar "2", Birim "Adet"
+                        </p>
+                    </div>
 
                     <div class="card">
                         <h2 class="card-title">📝 Alışveriş Listesi</h2>
@@ -1133,26 +1170,13 @@
 
         function renderChef() {
             return `
-                                <header class="app-header">
-                    <h1>👨‍🍳 ${appState.chefName}</h1>
+                <header class="app-header">
+                    <h1>👨‍🍳 Aşçı - AI Asistan</h1>
                     <div class="user-info">
                         ${appState.user.name}
                         <button onclick="logout()">Çıkış</button>
                     </div>
                 </header>
-
- <div class="main-content">
-            <div class="card">
-                <h2 class="card-title">👨‍🍳 Aşçı Ayarları</h2>
-                <div class="input-group">
-                    <input type="text" id="chefNameInput" placeholder="Aşçınızın adını girin" value="${appState.chefName}">
-                    <button class="btn-primary" onclick="updateChefName()">Güncelle</button>
-                </div>
-                <p style="font-size: 13px; color: var(--text-light); margin-top: 8px;">
-                    💡 Aşçınıza istediğiniz ismi verebilirsiniz!
-                </p>
-            </div>
-
 
                 <div class="main-content">
                     <div class="card">
