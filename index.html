@@ -5,9 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AkıllıMarket - PWA</title>
     
-    <!-- PWA Meta Tags -->
+    <!-- PWA Meta Tags - DÜZELTME -->
     <meta name="description" content="Akıllı alışveriş asistanınız">
     <meta name="theme-color" content="#6366F1">
+    <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-title" content="AkıllıMarket">
     
@@ -1086,7 +1087,7 @@
             updateState({ shoppingList: updatedList });
         }
 
-        // Çöp kutusu fonksiyonu
+        // DÜZELTME: Çöp kutusu fonksiyonu
         function deleteItemFromList(id) {
             console.log('Silme işlemi başlatıldı, ID:', id);
             
@@ -1170,25 +1171,22 @@
             showNotification(`${newItems.length} malzeme anasayfaya eklendi! 🛒`);
         }
 
-        // Dark Mode fonksiyonu
+        // DÜZELTME: Dark Mode fonksiyonu
         function toggleDarkModeFunction() {
             const newDarkMode = !appState.settings.darkMode;
             
+            // State'i güncelle
             appState.settings.darkMode = newDarkMode;
             saveToStorage();
             
-            const root = document.documentElement;
-            
+            // DOM'a zorla uygula
             if (newDarkMode) {
-                root.setAttribute('data-theme', 'dark');
-                document.body.style.backgroundColor = '#0F172A';
-                document.body.style.color = '#F1F5F9';
+                document.documentElement.setAttribute('data-theme', 'dark');
             } else {
-                root.removeAttribute('data-theme');
-                document.body.style.backgroundColor = '#F8FAFC';
-                document.body.style.color = '#1E293B';
+                document.documentElement.removeAttribute('data-theme');
             }
             
+            // Render'ı tetikle
             setTimeout(() => {
                 render();
             }, 100);
@@ -1196,15 +1194,18 @@
             showNotification(newDarkMode ? 'Gece modu açıldı 🌙' : 'Gündüz modu açıldı ☀️');
         }
 
+        // DÜZELTME: Ayarlar toggle fonksiyonu
         function toggleSetting(settingName) {
             const newSettings = { 
                 ...appState.settings, 
                 [settingName]: !appState.settings[settingName] 
             };
             
+            // State'i güncelle
             appState.settings = newSettings;
             saveToStorage();
             
+            // DOM'a anında uygula
             if (settingName === 'highContrast') {
                 if (newSettings.highContrast) {
                     document.body.classList.add('high-contrast');
@@ -1225,6 +1226,7 @@
                 }
             }
             
+            // Render'ı tetikle
             render();
         }
 
@@ -1283,4 +1285,4 @@
                     <div class="card">
                         <h2 class="card-title">➕ Ürün Ekle</h2>
                         <div class="two-column-input">
-                            <input type="text" id="newItemInput" placeholder
+                            <input type="text" id="newItemInput" placeholder="Ürün adı (
