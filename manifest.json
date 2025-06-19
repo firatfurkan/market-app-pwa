@@ -1,17 +1,9 @@
 {
   "name": "AkıllıMarket",
   "short_name": "AkıllıMarket",
-  "description": "Akıllı alışveriş asistanınız",
   "start_url": "/market-app-pwa/",
   "scope": "/market-app-pwa/",
   "display": "standalone",
   "background_color": "#6366F1",
-  "theme_color": "#6366F1",
-  "icons": [
-    {
-      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='192' height='192'%3E%3Ccircle cx='96' cy='96' r='96' fill='%236366F1'/%3E%3Ctext x='96' y='120' font-size='80' fill='white' text-anchor='middle'%3E🛒%3C/text%3E%3C/svg%3E",
-      "sizes": "192x192",
-      "type": "image/svg+xml"
-    }
-  ]
+  "theme_color": "#6366F1"
 }
