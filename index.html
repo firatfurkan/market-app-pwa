@@ -3,17 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AkıllıMarket - PWA</title>
+    <title>AkıllıMarket</title>
     
-    <!-- PWA Meta Tags - DÜZELTME -->
+    <!-- PWA Meta Tags -->
     <meta name="description" content="Akıllı alışveriş asistanınız">
     <meta name="theme-color" content="#6366F1">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-title" content="AkıllıMarket">
     
-    <!-- PWA Manifest - DÜZELTME -->
-    <link rel="manifest" href="/market-app-pwa/manifest.json">
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="./manifest.json">
     
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -516,61 +516,6 @@
             transform: translateX(0);
         }
 
-        /* Category Headers */
-        .category-header {
-            background: var(--background-gradient);
-            color: white;
-            padding: 20px 24px;
-            border-radius: 20px;
-            font-weight: 700;
-            font-size: 18px;
-            margin-bottom: 16px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: var(--shadow);
-        }
-
-        /* Shopping List Items */
-        .shopping-item {
-            display: flex;
-            align-items: center;
-            padding: 20px;
-            background: var(--card-background);
-            border-radius: 16px;
-            margin-bottom: 12px;
-            gap: 16px;
-            border: 2px solid var(--border-color);
-            transition: all 0.3s ease;
-        }
-
-        .shopping-item:hover {
-            border-color: var(--primary-color);
-            transform: translateY(-1px);
-            box-shadow: var(--shadow);
-        }
-
-        .shopping-item.completed {
-            background: #F1F5F9;
-            opacity: 0.7;
-        }
-
-        .shopping-item-content {
-            flex: 1;
-        }
-
-        .shopping-item-name {
-            font-weight: 600;
-            color: var(--text-color);
-            font-size: 16px;
-            margin-bottom: 4px;
-        }
-
-        .shopping-item-meta {
-            font-size: 12px;
-            color: var(--text-light);
-        }
-
         /* Responsive */
         @media (max-width: 480px) {
             .two-column-input {
@@ -592,10 +537,10 @@
     <div id="app"></div>
 
     <script>
-        // Service Worker Registration - DÜZELTME
+        // Service Worker Registration
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/market-app-pwa/sw.js')
+                navigator.serviceWorker.register('./sw.js')
                     .then(registration => console.log('SW registered'))
                     .catch(error => console.log('SW registration failed'));
             });
@@ -615,7 +560,7 @@
             settings: JSON.parse(localStorage.getItem('akilliMarket_settings') || '{"darkMode":false,"highContrast":false,"largeText":false}')
         };
 
-        // GENİŞLETİLMİŞ AI Aşçı Yemek Veritabanı - 25+ Yemek
+        // AI Aşçı Yemek Veritabanı
         const chefMealDatabase = {
             'makarna': {
                 ingredients: [
@@ -887,16 +832,15 @@
             }
         };
 
-        // GENİŞLETİLMİŞ Ürün Emoji Veritabanı
+        // Ürün emoji belirleme fonksiyonu
         function getProductEmoji(item) {
             const emojiMap = {
-                // Sebze & Meyve - GENİŞLETİLDİ
+                // Sebze & Meyve
                 'domates': '🍅', 'salatalık': '🥒', 'elma': '🍎', 'muz': '🍌', 'patates': '🥔',
                 'soğan': '🧅', 'marul': '🥬', 'limon': '🍋', 'havuç': '🥕', 'biber': '🌶️',
                 'patlıcan': '🍆', 'kabak': '🥒', 'portakal': '🍊', 'üzüm': '🍇', 'çilek': '🍓',
                 'kiraz': '🍒', 'armut': '🍐', 'brokoli': '🥦', 'mantar': '🍄', 'sarımsak': '🧄',
                 'maydanoz': '🌿', 'nane': '🌿', 'dereotu': '🌿', 'yeşil soğan': '🌿',
-                // YENİ MEYVELER
                 'erik': '🟣', 'kivi': '🥝', 'karpuz': '🍉', 'kavun': '🍈', 'şeftali': '🍑',
                 'kayısı': '🍑', 'incir': '🟤', 'nar': '🔴', 'ananas': '🍍', 'mango': '🥭',
                 'avokado': '🥑', 'hindistan cevizi': '🥥', 'fasulye': '🫘', 'bezelye': '🟢',
@@ -918,12 +862,9 @@
                 'domates sosu': '🍅', 'pizza hamuru': '🍕', 'kırmızı mercimek': '🌰',
                 'ekmek içi': '🍞', 'lavash': '🫓', 'mantı': '🥟', 'domates salçası': '🍅',
                 'karabiber': '🌶️', 'sos': '🥫', 'salça': '🍅', 'baharat': '🌶️',
-                // YENİ YAĞLAR
                 'ayçiçek yağı': '🌻', 'mısır yağı': '🌽', 'susam yağı': '🌰', 'fındık yağı': '🌰',
-                // YENİ TAHILLAR
                 'quinoa': '🌾', 'chia tohumu': '🌰', 'çekirdek': '🌰', 'fındık': '🌰',
                 'badem': '🌰', 'ceviz': '🌰', 'fıstık': '🥜', 'susam': '🌰',
-                // YENİ GIDALAR
                 'yufka': '🫓', 'tortilla': '🌮', 'nori': '🟢', 'wasabi': '🟢',
                 'soya sosu': '🥫', 'balık sosu': '🥫', 'ramen noodle': '🍜',
                 'pirinç noodle': '🍜', 'sushi pirinci': '🍚', 'bomba pirinci': '🍚',
@@ -942,22 +883,20 @@
             
             const itemLower = item.toLowerCase();
             
-            // Tam eşleşme ara
             if (emojiMap[itemLower]) {
                 return emojiMap[itemLower];
             }
             
-            // Kısmi eşleşme ara
             for (const [keyword, emoji] of Object.entries(emojiMap)) {
                 if (itemLower.includes(keyword) || keyword.includes(itemLower)) {
                     return emoji;
                 }
             }
             
-            return '🛒'; // Varsayılan emoji
+            return '🛒';
         }
 
-        // Kategori belirleme fonksiyonu - GENİŞLETİLDİ
+        // Kategori belirleme fonksiyonu
         function categorizeItem(item) {
             const categories = {
                 '🥬 Sebze & Meyve': [
@@ -1087,13 +1026,9 @@
             updateState({ shoppingList: updatedList });
         }
 
-        // DÜZELTME: Çöp kutusu fonksiyonu
         function deleteItemFromList(id) {
-            console.log('Silme işlemi başlatıldı, ID:', id);
-            
             const item = appState.shoppingList.find(item => String(item.id) === String(id));
             if (!item) {
-                console.error('Ürün bulunamadı:', id);
                 showNotification('Ürün bulunamadı!', 'error');
                 return;
             }
@@ -1103,7 +1038,6 @@
             showNotification(`${item.emoji} ${item.name} alındı ve listeden silindi! ✅`);
         }
 
-        // AI Aşçı Bot Arama
         function handleAiQuery() {
             const query = appState.aiQuery.toLowerCase().trim();
             
@@ -1128,98 +1062,4 @@
                 const availableMeals = Object.keys(chefMealDatabase).slice(0, 10).join(', ') + '...';
                 updateState({
                     aiSuggestions: [],
-                    aiBotResponse: `"${query}" için tarif bulunamadı. 👨‍🍳 Mevcut tarifler: ${availableMeals}`
-                });
-            }
-        }
-
-        // AI önerilerini listeye ekleme
-        function addAiSuggestionsToList() {
-            if (!appState.aiSuggestions || appState.aiSuggestions.length === 0) {
-                showNotification('Eklenecek malzeme bulunamadı!', 'error');
-                return;
-            }
-            
-            const newItems = [];
-            
-            appState.aiSuggestions.forEach(item => {
-                const emoji = getProductEmoji(item.name);
-                const newItem = {
-                    id: Date.now() + Math.random(),
-                    name: item.name,
-                    quantity: item.quantity || '1 adet',
-                    displayName: `${item.name} (${item.quantity || '1 adet'})`,
-                    emoji: emoji,
-                    completed: false,
-                    addedBy: appState.user?.name,
-                    category: categorizeItem(item.name),
-                    addedAt: new Date().toLocaleString('tr-TR')
-                };
-                newItems.push(newItem);
-            });
-            
-            const updatedShoppingList = [...appState.shoppingList, ...newItems];
-            
-            updateState({
-                shoppingList: updatedShoppingList,
-                aiSuggestions: [],
-                aiBotResponse: '',
-                aiQuery: '',
-                currentPage: 'home'
-            });
-            
-            showNotification(`${newItems.length} malzeme anasayfaya eklendi! 🛒`);
-        }
-
-        // DÜZELTME: Dark Mode fonksiyonu
-        function toggleDarkModeFunction() {
-            const newDarkMode = !appState.settings.darkMode;
-            
-            // State'i güncelle
-            appState.settings.darkMode = newDarkMode;
-            saveToStorage();
-            
-            // DOM'a zorla uygula
-            if (newDarkMode) {
-                document.documentElement.setAttribute('data-theme', 'dark');
-            } else {
-                document.documentElement.removeAttribute('data-theme');
-            }
-            
-            // Render'ı tetikle
-            setTimeout(() => {
-                render();
-            }, 100);
-            
-            showNotification(newDarkMode ? 'Gece modu açıldı 🌙' : 'Gündüz modu açıldı ☀️');
-        }
-
-        // DÜZELTME: Ayarlar toggle fonksiyonu
-        function toggleSetting(settingName) {
-            const newSettings = { 
-                ...appState.settings, 
-                [settingName]: !appState.settings[settingName] 
-            };
-            
-            // State'i güncelle
-            appState.settings = newSettings;
-            saveToStorage();
-            
-            // DOM'a anında uygula
-            if (settingName === 'highContrast') {
-                if (newSettings.highContrast) {
-                    document.body.classList.add('high-contrast');
-                    showNotification('Yüksek kontrast açıldı 🔆');
-                } else {
-                    document.body.classList.remove('high-contrast');
-                    showNotification('Yüksek kontrast kapatıldı');
-                }
-            }
-            
-            if (settingName === 'largeText') {
-                if (newSettings.largeText) {
-                    document.body.classList.add('large-text');
-                    showNotification('Büyük yazı açıldı 📝');
-                } else {
-                    document.body.classList.remove('large-text');
-                    showNotification('Normal yazı boyu
+                    a
