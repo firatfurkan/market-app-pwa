@@ -12,8 +12,8 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-title" content="AkıllıMarket">
     
-    <!-- PWA Manifest -->
-    <link rel="manifest" href="manifest.json">
+    <!-- PWA Manifest - DÜZELTME -->
+    <link rel="manifest" href="/market-app-pwa/manifest.json">
     
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -592,10 +592,10 @@
     <div id="app"></div>
 
     <script>
-        // Service Worker Registration
+        // Service Worker Registration - DÜZELTME
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./sw.js')
+                navigator.serviceWorker.register('/market-app-pwa/sw.js')
                     .then(registration => console.log('SW registered'))
                     .catch(error => console.log('SW registration failed'));
             });
@@ -1222,67 +1222,4 @@
                     showNotification('Büyük yazı açıldı 📝');
                 } else {
                     document.body.classList.remove('large-text');
-                    showNotification('Normal yazı boyutu');
-                }
-            }
-            
-            // Render'ı tetikle
-            render();
-        }
-
-        // Render functions
-        function renderLogin() {
-            return `
-                <div class="login-container">
-                    <div class="login-form">
-                        <h1>🛒 AkıllıMarket</h1>
-                        <p>Akıllı alışveriş asistanınız</p>
-                        <input type="text" id="loginInput" placeholder="Kullanıcı adınızı girin">
-                        <button onclick="handleLoginClick()">Başlayalım</button>
-                    </div>
-                </div>
-            `;
-        }
-
-        function renderHome() {
-            const totalItems = appState.shoppingList.length;
-            const completedItems = appState.shoppingList.filter(item => item.completed).length;
-            const groupedItems = appState.shoppingList.reduce((groups, item) => {
-                const category = item.category;
-                if (!groups[category]) {
-                    groups[category] = [];
-                }
-                groups[category].push(item);
-                return groups;
-            }, {});
-            const categories = Object.keys(groupedItems).length;
-
-            return `
-                <header class="app-header">
-                    <h1>🛒 AkıllıMarket</h1>
-                    <div class="user-info">
-                        ${appState.user.name}
-                        <button onclick="logout()">Çıkış</button>
-                    </div>
-                </header>
-
-                <div class="main-content">
-                    <div class="stats-grid">
-                        <div class="stat-card">
-                            <span class="stat-number">${totalItems}</span>
-                            <span class="stat-label">Ürün</span>
-                        </div>
-                        <div class="stat-card">
-                            <span class="stat-number">${completedItems}</span>
-                            <span class="stat-label">Alındı</span>
-                        </div>
-                        <div class="stat-card">
-                            <span class="stat-number">${categories}</span>
-                            <span class="stat-label">Kategori</span>
-                        </div>
-                    </div>
-
-                    <div class="card">
-                        <h2 class="card-title">➕ Ürün Ekle</h2>
-                        <div class="two-column-input">
-                            <input type="text" id="newItemInput" placeholder="Ürün adı (
+                    showNotification('Normal yazı boyu
