@@ -1,9 +1,9 @@
-const CACHE_NAME = 'akillimarket-v2.3.0';
+const CACHE_NAME = 'akillimarket-v2.4.0';
 const urlsToCache = [
-  './',
-  './index.html',
-  './manifest.json',
-  'https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap'
+  '/market-app-pwa/',
+  '/market-app-pwa/index.html',
+  '/market-app-pwa/manifest.json',
+  'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap'
 ];
 
 // Install event
