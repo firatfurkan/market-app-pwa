@@ -14,7 +14,8 @@
     <meta name="apple-mobile-web-app-title" content="AkıllıMarket">
     
     <!-- PWA Manifest -->
-    <link rel="manifest" href="manifest.json">
+  <link rel="manifest" href="/market-app-pwa/manifest.json">
+
     
     <style>
  :root {
