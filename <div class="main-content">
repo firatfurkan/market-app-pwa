@@ -566,7 +566,7 @@
         }
 
         // Global state
-        let appState = {
+                let appState = {
             user: null,
             currentPage: 'home',
             shoppingList: JSON.parse(localStorage.getItem('akilliMarket_shoppingList') || '[]'),
@@ -576,8 +576,10 @@
             aiQuery: '',
             aiSuggestions: [],
             aiBotResponse: '',
+            chefName: localStorage.getItem('akilliMarket_chefName') || 'Aşçı Bey',
             settings: JSON.parse(localStorage.getItem('akilliMarket_settings') || '{"darkMode":false,"highContrast":false,"largeText":false}')
         };
+
 
         // Genişletilmiş AI Aşçı Yemek Veritabanı
         const chefMealDatabase = {
@@ -715,10 +717,12 @@
         };
 
         // Save to localStorage
-        function saveToStorage() {
+              function saveToStorage() {
             localStorage.setItem('akilliMarket_shoppingList', JSON.stringify(appState.shoppingList));
             localStorage.setItem('akilliMarket_settings', JSON.stringify(appState.settings));
+            localStorage.setItem('akilliMarket_chefName', appState.chefName);
         }
+
 
         // Notification System
         function showNotification(message, type = 'success') {
@@ -758,8 +762,14 @@
                 'ekmek içi': '🍞', 'lavash': '🫓', 'mantı': '🥟', 'domates salçası': '🍅',
                 'karabiber': '🌶️', 'sos': '🥫',
                 
-                // İçecekler
+                               // İçecekler - GENİŞLETİLDİ
                 'su': '💧', 'meyve suyu': '🧃', 'kola': '🥤', 'ayran': '🥛',
+                'gazoz': '🥤', 'şarap': '🍷', 'bira': '🍺',
+                'cola': '🥤', 'fanta': '🍊', 'sprite': '🟢', 'icetea': '🧊', 
+                'ice tea': '🧊', 'çay': '🍵', 'kahve': '☕', 'limonata': '🍋',
+                'portakal suyu': '🍊', 'elma suyu': '🍎', 'şeftali suyu': '🍑',
+                'energy drink': '⚡', 'enerji içeceği': '⚡', 'soda': '🥤',
+
                 
                 // Temizlik
                 'deterjan': '🧽', 'sabun': '🧼', 'şampuan': '🧴', 'diş macunu': '🦷',
@@ -805,9 +815,13 @@
                     'kırmızı mercimek', 'ekmek içi', 'lavash', 'mantı', 'domates salçası',
                     'karabiber', 'sos'
                 ],
-                '💧 İçecekler': [
-                    'su', 'meyve suyu', 'kola', 'ayran', 'gazoz'
+                               '💧 İçecekler': [
+                    'su', 'meyve suyu', 'kola', 'ayran', 'gazoz', 'şarap', 'bira',
+                    'cola', 'fanta', 'sprite', 'icetea', 'ice tea', 'çay', 'kahve',
+                    'limonata', 'portakal suyu', 'elma suyu', 'şeftali suyu',
+                    'energy drink', 'enerji içeceği', 'soda'
                 ],
+
                 '🧽 Temizlik & Hijyen': [
                     'deterjan', 'sabun', 'şampuan', 'diş macunu', 'çöp poşeti', 
                     'çöp torbası', 'temizlik bezi', 'tuvalet kağıdı', 'peçete'
@@ -925,14 +939,24 @@
                     break;
                 }
             }
-
             if (!found) {
-                const availableMeals = Object.keys(chefMealDatabase).join(', ');
+                const funnyResponses = [
+                    `Hmm, "${query}" mi? 🤔 ${appState.chefName} şu anda bu tarifi araştırıyor! Belki de yeni bir lezzet keşfedecek!`,
+                    `"${query}" için tarif bulunamadı ama ${appState.chefName} pes etmiyor! 💪 Mutfakta deneyimler yapıyor...`,
+                    `Vay be! "${query}" ilginç bir seçim! 🧐 ${appState.chefName} bu tarifi henüz öğrenmemiş, ama çalışıyor!`,
+                    `"${query}" ha? 🤨 ${appState.chefName} şu anda bu konuda araştırma yapıyor. Sabırlı olun!`,
+                    `Ups! "${query}" ${appState.chefName}'in repertuvarında yok henüz. Ama öğrenmeye hevesli! 📚`
+                ];
+                const randomResponse = funnyResponses[Math.floor(Math.random() * funnyResponses.length)];
+                const availableMeals = Object.keys(chefMealDatabase).slice(0, 8).join(', ');
+                
                 updateState({
                     aiSuggestions: [],
-                    aiBotResponse: `"${query}" için tarif bulunamadı. 👨‍🍳 Mevcut tarifler: ${availableMeals}`
+                    aiBotResponse: `${randomResponse}\n\n👨‍🍳 Bildiği tarifler: ${availableMeals}...`
                 });
             }
+
+         
         }
 
         // AI önerilerini listeye ekleme - SONSUZ DÖNGÜ DÜZELTİLDİ
@@ -1164,13 +1188,26 @@
 
         function renderChef() {
             return `
-                <header class="app-header">
-                    <h1>👨‍🍳 Aşçı - AI Asistan</h1>
+                                <header class="app-header">
+                    <h1>👨‍🍳 ${appState.chefName}</h1>
                     <div class="user-info">
                         ${appState.user.name}
                         <button onclick="logout()">Çıkış</button>
                     </div>
                 </header>
+
+ <div class="main-content">
+            <div class="card">
+                <h2 class="card-title">👨‍🍳 Aşçı Ayarları</h2>
+                <div class="input-group">
+                    <input type="text" id="chefNameInput" placeholder="Aşçınızın adını girin" value="${appState.chefName}">
+                    <button class="btn-primary" onclick="updateChefName()">Güncelle</button>
+                </div>
+                <p style="font-size: 13px; color: var(--text-light); margin-top: 8px;">
+                    💡 Aşçınıza istediğiniz ismi verebilirsiniz!
+                </p>
+            </div>
+
 
                 <div class="main-content">
                     <div class="card">
