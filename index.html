@@ -1451,25 +1451,13 @@
             updateState({ currentPage: page });
         };
 
-        window.toggleItemComplete = function(id) {
-            toggleItemComplete(id);
-        };
+               // Global functions - DÜZELTİLMİŞ
+        window.toggleItemComplete = toggleItemComplete;
+        window.deleteItemFromList = deleteItemFromList;
+        window.addAiSuggestionsToList = addAiSuggestionsToList;
+        window.toggleDarkModeFunction = toggleDarkModeFunction;
+        window.toggleSetting = toggleSetting;
 
-        window.deleteItemFromList = function(id) {
-            deleteItemFromList(id);
-        };
-
-        window.addAiSuggestionsToList = function() {
-            addAiSuggestionsToList();
-        };
-
-        window.toggleDarkModeFunction = function() {
-            toggleDarkModeFunction();
-        };
-
-        window.toggleSetting = function(setting) {
-            toggleSetting(setting);
-        };
 
         window.clearAllData = function() {
             if (confirm('Tüm veriler silinecek. Emin misiniz?')) {
