@@ -13,7 +13,7 @@
     <meta name="apple-mobile-web-app-title" content="AkıllıMarket">
     
     <!-- PWA Manifest -->
-    <link rel="manifest" href="/market-app-pwa/manifest.json">
+    <link rel="manifest" href="./manifest.json">
     
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -493,7 +493,7 @@
             color: var(--text-light);
         }
 
-        /* Delete Button - İYİLEŞTİRİLMİŞ */
+        /* Delete Button */
         .delete-btn {
             background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%) !important;
             color: white !important;
@@ -570,7 +570,7 @@
             margin-top: 4px;
         }
 
-        /* Toggle Switch - DÜZELTİLMİŞ */
+        /* Toggle Switch */
         .toggle-switch {
             position: relative;
             width: 56px;
@@ -662,9 +662,7 @@
         // Service Worker Registration
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/market-app-pwa/sw.js', {
-                    scope: '/market-app-pwa/'
-                })
+                navigator.serviceWorker.register('./sw.js')
                     .then(registration => console.log('SW registered'))
                     .catch(error => console.log('SW registration failed'));
             });
@@ -685,7 +683,7 @@
             settings: JSON.parse(localStorage.getItem('akilliMarket_settings') || '{"darkMode":false,"highContrast":false,"largeText":false}')
         };
 
-        // GENİŞLETİLMİŞ AI Aşçı Yemek Veritabanı
+        // AI Aşçı Yemek Veritabanı
         const chefMealDatabase = {
             'makarna': {
                 ingredients: [
@@ -817,67 +815,10 @@
                     { name: 'nane', quantity: '1 demet' }
                 ],
                 response: "🥟 Geleneksel mantı malzemeleri! Türk mutfağının en özel lezzetlerinden."
-            },
-            'lahmacun': {
-                ingredients: [
-                    { name: 'lahmacun hamuru', quantity: '8 adet' },
-                    { name: 'kıyma', quantity: '400g' },
-                    { name: 'soğan', quantity: '2 adet' },
-                    { name: 'domates', quantity: '2 adet' },
-                    { name: 'maydanoz', quantity: '1 demet' },
-                    { name: 'salça', quantity: '2 kaşık' },
-                    { name: 'baharat', quantity: '1 paket' }
-                ],
-                response: "🫓 Enfes lahmacun malzemeleri! Türk mutfağının vazgeçilmez lezzeti."
-            },
-            'pide': {
-                ingredients: [
-                    { name: 'pide hamuru', quantity: '4 adet' },
-                    { name: 'kaşar peyniri', quantity: '300g' },
-                    { name: 'yumurta', quantity: '4 adet' },
-                    { name: 'sucuk', quantity: '200g' },
-                    { name: 'tereyağı', quantity: '100g' }
-                ],
-                response: "🥖 Lezzetli pide malzemeleri! Kahvaltı ve akşam yemeği için ideal."
-            },
-            'börek': {
-                ingredients: [
-                    { name: 'yufka', quantity: '1 paket' },
-                    { name: 'beyaz peynir', quantity: '400g' },
-                    { name: 'maydanoz', quantity: '1 demet' },
-                    { name: 'yumurta', quantity: '3 adet' },
-                    { name: 'süt', quantity: '1 su bardağı' },
-                    { name: 'zeytinyağı', quantity: '1 şişe' }
-                ],
-                response: "🥧 Su böreği malzemeleri! Geleneksel Türk böreği için mükemmel."
-            },
-            'sushi': {
-                ingredients: [
-                    { name: 'sushi pirinci', quantity: '2 su bardağı' },
-                    { name: 'nori', quantity: '10 yaprak' },
-                    { name: 'somon', quantity: '300g' },
-                    { name: 'avokado', quantity: '2 adet' },
-                    { name: 'salatalık', quantity: '1 adet' },
-                    { name: 'wasabi', quantity: '1 tüp' },
-                    { name: 'soya sosu', quantity: '1 şişe' }
-                ],
-                response: "🍣 Japon mutfağından sushi malzemeleri! Evde sushi yapma keyfi."
-            },
-            'tacos': {
-                ingredients: [
-                    { name: 'tortilla', quantity: '8 adet' },
-                    { name: 'dana eti', quantity: '500g' },
-                    { name: 'marul', quantity: '1 adet' },
-                    { name: 'domates', quantity: '3 adet' },
-                    { name: 'kaşar peyniri', quantity: '200g' },
-                    { name: 'avokado', quantity: '2 adet' },
-                    { name: 'limon', quantity: '2 adet' }
-                ],
-                response: "🌮 Meksika usulü tacos malzemeleri! Renkli ve lezzetli bir deneyim."
             }
         };
 
-        // GENİŞLETİLMİŞ Ürün Emoji Veritabanı
+        // Ürün emoji belirleme fonksiyonu
         function getProductEmoji(item) {
             const emojiMap = {
                 // Sebze & Meyve
@@ -886,19 +827,12 @@
                 'patlıcan': '🍆', 'kabak': '🥒', 'portakal': '🍊', 'üzüm': '🍇', 'çilek': '🍓',
                 'kiraz': '🍒', 'armut': '🍐', 'brokoli': '🥦', 'mantar': '🍄', 'sarımsak': '🧄',
                 'maydanoz': '🌿', 'nane': '🌿', 'dereotu': '🌿', 'yeşil soğan': '🌿',
-                'erik': '🟣', 'kivi': '🥝', 'karpuz': '🍉', 'kavun': '🍈', 'şeftali': '🍑',
-                'kayısı': '🍑', 'incir': '🟤', 'nar': '🔴', 'ananas': '🍍', 'mango': '🥭',
-                'avokado': '🥑', 'hindistan cevizi': '🥥', 'fasulye': '🫘', 'bezelye': '🟢',
-                'mısır': '🌽', 'bamya': '🟢', 'turp': '🔴', 'pancar': '🟣', 'lahana': '🥬',
-                'karnabahar': '🥦', 'ispanak': '🥬', 'roka': '🥬', 'semizotu': '🌿',
                 
                 // Et & Süt
                 'tavuk': '🐔', 'dana eti': '🥩', 'balık': '🐟', 'süt': '🥛', 'yoğurt': '🥛',
                 'peynir': '🧀', 'yumurta': '🥚', 'tereyağı': '🧈', 'kıyma': '🥩', 'sosis': '🌭',
                 'sucuk': '🌭', 'kaşar': '🧀', 'beyaz peynir': '🧀', 'tavuk eti': '🐔',
                 'mozzarella peyniri': '🧀', 'parmesan peyniri': '🧀', 'tavuk suyu': '🍲',
-                'kuzu eti': '🥩', 'karides': '🦐', 'midye': '🦪', 'somon': '🐟',
-                'tel peynir': '🧀', 'kaşar peyniri': '🧀',
                 
                 // Temel Gıda
                 'ekmek': '🍞', 'pirinç': '🍚', 'makarna': '🍝', 'un': '🌾', 'şeker': '🍯',
@@ -907,22 +841,12 @@
                 'domates sosu': '🍅', 'pizza hamuru': '🍕', 'kırmızı mercimek': '🌰',
                 'ekmek içi': '🍞', 'lavash': '🫓', 'mantı': '🥟', 'domates salçası': '🍅',
                 'karabiber': '🌶️', 'sos': '🥫', 'salça': '🍅', 'baharat': '🌶️',
-                'ayçiçek yağı': '🌻', 'mısır yağı': '🌽', 'susam yağı': '🌰', 'fındık yağı': '🌰',
-                'quinoa': '🌾', 'chia tohumu': '🌰', 'çekirdek': '🌰', 'fındık': '🌰',
-                'badem': '🌰', 'ceviz': '🌰', 'fıstık': '🥜', 'susam': '🌰',
-                'yufka': '🫓', 'tortilla': '🌮', 'nori': '🟢', 'wasabi': '🟢',
-                'soya sosu': '🥫', 'balık sosu': '🥫', 'ramen noodle': '🍜',
-                'pirinç noodle': '🍜', 'sushi pirinci': '🍚', 'bomba pirinci': '🍚',
-                'kadayıf': '🍯', 'baklava yufkası': '🍯', 'şerbet': '🍯',
-                'safran': '🟡', 'sumak': '🔴', 'fasulye filizi': '🌱',
-                'lahmacun hamuru': '🫓', 'pide hamuru': '🥖', 'yaprak': '🍃',
                 
                 // İçecekler - GENİŞLETİLDİ
                 'su': '💧', 'meyve suyu': '🧃', 'kola': '🥤', 'ayran': '🥛',
                 'gazoz': '🥤', 'şarap': '🍷', 'bira': '🍺',
                 'cola': '🥤', 'fanta': '🍊', 'sprite': '🟢', 'icetea': '🧊', 
-                'ice tea': '🧊', 'çay': '🍵', 'kahve': '☕', 'limonata': '🍋',
-                'portakal suyu': '🍊', 'elma suyu': '🍎', 'şeftali suyu': '🍑',
+                'ice tea': '🧊', 'limonata': '🍋', 'portakal suyu': '🍊', 'elma suyu': '🍎',
                 'energy drink': '⚡', 'enerji içeceği': '⚡', 'soda': '🥤',
                 'pepsi': '🥤', 'coca cola': '🥤', 'redbull': '⚡',
                 
@@ -953,40 +877,30 @@
                     'domates', 'salatalık', 'elma', 'muz', 'patates', 'soğan', 
                     'marul', 'limon', 'havuç', 'biber', 'patlıcan', 'kabak',
                     'portakal', 'üzüm', 'çilek', 'kiraz', 'armut', 'brokoli', 'mantar',
-                    'sarımsak', 'maydanoz', 'nane', 'dereotu', 'yeşil soğan',
-                    'erik', 'kivi', 'karpuz', 'kavun', 'şeftali', 'kayısı', 'incir',
-                    'nar', 'ananas', 'mango', 'avokado', 'hindistan cevizi', 'fasulye',
-                    'bezelye', 'mısır', 'bamya', 'turp', 'pancar', 'lahana',
-                    'karnabahar', 'ispanak', 'roka', 'semizotu', 'fasulye filizi', 'yaprak'
+                    'sarımsak', 'maydanoz', 'nane', 'dereotu', 'yeşil soğan'
                 ],
                 '🥩 Et & Süt': [
-                    'tavuk', 'dana eti', 'kuzu eti', 'balık', 'süt', 'yoğurt', 
+                    'tavuk', 'dana eti', 'balık', 'süt', 'yoğurt', 
                     'peynir', 'yumurta', 'tereyağı', 'kıyma', 'sosis', 'sucuk',
-                    'kaşar', 'beyaz peynir', 'krema', 'tavuk eti', 'mozzarella peyniri', 
-                    'parmesan peyniri', 'tavuk suyu', 'karides', 'midye', 'somon',
-                    'tel peynir', 'kaşar peyniri'
+                    'kaşar', 'beyaz peynir', 'tavuk eti', 'mozzarella peyniri', 
+                    'parmesan peyniri', 'tavuk suyu'
                 ],
                 '🍞 Temel Gıda': [
                     'ekmek', 'pirinç', 'makarna', 'un', 'şeker', 'tuz', 
                     'zeytinyağı', 'mercimek', 'nohut', 'bulgur', 'yulaf',
                     'bal', 'reçel', 'çay', 'kahve', 'domates sosu', 'pizza hamuru',
                     'kırmızı mercimek', 'ekmek içi', 'lavash', 'mantı', 'domates salçası',
-                    'karabiber', 'sos', 'salça', 'baharat', 'ayçiçek yağı', 'mısır yağı',
-                    'susam yağı', 'fındık yağı', 'quinoa', 'chia tohumu', 'çekirdek',
-                    'fındık', 'badem', 'ceviz', 'fıstık', 'susam', 'yufka', 'tortilla',
-                    'nori', 'wasabi', 'soya sosu', 'balık sosu', 'ramen noodle',
-                    'pirinç noodle', 'sushi pirinci', 'bomba pirinci', 'kadayıf',
-                    'baklava yufkası', 'şerbet', 'safran', 'sumak', 'lahmacun hamuru', 'pide hamuru'
+                    'karabiber', 'sos', 'salça', 'baharat'
                 ],
                 '💧 İçecekler': [
                     'su', 'meyve suyu', 'kola', 'ayran', 'gazoz', 'şarap', 'bira',
-                    'cola', 'fanta', 'sprite', 'icetea', 'ice tea', 'çay', 'kahve',
-                    'limonata', 'portakal suyu', 'elma suyu', 'şeftali suyu',
-                    'energy drink', 'enerji içeceği', 'soda', 'pepsi', 'coca cola', 'redbull'
+                    'cola', 'fanta', 'sprite', 'icetea', 'ice tea', 'limonata', 
+                    'portakal suyu', 'elma suyu', 'energy drink', 'enerji içeceği', 
+                    'soda', 'pepsi', 'coca cola', 'redbull'
                 ],
                 '🧽 Temizlik & Hijyen': [
                     'deterjan', 'sabun', 'şampuan', 'diş macunu', 'çöp poşeti', 
-                    'çöp torbası', 'temizlik bezi', 'tuvalet kağıdı', 'peçete'
+                    'tuvalet kağıdı'
                 ]
             };
             
@@ -1069,14 +983,10 @@
             showNotification(`${emoji} ${name} (${displayQuantity}) listeye eklendi! ✅`);
         }
 
-        // DÜZELTİLMİŞ Toggle Item Fonksiyonu
-        function toggleItem(id) {
-            console.log('Toggle item çağrıldı:', id);
+        function toggleItemComplete(id) {
             const updatedList = appState.shoppingList.map(item => {
                 if (String(item.id) === String(id)) {
-                    const newCompleted = !item.completed;
-                    console.log('Item durumu değiştirildi:', item.name, newCompleted);
-                    return { ...item, completed: newCompleted };
+                    return { ...item, completed: !item.completed };
                 }
                 return item;
             });
@@ -1085,16 +995,13 @@
             
             const item = appState.shoppingList.find(item => String(item.id) === String(id));
             if (item) {
-                showNotification(item.completed ? `${item.emoji} ${item.name} alındı olarak işaretlendi! ✅` : `${item.emoji} ${item.name} tekrar listeye eklendi! 🔄`);
+                showNotification(item.completed ? `${item.emoji} ${item.name} alındı! ✅` : `${item.emoji} ${item.name} tekrar listeye eklendi! 🔄`);
             }
         }
 
-        // DÜZELTİLMİŞ Delete Item Fonksiyonu
         function deleteItemFromList(id) {
-            console.log('Delete item çağrıldı:', id);
             const item = appState.shoppingList.find(item => String(item.id) === String(id));
             if (!item) {
-                console.error('Ürün bulunamadı:', id);
                 showNotification('Ürün bulunamadı!', 'error');
                 return;
             }
@@ -1126,14 +1033,11 @@
 
             if (!found) {
                 const funnyResponses = [
-                    `Hmm, "${query}" mi? 🤔 ${appState.chefName} şu anda bu tarifi araştırıyor! Belki de yeni bir lezzet keşfedecek!`,
-                    `"${query}" için tarif bulunamadı ama ${appState.chefName} pes etmiyor! 💪 Mutfakta deneyimler yapıyor...`,
-                    `Vay be! "${query}" ilginç bir seçim! 🧐 ${appState.chefName} bu tarifi henüz öğrenmemiş, ama çalışıyor!`,
-                    `"${query}" ha? 🤨 ${appState.chefName} şu anda bu konuda araştırma yapıyor. Sabırlı olun!`,
-                    `Ups! "${query}" ${appState.chefName}'in repertuvarında yok henüz. Ama öğrenmeye hevesli! 📚`,
-                    `"${query}" için ${appState.chefName} şu anda YouTube'da video izliyor! 📺 Biraz sabır...`,
-                    `${appState.chefName}: "Bu ${query} ne ya? 🤷‍♂️ Ama öğreneceğim, merak etme!"`,
-                    `"${query}" konusunda ${appState.chefName} henüz uzman değil, ama çalışkan! 💼`
+                    `Hmm, "${query}" mi? 🤔 ${appState.chefName} şu anda bu tarifi araştırıyor!`,
+                    `"${query}" için tarif bulunamadı ama ${appState.chefName} pes etmiyor! 💪`,
+                    `Vay be! "${query}" ilginç bir seçim! 🧐 ${appState.chefName} çalışıyor!`,
+                    `"${query}" ha? 🤨 ${appState.chefName} araştırma yapıyor. Sabırlı olun!`,
+                    `"${query}" ${appState.chefName}'in repertuvarında yok henüz. Ama öğreniyor! 📚`
                 ];
                 const randomResponse = funnyResponses[Math.floor(Math.random() * funnyResponses.length)];
                 const availableMeals = Object.keys(chefMealDatabase).slice(0, 8).join(', ');
@@ -1145,10 +1049,7 @@
             }
         }
 
-        // DÜZELTİLMİŞ AI Suggestions Ekleme Fonksiyonu
         function addAiSuggestionsToList() {
-            console.log('AI önerileri ekleniyor:', appState.aiSuggestions);
-            
             if (!appState.aiSuggestions || appState.aiSuggestions.length === 0) {
                 showNotification('Eklenecek malzeme bulunamadı!', 'error');
                 return;
@@ -1185,11 +1086,8 @@
             showNotification(`${newItems.length} malzeme anasayfaya eklendi! 🛒`);
         }
 
-        // DÜZELTİLMİŞ Dark Mode Fonksiyonu
         function toggleDarkModeFunction() {
-            console.log('Dark mode toggle çağrıldı');
             const newDarkMode = !appState.settings.darkMode;
-            
             const newSettings = { ...appState.settings, darkMode: newDarkMode };
             updateState({ settings: newSettings });
             
@@ -1202,9 +1100,7 @@
             showNotification(newDarkMode ? 'Gece modu açıldı 🌙' : 'Gündüz modu açıldı ☀️');
         }
 
-        // DÜZELTİLMİŞ Settings Toggle Fonksiyonu
         function toggleSetting(settingName) {
-            console.log('Setting toggle çağrıldı:', settingName);
             const newSettings = { 
                 ...appState.settings, 
                 [settingName]: !appState.settings[settingName] 
@@ -1266,3 +1162,178 @@
                     <div class="user-info">
                         ${appState.user.name}
                         <button onclick="logout()">Çıkış</button>
+                    </div>
+                </header>
+
+                <div class="main-content">
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <span class="stat-number">${totalItems}</span>
+                            <span class="stat-label">Ürün</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-number">${completedItems}</span>
+                            <span class="stat-label">Alındı</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-number">${categories}</span>
+                            <span class="stat-label">Kategori</span>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h2 class="card-title">✨ Ürün Ekle</h2>
+                        <div class="two-column-input">
+                            <input type="text" id="newItemInput" placeholder="Ürün adı (örn: Zeytinyağı)" value="${appState.newItem}">
+                            <div style="display: flex; gap: 12px;">
+                                <input type="number" id="newQuantityInput" placeholder="Miktar" value="${appState.newQuantity}" style="width: 80px;">
+                                <select id="newUnitSelect" style="width: 100px;">
+                                    <option value="adet" ${appState.newUnit === 'adet' ? 'selected' : ''}>Adet</option>
+                                    <option value="kg" ${appState.newUnit === 'kg' ? 'selected' : ''}>Kg</option>
+                                    <option value="g" ${appState.newUnit === 'g' ? 'selected' : ''}>Gram</option>
+                                    <option value="l" ${appState.newUnit === 'l' ? 'selected' : ''}>Litre</option>
+                                    <option value="ml" ${appState.newUnit === 'ml' ? 'selected' : ''}>ML</option>
+                                    <option value="paket" ${appState.newUnit === 'paket' ? 'selected' : ''}>Paket</option>
+                                    <option value="şişe" ${appState.newUnit === 'şişe' ? 'selected' : ''}>Şişe</option>
+                                </select>
+                            </div>
+                        </div>
+                        <button class="btn-primary" style="width: 100%;" onclick="addNewItem()">🛒 Ürün Ekle</button>
+                        <p style="font-size: 13px; color: var(--text-light); margin-top: 12px; text-align: center; opacity: 0.8;">
+                            💡 Örnek: "Zeytinyağı" - "1" - "Şişe"
+                        </p>
+                    </div>
+
+                    ${Object.keys(groupedItems).length > 0 ? Object.keys(groupedItems).map(category => `
+                        <div class="category-header">
+                            ${category}
+                            <span>${groupedItems[category].length}</span>
+                        </div>
+                        ${groupedItems[category].map(item => `
+                            <div class="shopping-item ${item.completed ? 'completed' : ''}">
+                                <button class="check-btn ${item.completed ? 'completed' : ''}" onclick="toggleItemComplete('${item.id}')">
+                                    ${item.completed ? '✓' : ''}
+                                </button>
+                                <span style="font-size: 24px;">${item.emoji}</span>
+                                <div class="shopping-item-content">
+                                    <div class="shopping-item-name">${item.name}</div>
+                                    <div class="shopping-item-meta">${item.quantity} • ${item.addedAt}</div>
+                                </div>
+                                <button class="delete-btn" onclick="deleteItemFromList('${item.id}')">🗑️</button>
+                            </div>
+                        `).join('')}
+                    `).join('') : '<div class="card"><p style="text-align: center; color: var(--text-light);">Henüz ürün eklenmemiş 🛒</p></div>'}
+                </div>
+
+                <nav class="bottom-nav">
+                    <div class="nav-item active" onclick="changePage('home')">
+                        <div class="nav-icon">🏠</div>
+                        <span>Ana Sayfa</span>
+                    </div>
+                    <div class="nav-item" onclick="changePage('chef')">
+                        <div class="nav-icon">👨‍🍳</div>
+                        <span>Aşçı</span>
+                    </div>
+                    <div class="nav-item" onclick="changePage('settings')">
+                        <div class="nav-icon">⚙️</div>
+                        <span>Ayarlar</span>
+                    </div>
+                </nav>
+            `;
+        }
+
+        function renderChef() {
+            return `
+                <header class="app-header">
+                    <h1>👨‍🍳 ${appState.chefName}</h1>
+                    <div class="user-info">
+                        ${appState.user.name}
+                        <button onclick="logout()">Çıkış</button>
+                    </div>
+                </header>
+
+                <div class="main-content">
+                    <div class="card">
+                        <h2 class="card-title">👨‍🍳 Aşçı Ayarları</h2>
+                        <div class="input-group">
+                            <input type="text" id="chefNameInput" placeholder="Aşçınızın adını girin" value="${appState.chefName}">
+                            <button class="btn-primary" onclick="updateChefName()">Güncelle</button>
+                        </div>
+                        <p style="font-size: 13px; color: var(--text-light); margin-top: 8px;">
+                            💡 Aşçınıza istediğiniz ismi verebilirsiniz!
+                        </p>
+                    </div>
+
+                    <div class="card">
+                        <h2 class="card-title">👨‍🍳 Yemek Ara</h2>
+                        <div class="input-group">
+                            <input type="text" id="aiQueryInput" placeholder="Hangi yemek yapmak istiyorsun?" value="${appState.aiQuery}">
+                            <button class="btn-primary" onclick="handleAiQueryClick()">Ara</button>
+                        </div>
+                        <p style="font-size: 13px; color: var(--text-light); margin-top: 8px;">
+                            💡 Örnek: "makarna", "omlet", "pizza"
+                        </p>
+                    </div>
+
+                    ${appState.aiBotResponse ? `
+                        <div class="ai-bot-response">
+                            <h3 style="margin-bottom: 12px;">🤖 ${appState.chefName} Diyor:</h3>
+                            <p style="white-space: pre-line;">${appState.aiBotResponse}</p>
+                        </div>
+                    ` : ''}
+
+                    ${appState.aiSuggestions.length > 0 ? `
+                        <div class="ai-suggestions">
+                            <h3 style="margin-bottom: 16px;">🛒 Gerekli Malzemeler:</h3>
+                            ${appState.aiSuggestions.map(item => `
+                                <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
+                                    <span style="font-size: 20px;">${getProductEmoji(item.name)}</span>
+                                    <span style="font-weight: 500;">${item.name}</span>
+                                    <span style="color: var(--text-light);">(${item.quantity})</span>
+                                </div>
+                            `).join('')}
+                            <button class="btn-secondary" onclick="addAiSuggestionsToList()" style="margin-top: 16px;">
+                                Tümünü Listeye Ekle
+                            </button>
+                        </div>
+                    ` : ''}
+                </div>
+
+                <nav class="bottom-nav">
+                    <div class="nav-item" onclick="changePage('home')">
+                        <div class="nav-icon">🏠</div>
+                        <span>Ana Sayfa</span>
+                    </div>
+                    <div class="nav-item active" onclick="changePage('chef')">
+                        <div class="nav-icon">👨‍🍳</div>
+                        <span>Aşçı</span>
+                    </div>
+                    <div class="nav-item" onclick="changePage('settings')">
+                        <div class="nav-icon">⚙️</div>
+                        <span>Ayarlar</span>
+                    </div>
+                </nav>
+            `;
+        }
+
+        function renderSettings() {
+            return `
+                <header class="app-header">
+                    <h1>⚙️ Ayarlar</h1>
+                    <div class="user-info">
+                        ${appState.user.name}
+                        <button onclick="logout()">Çıkış</button>
+                    </div>
+                </header>
+
+                <div class="main-content">
+                    <div class="card">
+                        <h2 class="card-title">🎨 Görünüm</h2>
+                        
+                        <div class="setting-item">
+                            <div>
+                                <div class="setting-label">Gece Modu</div>
+                                <div class="setting-description">Koyu tema kullan</div>
+                            </div>
+                            <div class="toggle-switch ${appState.settings.darkMode ? 'active' : ''}" onclick="toggleDarkModeFunction()">
+                                <div class="toggle-slider"></div>
