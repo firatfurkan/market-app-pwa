@@ -421,7 +421,79 @@
             box-shadow: 0 10px 25px rgba(245, 158, 11, 0.4);
         }
 
-        /* Delete Button */
+        /* Shopping Item - YENİ TASARIM */
+        .shopping-item {
+            display: flex;
+            align-items: center;
+            padding: 20px;
+            background: var(--card-background);
+            border-radius: 16px;
+            margin-bottom: 12px;
+            gap: 16px;
+            border: 2px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .shopping-item:hover {
+            border-color: var(--primary-color);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow);
+        }
+
+        .shopping-item.completed {
+            background: #F1F5F9;
+            opacity: 0.8;
+        }
+
+        .shopping-item.completed .shopping-item-name {
+            text-decoration: line-through;
+            color: var(--text-light);
+        }
+
+        /* Tik Butonu */
+        .check-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: 3px solid var(--border-color);
+            background: transparent;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            font-size: 16px;
+            color: transparent;
+        }
+
+        .check-btn.completed {
+            background: var(--accent-color) !important;
+            border-color: var(--accent-color) !important;
+            color: white !important;
+        }
+
+        .check-btn:hover {
+            border-color: var(--accent-color);
+            background: rgba(16, 185, 129, 0.1);
+        }
+
+        .shopping-item-content {
+            flex: 1;
+        }
+
+        .shopping-item-name {
+            font-weight: 600;
+            color: var(--text-color);
+            font-size: 16px;
+            margin-bottom: 4px;
+        }
+
+        .shopping-item-meta {
+            font-size: 12px;
+            color: var(--text-light);
+        }
+
+        /* Delete Button - İYİLEŞTİRİLMİŞ */
         .delete-btn {
             background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%) !important;
             color: white !important;
@@ -498,6 +570,7 @@
             margin-top: 4px;
         }
 
+        /* Toggle Switch - DÜZELTİLMİŞ */
         .toggle-switch {
             position: relative;
             width: 56px;
@@ -548,6 +621,21 @@
 
         .notification.show {
             transform: translateX(0);
+        }
+
+        /* Category Headers */
+        .category-header {
+            background: var(--background-gradient);
+            color: white;
+            padding: 20px 24px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 18px;
+            margin-bottom: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: var(--shadow);
         }
 
         /* Responsive */
@@ -981,27 +1069,39 @@
             showNotification(`${emoji} ${name} (${displayQuantity}) listeye eklendi! ✅`);
         }
 
+        // DÜZELTİLMİŞ Toggle Item Fonksiyonu
         function toggleItem(id) {
+            console.log('Toggle item çağrıldı:', id);
             const updatedList = appState.shoppingList.map(item => {
                 if (String(item.id) === String(id)) {
-                    return { ...item, completed: !item.completed };
+                    const newCompleted = !item.completed;
+                    console.log('Item durumu değiştirildi:', item.name, newCompleted);
+                    return { ...item, completed: newCompleted };
                 }
                 return item;
             });
             
             updateState({ shoppingList: updatedList });
+            
+            const item = appState.shoppingList.find(item => String(item.id) === String(id));
+            if (item) {
+                showNotification(item.completed ? `${item.emoji} ${item.name} alındı olarak işaretlendi! ✅` : `${item.emoji} ${item.name} tekrar listeye eklendi! 🔄`);
+            }
         }
 
+        // DÜZELTİLMİŞ Delete Item Fonksiyonu
         function deleteItemFromList(id) {
+            console.log('Delete item çağrıldı:', id);
             const item = appState.shoppingList.find(item => String(item.id) === String(id));
             if (!item) {
+                console.error('Ürün bulunamadı:', id);
                 showNotification('Ürün bulunamadı!', 'error');
                 return;
             }
             
             const updatedList = appState.shoppingList.filter(item => String(item.id) !== String(id));
             updateState({ shoppingList: updatedList });
-            showNotification(`${item.emoji} ${item.name} alındı ve listeden silindi! ✅`);
+            showNotification(`${item.emoji} ${item.name} listeden silindi! 🗑️`);
         }
 
         function handleAiQuery() {
@@ -1045,7 +1145,10 @@
             }
         }
 
+        // DÜZELTİLMİŞ AI Suggestions Ekleme Fonksiyonu
         function addAiSuggestionsToList() {
+            console.log('AI önerileri ekleniyor:', appState.aiSuggestions);
+            
             if (!appState.aiSuggestions || appState.aiSuggestions.length === 0) {
                 showNotification('Eklenecek malzeme bulunamadı!', 'error');
                 return;
@@ -1082,11 +1185,13 @@
             showNotification(`${newItems.length} malzeme anasayfaya eklendi! 🛒`);
         }
 
+        // DÜZELTİLMİŞ Dark Mode Fonksiyonu
         function toggleDarkModeFunction() {
+            console.log('Dark mode toggle çağrıldı');
             const newDarkMode = !appState.settings.darkMode;
             
-            appState.settings.darkMode = newDarkMode;
-            saveToStorage();
+            const newSettings = { ...appState.settings, darkMode: newDarkMode };
+            updateState({ settings: newSettings });
             
             if (newDarkMode) {
                 document.documentElement.setAttribute('data-theme', 'dark');
@@ -1094,21 +1199,18 @@
                 document.documentElement.removeAttribute('data-theme');
             }
             
-            setTimeout(() => {
-                render();
-            }, 100);
-            
             showNotification(newDarkMode ? 'Gece modu açıldı 🌙' : 'Gündüz modu açıldı ☀️');
         }
 
+        // DÜZELTİLMİŞ Settings Toggle Fonksiyonu
         function toggleSetting(settingName) {
+            console.log('Setting toggle çağrıldı:', settingName);
             const newSettings = { 
                 ...appState.settings, 
                 [settingName]: !appState.settings[settingName] 
             };
             
-            appState.settings = newSettings;
-            saveToStorage();
+            updateState({ settings: newSettings });
             
             if (settingName === 'highContrast') {
                 if (newSettings.highContrast) {
@@ -1129,8 +1231,6 @@
                     showNotification('Normal yazı boyutu');
                 }
             }
-            
-            render();
         }
 
         // Render functions
@@ -1166,362 +1266,3 @@
                     <div class="user-info">
                         ${appState.user.name}
                         <button onclick="logout()">Çıkış</button>
-                    </div>
-                </header>
-
-                <div class="main-content">
-                    <div class="stats-grid">
-                        <div class="stat-card">
-                            <span class="stat-number">${totalItems}</span>
-                            <span class="stat-label">Ürün</span>
-                        </div>
-                        <div class="stat-card">
-                            <span class="stat-number">${completedItems}</span>
-                            <span class="stat-label">Alındı</span>
-                        </div>
-                        <div class="stat-card">
-                            <span class="stat-number">${categories}</span>
-                            <span class="stat-label">Kategori</span>
-                        </div>
-                    </div>
-
-                    <div class="card">
-                        <h2 class="card-title">✨ Ürün Ekle</h2>
-                        <div class="two-column-input">
-                            <input type="text" id="newItemInput" placeholder="Ürün adı (örn: Zeytinyağı)" value="${appState.newItem}">
-                            <div style="display: flex; gap: 12px;">
-                                <input type="number" id="newQuantityInput" placeholder="Miktar" value="${appState.newQuantity}" style="width: 80px;">
-                                <select id="newUnitSelect" style="width: 100px;">
-                                    <option value="adet" ${appState.newUnit === 'adet' ? 'selected' : ''}>Adet</option>
-                                    <option value="kg" ${appState.newUnit === 'kg' ? 'selected' : ''}>Kg</option>
-                                    <option value="g" ${appState.newUnit === 'g' ? 'selected' : ''}>Gram</option>
-                                    <option value="l" ${appState.newUnit === 'l' ? 'selected' : ''}>Litre</option>
-                                    <option value="ml" ${appState.newUnit === 'ml' ? 'selected' : ''}>ML</option>
-                                    <option value="paket" ${appState.newUnit === 'paket' ? 'selected' : ''}>Paket</option>
-                                    <option value="şişe" ${appState.newUnit === 'şişe' ? 'selected' : ''}>Şişe</option>
-                                </select>
-                            </div>
-                        </div>
-                        <button class="btn-primary" style="width: 100%;" onclick="addNewItem()">🛒 Ürün Ekle</button>
-                        <p style="font-size: 13px; color: var(--text-light); margin-top: 12px; text-align: center; opacity: 0.8;">
-                            💡 Örnek: "Zeytinyağı" - "1" - "Şişe"
-                        </p>
-                    </div>
-
-                    ${Object.keys(groupedItems).length > 0 ? Object.keys(groupedItems).map(category => `
-                        <div class="category-header">
-                            ${category}
-                            <span>${groupedItems[category].length}</span>
-                        </div>
-                        ${groupedItems[category].map(item => `
-                            <div class="shopping-item ${item.completed ? 'completed' : ''}" onclick="toggleItem('${item.id}')">
-                                <span style="font-size: 24px;">${item.emoji}</span>
-                                <div class="shopping-item-content">
-                                    <div class="shopping-item-name">${item.name}</div>
-                                    <div class="shopping-item-meta">${item.quantity} • ${item.addedAt}</div>
-                                </div>
-                                <button class="delete-btn" onclick="event.stopPropagation(); deleteItemFromList('${item.id}')">🗑️</button>
-                            </div>
-                        `).join('')}
-                    `).join('') : '<div class="card"><p style="text-align: center; color: var(--text-light);">Henüz ürün eklenmemiş 🛒</p></div>'}
-                </div>
-                <nav class="bottom-nav">
-                    <div class="nav-item active" onclick="changePage('home')">
-                        <div class="nav-icon">🏠</div>
-                        <span>Ana Sayfa</span>
-                    </div>
-                    <div class="nav-item" onclick="changePage('chef')">
-                        <div class="nav-icon">👨‍🍳</div>
-                        <span>Aşçı</span>
-                    </div>
-                    <div class="nav-item" onclick="changePage('settings')">
-                        <div class="nav-icon">⚙️</div>
-                        <span>Ayarlar</span>
-                    </div>
-                </nav>
-            `;
-        }
-
-        function renderChef() {
-            return `
-                <header class="app-header">
-                    <h1>👨‍🍳 ${appState.chefName}</h1>
-                    <div class="user-info">
-                        ${appState.user.name}
-                        <button onclick="logout()">Çıkış</button>
-                    </div>
-                </header>
-
-                <div class="main-content">
-                    <div class="card">
-                        <h2 class="card-title">👨‍🍳 Aşçı Ayarları</h2>
-                        <div class="input-group">
-                            <input type="text" id="chefNameInput" placeholder="Aşçınızın adını girin" value="${appState.chefName}">
-                            <button class="btn-primary" onclick="updateChefName()">Güncelle</button>
-                        </div>
-                        <p style="font-size: 13px; color: var(--text-light); margin-top: 8px;">
-                            💡 Aşçınıza istediğiniz ismi verebilirsiniz!
-                        </p>
-                    </div>
-
-                    <div class="card">
-                        <h2 class="card-title">👨‍🍳 Yemek Ara</h2>
-                        <div class="input-group">
-                            <input type="text" id="aiQueryInput" placeholder="Hangi yemek yapmak istiyorsun?" value="${appState.aiQuery}">
-                            <button class="btn-primary" onclick="handleAiQueryClick()">Ara</button>
-                        </div>
-                        <p style="font-size: 13px; color: var(--text-light); margin-top: 8px;">
-                            💡 Örnek: "makarna", "omlet", "pizza"
-                        </p>
-                    </div>
-
-                    ${appState.aiBotResponse ? `
-                        <div class="ai-bot-response">
-                            <h3 style="margin-bottom: 12px;">🤖 ${appState.chefName} Diyor:</h3>
-                            <p style="white-space: pre-line;">${appState.aiBotResponse}</p>
-                        </div>
-                    ` : ''}
-
-                    ${appState.aiSuggestions.length > 0 ? `
-                        <div class="ai-suggestions">
-                            <h3 style="margin-bottom: 16px;">🛒 Gerekli Malzemeler:</h3>
-                            ${appState.aiSuggestions.map(item => `
-                                <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
-                                    <span style="font-size: 20px;">${getProductEmoji(item.name)}</span>
-                                    <span style="font-weight: 500;">${item.name}</span>
-                                    <span style="color: var(--text-light);">(${item.quantity})</span>
-                                </div>
-                            `).join('')}
-                            <button class="btn-secondary" onclick="addAiSuggestionsToList()" style="margin-top: 16px;">
-                                Tümünü Listeye Ekle
-                            </button>
-                        </div>
-                    ` : ''}
-                </div>
-
-                <nav class="bottom-nav">
-                    <div class="nav-item" onclick="changePage('home')">
-                        <div class="nav-icon">🏠</div>
-                        <span>Ana Sayfa</span>
-                    </div>
-                    <div class="nav-item active" onclick="changePage('chef')">
-                        <div class="nav-icon">👨‍🍳</div>
-                        <span>Aşçı</span>
-                    </div>
-                    <div class="nav-item" onclick="changePage('settings')">
-                        <div class="nav-icon">⚙️</div>
-                        <span>Ayarlar</span>
-                    </div>
-                </nav>
-            `;
-        }
-
-        function renderSettings() {
-            return `
-                <header class="app-header">
-                    <h1>⚙️ Ayarlar</h1>
-                    <div class="user-info">
-                        ${appState.user.name}
-                        <button onclick="logout()">Çıkış</button>
-                    </div>
-                </header>
-
-                <div class="main-content">
-                    <div class="card">
-                        <h2 class="card-title">🎨 Görünüm</h2>
-                        
-                        <div class="setting-item">
-                            <div>
-                                <div class="setting-label">Gece Modu</div>
-                                <div class="setting-description">Koyu tema kullan</div>
-                            </div>
-                            <div class="toggle-switch ${appState.settings.darkMode ? 'active' : ''}" onclick="toggleDarkModeFunction()">
-                                <div class="toggle-slider"></div>
-                            </div>
-                        </div>
-
-                        <div class="setting-item">
-                            <div>
-                                <div class="setting-label">Yüksek Kontrast</div>
-                                <div class="setting-description">Daha net görünüm</div>
-                            </div>
-                            <div class="toggle-switch ${appState.settings.highContrast ? 'active' : ''}" onclick="toggleSetting('highContrast')">
-                                <div class="toggle-slider"></div>
-                            </div>
-                        </div>
-
-                        <div class="setting-item">
-                            <div>
-                                <div class="setting-label">Büyük Yazı</div>
-                                <div class="setting-description">Yazıları büyüt</div>
-                            </div>
-                            <div class="toggle-switch ${appState.settings.largeText ? 'active' : ''}" onclick="toggleSetting('largeText')">
-                                <div class="toggle-slider"></div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="card">
-                        <h2 class="card-title">📊 İstatistikler</h2>
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; text-align: center;">
-                            <div>
-                                <div style="font-size: 24px; font-weight: 700; color: var(--primary-color);">${appState.shoppingList.length}</div>
-                                <div style="font-size: 14px; color: var(--text-light);">Toplam Ürün</div>
-                            </div>
-                            <div>
-                                <div style="font-size: 24px; font-weight: 700; color: var(--accent-color);">${appState.shoppingList.filter(item => item.completed).length}</div>
-                                <div style="font-size: 14px; color: var(--text-light);">Alınan Ürün</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="card">
-                        <h2 class="card-title">🗑️ Veri Yönetimi</h2>
-                        <button class="btn-secondary" onclick="clearAllData()" style="background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);">
-                            Tüm Verileri Temizle
-                        </button>
-                        <p style="font-size: 12px; color: var(--text-light); margin-top: 8px;">
-                            ⚠️ Bu işlem geri alınamaz
-                        </p>
-                    </div>
-                </div>
-
-                <nav class="bottom-nav">
-                    <div class="nav-item" onclick="changePage('home')">
-                        <div class="nav-icon">🏠</div>
-                        <span>Ana Sayfa</span>
-                    </div>
-                    <div class="nav-item" onclick="changePage('chef')">
-                        <div class="nav-icon">👨‍🍳</div>
-                        <span>Aşçı</span>
-                    </div>
-                    <div class="nav-item active" onclick="changePage('settings')">
-                        <div class="nav-icon">⚙️</div>
-                        <span>Ayarlar</span>
-                    </div>
-                </nav>
-            `;
-        }
-
-        // Global functions
-        window.handleLoginClick = function() {
-            const input = document.getElementById('loginInput');
-            if (input && input.value.trim()) {
-                handleLogin(input.value.trim());
-            }
-        };
-
-        window.addNewItem = function() {
-            const nameInput = document.getElementById('newItemInput');
-            const quantityInput = document.getElementById('newQuantityInput');
-            const unitSelect = document.getElementById('newUnitSelect');
-            
-            if (nameInput && nameInput.value.trim()) {
-                const name = nameInput.value.trim();
-                const quantity = quantityInput ? quantityInput.value : '1';
-                const unit = unitSelect ? unitSelect.value : 'adet';
-                
-                updateState({
-                    newItem: name,
-                    newQuantity: quantity,
-                    newUnit: unit
-                });
-                
-                addItem(name, quantity, unit);
-            }
-        };
-
-        window.handleAiQueryClick = function() {
-            const input = document.getElementById('aiQueryInput');
-            if (input) {
-                updateState({ aiQuery: input.value });
-                handleAiQuery();
-            }
-        };
-
-        window.updateChefName = function() {
-            const input = document.getElementById('chefNameInput');
-            if (input && input.value.trim()) {
-                updateState({ chefName: input.value.trim() });
-                showNotification(`Aşçınızın adı "${input.value.trim()}" olarak güncellendi! 👨‍🍳`);
-            }
-        };
-
-        window.changePage = function(page) {
-            updateState({ currentPage: page });
-        };
-
-        window.toggleItem = function(id) {
-            toggleItem(id);
-        };
-
-        window.deleteItemFromList = function(id) {
-            deleteItemFromList(id);
-        };
-
-        window.addAiSuggestionsToList = function() {
-            addAiSuggestionsToList();
-        };
-
-        window.toggleDarkModeFunction = function() {
-            toggleDarkModeFunction();
-        };
-
-        window.toggleSetting = function(setting) {
-            toggleSetting(setting);
-        };
-
-        window.clearAllData = function() {
-            if (confirm('Tüm veriler silinecek. Emin misiniz?')) {
-                localStorage.clear();
-                location.reload();
-            }
-        };
-
-        window.logout = function() {
-            localStorage.clear();
-            location.reload();
-        };
-
-        // Render function
-        function render() {
-            const app = document.getElementById('app');
-            if (!app) return;
-
-            if (!appState.user) {
-                app.innerHTML = renderLogin();
-                return;
-            }
-
-            switch (appState.currentPage) {
-                case 'home':
-                    app.innerHTML = renderHome();
-                    break;
-                case 'chef':
-                    app.innerHTML = renderChef();
-                    break;
-                case 'settings':
-                    app.innerHTML = renderSettings();
-                    break;
-                default:
-                    app.innerHTML = renderHome();
-            }
-
-            // Apply settings
-            if (appState.settings.darkMode) {
-                document.documentElement.setAttribute('data-theme', 'dark');
-            }
-            if (appState.settings.highContrast) {
-                document.body.classList.add('high-contrast');
-            }
-            if (appState.settings.largeText) {
-                document.body.classList.add('large-text');
-            }
-        }
-
-        // Initialize app
-        render();
-    </script>
-</body>
-</html>
-
