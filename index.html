@@ -1453,10 +1453,98 @@
 
                // Global functions - DÜZELTİLMİŞ
         window.toggleItemComplete = toggleItemComplete;
-        window.deleteItemFromList = deleteItemFromList;
-        window.addAiSuggestionsToList = addAiSuggestionsToList;
-        window.toggleDarkModeFunction = toggleDarkModeFunction;
-        window.toggleSetting = toggleSetting;
+             window.deleteItemFromList = function(id) {
+            const item = appState.shoppingList.find(item => String(item.id) === String(id));
+            if (!item) {
+                showNotification('Ürün bulunamadı!', 'error');
+                return;
+            }
+            
+            const updatedList = appState.shoppingList.filter(item => String(item.id) !== String(id));
+            updateState({ shoppingList: updatedList });
+            showNotification(`${item.emoji} ${item.name} listeden silindi! 🗑️`);
+        };
+
+        window.addAiSuggestionsToList = function() {
+            if (!appState.aiSuggestions || appState.aiSuggestions.length === 0) {
+                showNotification('Eklenecek malzeme bulunamadı!', 'error');
+                return;
+            }
+            
+            const newItems = [];
+            
+            appState.aiSuggestions.forEach(item => {
+                const emoji = getProductEmoji(item.name);
+                const newItem = {
+                    id: Date.now() + Math.random(),
+                    name: item.name,
+                    quantity: item.quantity || '1 adet',
+                    displayName: `${item.name} (${item.quantity || '1 adet'})`,
+                    emoji: emoji,
+                    completed: false,
+                    addedBy: appState.user?.name,
+                    category: categorizeItem(item.name),
+                    addedAt: new Date().toLocaleString('tr-TR')
+                };
+                newItems.push(newItem);
+            });
+            
+            const updatedShoppingList = [...appState.shoppingList, ...newItems];
+            
+            updateState({
+                shoppingList: updatedShoppingList,
+                aiSuggestions: [],
+                aiBotResponse: '',
+                aiQuery: '',
+                currentPage: 'home'
+            });
+            
+            showNotification(`${newItems.length} malzeme anasayfaya eklendi! 🛒`);
+        };
+
+        window.toggleDarkModeFunction = function() {
+            const newDarkMode = !appState.settings.darkMode;
+            const newSettings = { ...appState.settings, darkMode: newDarkMode };
+            updateState({ settings: newSettings });
+            
+            if (newDarkMode) {
+                document.documentElement.setAttribute('data-theme', 'dark');
+            } else {
+                document.documentElement.removeAttribute('data-theme');
+            }
+            
+            showNotification(newDarkMode ? 'Gece modu açıldı 🌙' : 'Gündüz modu açıldı ☀️');
+        };
+
+        window.toggleSetting = function(settingName) {
+            const newSettings = { 
+                ...appState.settings, 
+                [settingName]: !appState.settings[settingName] 
+            };
+            
+            updateState({ settings: newSettings });
+            
+            if (settingName === 'highContrast') {
+                if (newSettings.highContrast) {
+                    document.body.classList.add('high-contrast');
+                    showNotification('Yüksek kontrast açıldı 🔆');
+                } else {
+                    document.body.classList.remove('high-contrast');
+                    showNotification('Yüksek kontrast kapatıldı');
+                }
+            }
+            
+            if (settingName === 'largeText') {
+                if (newSettings.largeText) {
+                    document.body.classList.add('large-text');
+                    showNotification('Büyük yazı açıldı 📝');
+                } else {
+                    document.body.classList.remove('large-text');
+                    showNotification('Normal yazı boyutu');
+                }
+            }
+        };
+
 
 
         window.clearAllData = function() {
