@@ -685,7 +685,7 @@
             settings: JSON.parse(localStorage.getItem('akilliMarket_settings') || '{"darkMode":false,"highContrast":false,"largeText":false}')
         };
 
-                const newShoppingItem = {
+          const newShoppingItem = {
     id: Date.now() + Math.random(),
     name: name,
     quantity: displayQuantity,
@@ -698,14 +698,16 @@
     addedAt: new Date().toLocaleString('tr-TR')
 };
 
-   updateState({
-        shoppingList: [...appState.shoppingList, newShoppingItem],
-        newItem: '',
-        newQuantity: '1',
-        newUnit: 'adet'
-    });
-    
-    showNotification(`${emoji} ${name} (${displayQuantity}) listeye eklendi! ✅`);
+updateState({
+    shoppingList: [...appState.shoppingList, newShoppingItem],
+    newItem: '',
+    newQuantity: '1',
+    newUnit: 'adet'
+});
+
+showNotification(`${emoji} ${name} (${displayQuantity}) listeye eklendi! ✅`);
+}
+      
 }
 
 
@@ -1106,6 +1108,7 @@
                     displayName: `${item.name} (${item.quantity || '1 adet'})`,
                     emoji: emoji,
                     completed: false,
+                     completedBy: null,
                     addedBy: appState.user?.name,
                     category: categorizeItem(item.name),
                     addedAt: new Date().toLocaleString('tr-TR')
@@ -1606,6 +1609,7 @@
                     displayName: `${item.name} (${item.quantity || '1 adet'})`,
                     emoji: emoji,
                     completed: false,
+                    completedBy: null
                     addedBy: appState.user?.name,
                     category: categorizeItem(item.name),
                     addedAt: new Date().toLocaleString('tr-TR')
