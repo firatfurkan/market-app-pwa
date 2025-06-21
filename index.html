@@ -421,7 +421,7 @@
             box-shadow: 0 10px 25px rgba(245, 158, 11, 0.4);
         }
 
-        /* Shopping Item - YENİ TASARIM */
+        /* Shopping Item */
         .shopping-item {
             display: flex;
             align-items: center;
@@ -669,12 +669,10 @@
         }
 
         // Global state
-         let appState = {
+        let appState = {
             user: null,
             currentPage: 'home',
             shoppingList: JSON.parse(localStorage.getItem('akilliMarket_shoppingList') || '[]'),
-            sharedUsers: JSON.parse(localStorage.getItem('akilliMarket_sharedUsers') || '[]'),
-            shareCode: localStorage.getItem('akilliMarket_shareCode') || null,
             newItem: '',
             newQuantity: '1',
             newUnit: 'adet',
@@ -682,6 +680,8 @@
             aiSuggestions: [],
             aiBotResponse: '',
             chefName: localStorage.getItem('akilliMarket_chefName') || 'Aşçı Bey',
+            sharedUsers: JSON.parse(localStorage.getItem('akilliMarket_sharedUsers') || '[]'),
+            shareCode: localStorage.getItem('akilliMarket_shareCode') || null,
             settings: JSON.parse(localStorage.getItem('akilliMarket_settings') || '{"darkMode":false,"highContrast":false,"largeText":false}')
         };
 
@@ -919,59 +919,6 @@
         }
 
         // Save to localStorage
-                     // Paylaşım Fonksiyonları
-        function generateShareCode() {
-            return Math.random().toString(36).substring(2, 8).toUpperCase();
-        }
-
-        function createSharedList() {
-            const shareCode = generateShareCode();
-            updateState({ 
-                shareCode: shareCode,
-                sharedUsers: [{ name: appState.user.name, id: appState.user.id, isOwner: true }]
-            });
-            showNotification(`Paylaşım kodu: ${shareCode} - Bu kodu eşinizle paylaşın! 📱`);
-        }
-
-        function joinSharedList(code) {
-            if (!code || code.length !== 6) {
-                showNotification('Geçersiz paylaşım kodu!', 'error');
-                return;
-            }
-            
-            // Simülasyon: Gerçek uygulamada sunucudan veri gelecek
-            const newSharedUsers = [...appState.sharedUsers, { 
-                name: appState.user.name, 
-                id: appState.user.id, 
-                isOwner: false 
-            }];
-            
-            updateState({ 
-                shareCode: code,
-                sharedUsers: newSharedUsers
-            });
-            showNotification(`${code} kodlu listeye katıldınız! 🎉`);
-        }
-
-        function leaveSharedList() {
-            if (confirm('Paylaşımlı listeden ayrılmak istediğinizden emin misiniz?')) {
-                updateState({ 
-                    shareCode: null,
-                    sharedUsers: []
-                });
-                showNotification('Paylaşımlı listeden ayrıldınız! 👋');
-            }
-        }
-
-        window.createSharedList = createSharedList;
-        window.joinSharedList = function() {
-            const code = prompt('Paylaşım kodunu girin:');
-            if (code) joinSharedList(code.toUpperCase());
-        };
-        window.leaveSharedList = leaveSharedList;
-
-
-
         function saveToStorage() {
             localStorage.setItem('akilliMarket_shoppingList', JSON.stringify(appState.shoppingList));
             localStorage.setItem('akilliMarket_settings', JSON.stringify(appState.settings));
@@ -979,7 +926,6 @@
             localStorage.setItem('akilliMarket_sharedUsers', JSON.stringify(appState.sharedUsers));
             localStorage.setItem('akilliMarket_shareCode', appState.shareCode);
         }
-
 
         // Notification System
         function showNotification(message, type = 'success') {
@@ -1026,6 +972,7 @@
                 displayName: `${name} (${displayQuantity})`,
                 emoji: emoji,
                 completed: false,
+                completedBy: null,
                 addedBy: appState.user?.name,
                 category: categorizeItem(name),
                 addedAt: new Date().toLocaleString('tr-TR')
@@ -1041,7 +988,7 @@
             showNotification(`${emoji} ${name} (${displayQuantity}) listeye eklendi! ✅`);
         }
 
-               function toggleItemComplete(id) {
+        function toggleItemComplete(id) {
             const updatedList = appState.shoppingList.map(item => {
                 if (String(item.id) === String(id)) {
                     const newCompleted = !item.completed;
@@ -1066,7 +1013,6 @@
                 }
             }
         }
-
 
         function deleteItemFromList(id) {
             const item = appState.shoppingList.find(item => String(item.id) === String(id));
@@ -1135,6 +1081,7 @@
                     displayName: `${item.name} (${item.quantity || '1 adet'})`,
                     emoji: emoji,
                     completed: false,
+                    completedBy: null,
                     addedBy: appState.user?.name,
                     category: categorizeItem(item.name),
                     addedAt: new Date().toLocaleString('tr-TR')
@@ -1198,6 +1145,49 @@
             }
         }
 
+        // Paylaşım Fonksiyonları
+        function generateShareCode() {
+            return Math.random().toString(36).substring(2, 8).toUpperCase();
+        }
+
+        function createSharedList() {
+            const shareCode = generateShareCode();
+            updateState({ 
+                shareCode: shareCode,
+                sharedUsers: [{ name: appState.user.name, id: appState.user.id, isOwner: true }]
+            });
+            showNotification(`Paylaşım kodu: ${shareCode} - Bu kodu eşinizle paylaşın! 📱`);
+        }
+
+        function joinSharedList(code) {
+            if (!code || code.length !== 6) {
+                showNotification('Geçersiz paylaşım kodu!', 'error');
+                return;
+            }
+            
+            const newSharedUsers = [...appState.sharedUsers, { 
+                name: appState.user.name, 
+                id: appState.user.id, 
+                isOwner: false 
+            }];
+            
+            updateState({ 
+                shareCode: code,
+                sharedUsers: newSharedUsers
+            });
+            showNotification(`${code} kodlu listeye katıldınız! 🎉`);
+        }
+
+        function leaveSharedList() {
+            if (confirm('Paylaşımlı listeden ayrılmak istediğinizden emin misiniz?')) {
+                updateState({ 
+                    shareCode: null,
+                    sharedUsers: []
+                });
+                showNotification('Paylaşımlı listeden ayrıldınız! 👋');
+            }
+        }
+
         // Render functions
         function renderLogin() {
             return `
@@ -1211,35 +1201,6 @@
                 </div>
             `;
         }
-                    ${!appState.shareCode ? `
-                        <div class="card">
-                            <h2 class="card-title">👥 Paylaşımlı Liste</h2>
-                            <p style="margin-bottom: 16px; color: var(--text-light);">
-                                Eşiniz veya ev arkadaşınızla aynı alışveriş listesini paylaşın!
-                            </p>
-                            <div style="display: flex; gap: 12px;">
-                                <button class="btn-primary" onclick="createSharedList()" style="flex: 1;">
-                                    📱 Liste Oluştur
-                                </button>
-                                <button class="btn-secondary" onclick="joinSharedList()" style="flex: 1;">
-                                    🔗 Listeye Katıl
-                                </button>
-                            </div>
-                        </div>
-                    ` : `
-                        <div class="card">
-                            <h2 class="card-title">👥 Paylaşımlı Liste</h2>
-                            <p style="margin-bottom: 12px;">
-                                <strong>Paylaşım Kodu:</strong> <span style="background: var(--primary-color); color: white; padding: 4px 8px; border-radius: 8px; font-weight: bold;">${appState.shareCode}</span>
-                            </p>
-                            <p style="margin-bottom: 16px; color: var(--text-light);">
-                                <strong>Katılımcılar:</strong> ${appState.sharedUsers.map(user => user.name + (user.isOwner ? ' (Sahibi)' : '')).join(', ')}
-                            </p>
-                            <button class="btn-secondary" onclick="leaveSharedList()" style="background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);">
-                                👋 Listeden Ayrıl
-                            </button>
-                        </div>
-                    `}
 
         function renderHome() {
             const totalItems = appState.shoppingList.length;
@@ -1279,6 +1240,36 @@
                         </div>
                     </div>
 
+                    ${!appState.shareCode ? `
+                        <div class="card">
+                            <h2 class="card-title">👥 Paylaşımlı Liste</h2>
+                            <p style="margin-bottom: 16px; color: var(--text-light);">
+                                Eşiniz veya ev arkadaşınızla aynı alışveriş listesini paylaşın!
+                            </p>
+                            <div style="display: flex; gap: 12px;">
+                                <button class="btn-primary" onclick="createSharedList()" style="flex: 1;">
+                                    📱 Liste Oluştur
+                                </button>
+                                <button class="btn-secondary" onclick="joinSharedList()" style="flex: 1;">
+                                    🔗 Listeye Katıl
+                                </button>
+                            </div>
+                        </div>
+                    ` : `
+                        <div class="card">
+                            <h2 class="card-title">👥 Paylaşımlı Liste</h2>
+                            <p style="margin-bottom: 12px;">
+                                <strong>Paylaşım Kodu:</strong> <span style="background: var(--primary-color); color: white; padding: 4px 8px; border-radius: 8px; font-weight: bold;">${appState.shareCode}</span>
+                            </p>
+                            <p style="margin-bottom: 16px; color: var(--text-light);">
+                                <strong>Katılımcılar:</strong> ${appState.sharedUsers.map(user => user.name + (user.isOwner ? ' (Sahibi)' : '')).join(', ')}
+                            </p>
+                            <button class="btn-secondary" onclick="leaveSharedList()" style="background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);">
+                                👋 Listeden Ayrıl
+                            </button>
+                        </div>
+                    `}
+
                     <div class="card">
                         <h2 class="card-title">✨ Ürün Ekle</h2>
                         <div class="two-column-input">
@@ -1315,11 +1306,10 @@
                                 <span style="font-size: 24px;">${item.emoji}</span>
                                 <div class="shopping-item-content">
                                     <div class="shopping-item-name">${item.name}</div>
-                                                                        <div class="shopping-item-meta">
+                                    <div class="shopping-item-meta">
                                         ${item.quantity} • ${item.addedBy} ekledi
                                         ${item.completed ? ` • ${item.completedBy} aldı` : ''}
                                     </div>
-
                                 </div>
                                 <button class="delete-btn" onclick="deleteItemFromList('${item.id}')">🗑️</button>
                             </div>
@@ -1358,347 +1348,4 @@
                     <div class="card">
                         <h2 class="card-title">👨‍🍳 Aşçı Ayarları</h2>
                         <div class="input-group">
-                            <input type="text" id="chefNameInput" placeholder="Aşçınızın adını girin" value="${appState.chefName}">
-                            <button class="btn-primary" onclick="updateChefName()">Güncelle</button>
-                        </div>
-                        <p style="font-size: 13px; color: var(--text-light); margin-top: 8px;">
-                            💡 Aşçınıza istediğiniz ismi verebilirsiniz!
-                        </p>
-                    </div>
-
-                    <div class="card">
-                        <h2 class="card-title">👨‍🍳 Yemek Ara</h2>
-                        <div class="input-group">
-                            <input type="text" id="aiQueryInput" placeholder="Hangi yemek yapmak istiyorsun?" value="${appState.aiQuery}">
-                            <button class="btn-primary" onclick="handleAiQueryClick()">Ara</button>
-                        </div>
-                        <p style="font-size: 13px; color: var(--text-light); margin-top: 8px;">
-                            💡 Örnek: "makarna", "omlet", "pizza"
-                        </p>
-                    </div>
-
-                    ${appState.aiBotResponse ? `
-                        <div class="ai-bot-response">
-                            <h3 style="margin-bottom: 12px;">🤖 ${appState.chefName} Diyor:</h3>
-                            <p style="white-space: pre-line;">${appState.aiBotResponse}</p>
-                        </div>
-                    ` : ''}
-
-                    ${appState.aiSuggestions.length > 0 ? `
-                        <div class="ai-suggestions">
-                            <h3 style="margin-bottom: 16px;">🛒 Gerekli Malzemeler:</h3>
-                            ${appState.aiSuggestions.map(item => `
-                                <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
-                                    <span style="font-size: 20px;">${getProductEmoji(item.name)}</span>
-                                    <span style="font-weight: 500;">${item.name}</span>
-                                    <span style="color: var(--text-light);">(${item.quantity})</span>
-                                </div>
-                            `).join('')}
-                            <button class="btn-secondary" onclick="addAiSuggestionsToList()" style="margin-top: 16px;">
-                                Tümünü Listeye Ekle
-                            </button>
-                        </div>
-                    ` : ''}
-                </div>
-
-                <nav class="bottom-nav">
-                    <div class="nav-item" onclick="changePage('home')">
-                        <div class="nav-icon">🏠</div>
-                        <span>Ana Sayfa</span>
-                    </div>
-                    <div class="nav-item active" onclick="changePage('chef')">
-                        <div class="nav-icon">👨‍🍳</div>
-                        <span>Aşçı</span>
-                    </div>
-                    <div class="nav-item" onclick="changePage('settings')">
-                        <div class="nav-icon">⚙️</div>
-                        <span>Ayarlar</span>
-                    </div>
-                </nav>
-            `;
-        }
-
-        function renderSettings() {
-            return `
-                <header class="app-header">
-                    <h1>⚙️ Ayarlar</h1>
-                    <div class="user-info">
-                        ${appState.user.name}
-                        <button onclick="logout()">Çıkış</button>
-                    </div>
-                </header>
-
-                <div class="main-content">
-                    <div class="card">
-                        <h2 class="card-title">🎨 Görünüm</h2>
-                        
-                        <div class="setting-item">
-                            <div>
-                                <div class="setting-label">Gece Modu</div>
-                                <div class="setting-description">Koyu tema kullan</div>
-                            </div>
-                            <div class="toggle-switch ${appState.settings.darkMode ? 'active' : ''}" onclick="toggleDarkModeFunction()">
-                                <div class="toggle-slider"></div>
-                            </div>
-                        </div>
-
-                        <div class="setting-item">
-                            <div>
-                                <div class="setting-label">Yüksek Kontrast</div>
-                                <div class="setting-description">Daha net görünüm</div>
-                            </div>
-                            <div class="toggle-switch ${appState.settings.highContrast ? 'active' : ''}" onclick="toggleSetting('highContrast')">
-                                <div class="toggle-slider"></div>
-                            </div>
-                        </div>
-
-                        <div class="setting-item">
-                            <div>
-                                <div class="setting-label">Büyük Yazı</div>
-                                <div class="setting-description">Yazıları büyüt</div>
-                            </div>
-                            <div class="toggle-switch ${appState.settings.largeText ? 'active' : ''}" onclick="toggleSetting('largeText')">
-                                <div class="toggle-slider"></div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="card">
-                        <h2 class="card-title">📊 İstatistikler</h2>
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; text-align: center;">
-                            <div>
-                                <div style="font-size: 24px; font-weight: 700; color: var(--primary-color);">${appState.shoppingList.length}</div>
-                                <div style="font-size: 14px; color: var(--text-light);">Toplam Ürün</div>
-                            </div>
-                            <div>
-                                <div style="font-size: 24px; font-weight: 700; color: var(--accent-color);">${appState.shoppingList.filter(item => item.completed).length}</div>
-                                <div style="font-size: 14px; color: var(--text-light);">Alınan Ürün</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="card">
-                        <h2 class="card-title">🗑️ Veri Yönetimi</h2>
-                        <button class="btn-secondary" onclick="clearAllData()" style="background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);">
-                            Tüm Verileri Temizle
-                        </button>
-                        <p style="font-size: 12px; color: var(--text-light); margin-top: 8px;">
-                            ⚠️ Bu işlem geri alınamaz
-                        </p>
-                    </div>
-                </div>
-
-                <nav class="bottom-nav">
-                    <div class="nav-item" onclick="changePage('home')">
-                        <div class="nav-icon">🏠</div>
-                        <span>Ana Sayfa</span>
-                    </div>
-                    <div class="nav-item" onclick="changePage('chef')">
-                        <div class="nav-icon">👨‍🍳</div>
-                        <span>Aşçı</span>
-                    </div>
-                    <div class="nav-item active" onclick="changePage('settings')">
-                        <div class="nav-icon">⚙️</div>
-                        <span>Ayarlar</span>
-                    </div>
-                </nav>
-            `;
-        }
-
-        // Global functions
-        window.handleLoginClick = function() {
-            const input = document.getElementById('loginInput');
-            if (input && input.value.trim()) {
-                handleLogin(input.value.trim());
-            }
-        };
-
-        window.addNewItem = function() {
-            const nameInput = document.getElementById('newItemInput');
-            const quantityInput = document.getElementById('newQuantityInput');
-            const unitSelect = document.getElementById('newUnitSelect');
-            
-            if (nameInput && nameInput.value.trim()) {
-                const name = nameInput.value.trim();
-                const quantity = quantityInput ? quantityInput.value : '1';
-                const unit = unitSelect ? unitSelect.value : 'adet';
-                
-                updateState({
-                    newItem: name,
-                    newQuantity: quantity,
-                    newUnit: unit
-                });
-                
-                addItem(name, quantity, unit);
-            }
-        };
-
-        window.handleAiQueryClick = function() {
-            const input = document.getElementById('aiQueryInput');
-            if (input) {
-                updateState({ aiQuery: input.value });
-                handleAiQuery();
-            }
-        };
-
-        window.updateChefName = function() {
-            const input = document.getElementById('chefNameInput');
-            if (input && input.value.trim()) {
-                updateState({ chefName: input.value.trim() });
-                showNotification(`Aşçınızın adı "${input.value.trim()}" olarak güncellendi! 👨‍🍳`);
-            }
-        };
-
-        window.changePage = function(page) {
-            updateState({ currentPage: page });
-        };
-
-               // Global functions - DÜZELTİLMİŞ
-        window.toggleItemComplete = toggleItemComplete;
-             window.deleteItemFromList = function(id) {
-            const item = appState.shoppingList.find(item => String(item.id) === String(id));
-            if (!item) {
-                showNotification('Ürün bulunamadı!', 'error');
-                return;
-            }
-            
-            const updatedList = appState.shoppingList.filter(item => String(item.id) !== String(id));
-            updateState({ shoppingList: updatedList });
-            showNotification(`${item.emoji} ${item.name} listeden silindi! 🗑️`);
-        };
-
-        window.addAiSuggestionsToList = function() {
-            if (!appState.aiSuggestions || appState.aiSuggestions.length === 0) {
-                showNotification('Eklenecek malzeme bulunamadı!', 'error');
-                return;
-            }
-            
-            const newItems = [];
-            
-            appState.aiSuggestions.forEach(item => {
-                const emoji = getProductEmoji(item.name);
-                const newItem = {
-                    id: Date.now() + Math.random(),
-                    name: item.name,
-                    quantity: item.quantity || '1 adet',
-                    displayName: `${item.name} (${item.quantity || '1 adet'})`,
-                    emoji: emoji,
-                    completed: false,
-                    addedBy: appState.user?.name,
-                    category: categorizeItem(item.name),
-                    addedAt: new Date().toLocaleString('tr-TR')
-                };
-                newItems.push(newItem);
-            });
-            
-            const updatedShoppingList = [...appState.shoppingList, ...newItems];
-            
-            updateState({
-                shoppingList: updatedShoppingList,
-                aiSuggestions: [],
-                aiBotResponse: '',
-                aiQuery: '',
-                currentPage: 'home'
-            });
-            
-            showNotification(`${newItems.length} malzeme anasayfaya eklendi! 🛒`);
-        };
-
-        window.toggleDarkModeFunction = function() {
-            const newDarkMode = !appState.settings.darkMode;
-            const newSettings = { ...appState.settings, darkMode: newDarkMode };
-            updateState({ settings: newSettings });
-            
-            if (newDarkMode) {
-                document.documentElement.setAttribute('data-theme', 'dark');
-            } else {
-                document.documentElement.removeAttribute('data-theme');
-            }
-            
-            showNotification(newDarkMode ? 'Gece modu açıldı 🌙' : 'Gündüz modu açıldı ☀️');
-        };
-
-        window.toggleSetting = function(settingName) {
-            const newSettings = { 
-                ...appState.settings, 
-                [settingName]: !appState.settings[settingName] 
-            };
-            
-            updateState({ settings: newSettings });
-            
-            if (settingName === 'highContrast') {
-                if (newSettings.highContrast) {
-                    document.body.classList.add('high-contrast');
-                    showNotification('Yüksek kontrast açıldı 🔆');
-                } else {
-                    document.body.classList.remove('high-contrast');
-                    showNotification('Yüksek kontrast kapatıldı');
-                }
-            }
-            
-            if (settingName === 'largeText') {
-                if (newSettings.largeText) {
-                    document.body.classList.add('large-text');
-                    showNotification('Büyük yazı açıldı 📝');
-                } else {
-                    document.body.classList.remove('large-text');
-                    showNotification('Normal yazı boyutu');
-                }
-            }
-        };
-
-
-
-        window.clearAllData = function() {
-            if (confirm('Tüm veriler silinecek. Emin misiniz?')) {
-                localStorage.clear();
-                location.reload();
-            }
-        };
-
-        window.logout = function() {
-            localStorage.clear();
-            location.reload();
-        };
-
-        // Render function
-        function render() {
-            const app = document.getElementById('app');
-            if (!app) return;
-
-            if (!appState.user) {
-                app.innerHTML = renderLogin();
-                return;
-            }
-
-            switch (appState.currentPage) {
-                case 'home':
-                    app.innerHTML = renderHome();
-                    break;
-                case 'chef':
-                    app.innerHTML = renderChef();
-                    break;
-                case 'settings':
-                    app.innerHTML = renderSettings();
-                    break;
-                default:
-                    app.innerHTML = renderHome();
-            }
-
-            // Apply settings
-            if (appState.settings.darkMode) {
-                document.documentElement.setAttribute('data-theme', 'dark');
-            }
-            if (appState.settings.highContrast) {
-                document.body.classList.add('high-contrast');
-            }
-            if (appState.settings.largeText) {
-                document.body.classList.add('large-text');
-            }
-        }
-
-        // Initialize app
-        render();
-    </script>
-</body>
-</html>
+                            <input type="text" id="chefNameInput" placeholder
