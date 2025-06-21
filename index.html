@@ -668,19 +668,45 @@
             });
         }
 
-        // Global state
-               const newShoppingItem = {
-                id: Date.now() + Math.random(),
-                name: name,
-                quantity: displayQuantity,
-                displayName: `${name} (${displayQuantity})`,
-                emoji: emoji,
-                completed: false,
-                completedBy: null,
-                addedBy: appState.user?.name,
-                category: categorizeItem(name),
-                addedAt: new Date().toLocaleString('tr-TR')
-            };
+                // Global state
+        let appState = {
+            user: null,
+            currentPage: 'home',
+            shoppingList: JSON.parse(localStorage.getItem('akilliMarket_shoppingList') || '[]'),
+            newItem: '',
+            newQuantity: '1',
+            newUnit: 'adet',
+            aiQuery: '',
+            aiSuggestions: [],
+            aiBotResponse: '',
+            chefName: localStorage.getItem('akilliMarket_chefName') || 'Aşçı Bey',
+            sharedUsers: JSON.parse(localStorage.getItem('akilliMarket_sharedUsers') || '[]'),
+            shareCode: localStorage.getItem('akilliMarket_shareCode') || null,
+            settings: JSON.parse(localStorage.getItem('akilliMarket_settings') || '{"darkMode":false,"highContrast":false,"largeText":false}')
+        };
+
+                const newShoppingItem = {
+    id: Date.now() + Math.random(),
+    name: name,
+    quantity: displayQuantity,
+    displayName: `${name} (${displayQuantity})`,
+    emoji: emoji,
+    completed: false,
+    completedBy: null,
+    addedBy: appState.user?.name,
+    category: categorizeItem(name),
+    addedAt: new Date().toLocaleString('tr-TR')
+};
+
+   updateState({
+        shoppingList: [...appState.shoppingList, newShoppingItem],
+        newItem: '',
+        newQuantity: '1',
+        newUnit: 'adet'
+    });
+    
+    showNotification(`${emoji} ${name} (${displayQuantity}) listeye eklendi! ✅`);
+}
 
 
         // AI Aşçı Yemek Veritabanı
@@ -917,11 +943,14 @@
         }
 
         // Save to localStorage
-        function saveToStorage() {
-            localStorage.setItem('akilliMarket_shoppingList', JSON.stringify(appState.shoppingList));
-            localStorage.setItem('akilliMarket_settings', JSON.stringify(appState.settings));
-            localStorage.setItem('akilliMarket_chefName', appState.chefName);
-        }
+       function saveToStorage() {
+    localStorage.setItem('akilliMarket_shoppingList', JSON.stringify(appState.shoppingList));
+    localStorage.setItem('akilliMarket_settings', JSON.stringify(appState.settings));
+    localStorage.setItem('akilliMarket_chefName', appState.chefName);
+    localStorage.setItem('akilliMarket_sharedUsers', JSON.stringify(appState.sharedUsers));
+    localStorage.setItem('akilliMarket_shareCode', appState.shareCode);
+}
+
 
         // Notification System
         function showNotification(message, type = 'success') {
@@ -1450,7 +1479,56 @@
         }
 
         // Global functions
-        window.handleLoginClick = function() {
+  // Paylaşım Fonksiyonları - BURAYA EKLE
+        function generateShareCode() {
+            return Math.random().toString(36).substring(2, 8).toUpperCase();
+        }
+
+        function createSharedList() {
+            const shareCode = generateShareCode();
+            updateState({ 
+                shareCode: shareCode,
+                sharedUsers: [{ name: appState.user.name, id: appState.user.id, isOwner: true }]
+            });
+            showNotification(`Paylaşım kodu: ${shareCode} - Bu kodu ailenizle paylaşın! 📱`);
+        }
+
+        function joinSharedList(code) {
+            if (!code || code.length !== 6) {
+                showNotification('Geçersiz paylaşım kodu!', 'error');
+                return;
+            }
+            
+            const newSharedUsers = [...appState.sharedUsers, { 
+                name: appState.user.name, 
+                id: appState.user.id, 
+                isOwner: false 
+            }];
+            
+            updateState({ 
+                shareCode: code,
+                sharedUsers: newSharedUsers
+            });
+            showNotification(`${code} kodlu listeye katıldınız! 🎉`);
+        }
+
+        function leaveSharedList() {
+            if (confirm('Paylaşımlı listeden ayrılmak istediğinizden emin misiniz?')) {
+                updateState({ 
+                    shareCode: null,
+                    sharedUsers: []
+                });
+                showNotification('Paylaşımlı listeden ayrıldınız! 👋');
+            }
+        }
+
+        window.createSharedList = createSharedList;
+        window.joinSharedList = function() {
+            const code = prompt('Paylaşım kodunu girin:');
+            if (code) joinSharedList(code.toUpperCase());
+        };
+        window.leaveSharedList = leaveSharedList;       
+ window.handleLoginClick = function() {
             const input = document.getElementById('loginInput');
             if (input && input.value.trim()) {
                 handleLogin(input.value.trim());
