@@ -1507,6 +1507,46 @@ let appState = {
             if (code) joinSharedList(code.toUpperCase());
         };
         window.leaveSharedList = leaveSharedList;
+// Tab Senkronizasyonu - YENİ EKLEME
+        function syncWithOtherTabs() {
+            window.addEventListener('storage', (e) => {
+                if (e.key === 'akilliMarket_shoppingList') {
+                    const newList = JSON.parse(e.newValue || '[]');
+                    updateState({ shoppingList: newList });
+                    showNotification('Liste başka sekmeden güncellendi! 🔄');
+                }
+                if (e.key === 'akilliMarket_shareCode') {
+                    const newShareCode = e.newValue;
+                    updateState({ shareCode: newShareCode });
+                }
+                if (e.key === 'akilliMarket_sharedUsers') {
+                    const newSharedUsers = JSON.parse(e.newValue || '[]');
+                    updateState({ sharedUsers: newSharedUsers });
+                }
+            });
+        }
+        // QR Kod Paylaşımı - YENİ EKLEME
+        function generateQRCode() {
+            const url = `${window.location.origin}${window.location.pathname}?shareCode=${appState.shareCode}`;
+            const qrText = `AkıllıMarket Listesi\nKod: ${appState.shareCode}\nLink: ${url}`;
+            
+            // Basit QR kod alternatifi - kopyalama
+            navigator.clipboard.writeText(qrText).then(() => {
+                showNotification('Liste bilgileri panoya kopyalandı! 📋');
+            }).catch(() => {
+                // Fallback
+                const textArea = document.createElement('textarea');
+                textArea.value = qrText;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                showNotification('Liste bilgileri panoya kopyalandı! 📋');
+            });
+        }
+
+        window.generateQRCode = generateQRCode;
+
 
         // Global functions ← Buradan sonra eski kodlar devam eder
         window.handleLoginClick = function() {
