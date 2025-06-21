@@ -669,46 +669,21 @@
         }
 
                 // Global state
-        let appState = {
-            user: null,
-            currentPage: 'home',
-            shoppingList: JSON.parse(localStorage.getItem('akilliMarket_shoppingList') || '[]'),
-            newItem: '',
-            newQuantity: '1',
-            newUnit: 'adet',
-            aiQuery: '',
-            aiSuggestions: [],
-            aiBotResponse: '',
-            chefName: localStorage.getItem('akilliMarket_chefName') || 'Aşçı Bey',
-            sharedUsers: JSON.parse(localStorage.getItem('akilliMarket_sharedUsers') || '[]'),
-            shareCode: localStorage.getItem('akilliMarket_shareCode') || null,
-            settings: JSON.parse(localStorage.getItem('akilliMarket_settings') || '{"darkMode":false,"highContrast":false,"largeText":false}')
-        };
-
-    
-    id: Date.now() + Math.random(),
-    name: name,
-    quantity: displayQuantity,
-    displayName: `${name} (${displayQuantity})`,
-    emoji: emoji,
-    completed: false,
-    completedBy: null,
-    addedBy: appState.user?.name,
-    category: categorizeItem(name),
-    addedAt: new Date().toLocaleString('tr-TR')
-
-
-updateState({
-    shoppingList: [...appState.shoppingList, newShoppingItem],
+let appState = {
+    user: null,
+    currentPage: 'home',
+    shoppingList: JSON.parse(localStorage.getItem('akilliMarket_shoppingList') || '[]'),
     newItem: '',
     newQuantity: '1',
-    newUnit: 'adet'
-});
-
-showNotification(`${emoji} ${name} (${displayQuantity}) listeye eklendi! ✅`);
-}
-      
-}
+    newUnit: 'adet',
+    aiQuery: '',
+    aiSuggestions: [],
+    aiBotResponse: '',
+    chefName: localStorage.getItem('akilliMarket_chefName') || 'Aşçı Bey',
+    sharedUsers: JSON.parse(localStorage.getItem('akilliMarket_sharedUsers') || '[]'),
+    shareCode: localStorage.getItem('akilliMarket_shareCode') || null,
+    settings: JSON.parse(localStorage.getItem('akilliMarket_settings') || '{"darkMode":false,"highContrast":false,"largeText":false}')
+};
 
 
         // AI Aşçı Yemek Veritabanı
@@ -1483,7 +1458,7 @@ showNotification(`${emoji} ${name} (${displayQuantity}) listeye eklendi! ✅`);
         }
 
         // Global functions
-  // Paylaşım Fonksiyonları - BURAYA EKLE
+          // Paylaşım Fonksiyonları
         function generateShareCode() {
             return Math.random().toString(36).substring(2, 8).toUpperCase();
         }
@@ -1531,14 +1506,17 @@ showNotification(`${emoji} ${name} (${displayQuantity}) listeye eklendi! ✅`);
             const code = prompt('Paylaşım kodunu girin:');
             if (code) joinSharedList(code.toUpperCase());
         };
-        window.leaveSharedList = leaveSharedList;       
- window.handleLoginClick = function() {
+        window.leaveSharedList = leaveSharedList;
+
+        // Global functions ← Buradan sonra eski kodlar devam eder
+        window.handleLoginClick = function() {
             const input = document.getElementById('loginInput');
             if (input && input.value.trim()) {
                 handleLogin(input.value.trim());
             }
         };
 
+        
         window.addNewItem = function() {
             const nameInput = document.getElementById('newItemInput');
             const quantityInput = document.getElementById('newQuantityInput');
