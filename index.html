@@ -669,10 +669,12 @@
         }
 
         // Global state
-        let appState = {
+         let appState = {
             user: null,
             currentPage: 'home',
             shoppingList: JSON.parse(localStorage.getItem('akilliMarket_shoppingList') || '[]'),
+            sharedUsers: JSON.parse(localStorage.getItem('akilliMarket_sharedUsers') || '[]'),
+            shareCode: localStorage.getItem('akilliMarket_shareCode') || null,
             newItem: '',
             newQuantity: '1',
             newUnit: 'adet',
@@ -917,11 +919,67 @@
         }
 
         // Save to localStorage
+                     // Paylaşım Fonksiyonları
+        function generateShareCode() {
+            return Math.random().toString(36).substring(2, 8).toUpperCase();
+        }
+
+        function createSharedList() {
+            const shareCode = generateShareCode();
+            updateState({ 
+                shareCode: shareCode,
+                sharedUsers: [{ name: appState.user.name, id: appState.user.id, isOwner: true }]
+            });
+            showNotification(`Paylaşım kodu: ${shareCode} - Bu kodu eşinizle paylaşın! 📱`);
+        }
+
+        function joinSharedList(code) {
+            if (!code || code.length !== 6) {
+                showNotification('Geçersiz paylaşım kodu!', 'error');
+                return;
+            }
+            
+            // Simülasyon: Gerçek uygulamada sunucudan veri gelecek
+            const newSharedUsers = [...appState.sharedUsers, { 
+                name: appState.user.name, 
+                id: appState.user.id, 
+                isOwner: false 
+            }];
+            
+            updateState({ 
+                shareCode: code,
+                sharedUsers: newSharedUsers
+            });
+            showNotification(`${code} kodlu listeye katıldınız! 🎉`);
+        }
+
+        function leaveSharedList() {
+            if (confirm('Paylaşımlı listeden ayrılmak istediğinizden emin misiniz?')) {
+                updateState({ 
+                    shareCode: null,
+                    sharedUsers: []
+                });
+                showNotification('Paylaşımlı listeden ayrıldınız! 👋');
+            }
+        }
+
+        window.createSharedList = createSharedList;
+        window.joinSharedList = function() {
+            const code = prompt('Paylaşım kodunu girin:');
+            if (code) joinSharedList(code.toUpperCase());
+        };
+        window.leaveSharedList = leaveSharedList;
+
+
+
         function saveToStorage() {
             localStorage.setItem('akilliMarket_shoppingList', JSON.stringify(appState.shoppingList));
             localStorage.setItem('akilliMarket_settings', JSON.stringify(appState.settings));
             localStorage.setItem('akilliMarket_chefName', appState.chefName);
+            localStorage.setItem('akilliMarket_sharedUsers', JSON.stringify(appState.sharedUsers));
+            localStorage.setItem('akilliMarket_shareCode', appState.shareCode);
         }
+
 
         // Notification System
         function showNotification(message, type = 'success') {
@@ -983,21 +1041,32 @@
             showNotification(`${emoji} ${name} (${displayQuantity}) listeye eklendi! ✅`);
         }
 
-        function toggleItemComplete(id) {
+               function toggleItemComplete(id) {
             const updatedList = appState.shoppingList.map(item => {
                 if (String(item.id) === String(id)) {
-                    return { ...item, completed: !item.completed };
+                    const newCompleted = !item.completed;
+                    return { 
+                        ...item, 
+                        completed: newCompleted,
+                        completedBy: newCompleted ? appState.user.name : null,
+                        completedAt: newCompleted ? new Date().toLocaleString('tr-TR') : null
+                    };
                 }
                 return item;
             });
             
             updateState({ shoppingList: updatedList });
             
-            const item = appState.shoppingList.find(item => String(item.id) === String(id));
+            const item = updatedList.find(item => String(item.id) === String(id));
             if (item) {
-                showNotification(item.completed ? `${item.emoji} ${item.name} alındı! ✅` : `${item.emoji} ${item.name} tekrar listeye eklendi! 🔄`);
+                if (item.completed) {
+                    showNotification(`${item.emoji} ${item.name} ${item.completedBy} tarafından alındı! ✅`);
+                } else {
+                    showNotification(`${item.emoji} ${item.name} tekrar listeye eklendi! 🔄`);
+                }
             }
         }
+
 
         function deleteItemFromList(id) {
             const item = appState.shoppingList.find(item => String(item.id) === String(id));
@@ -1142,6 +1211,35 @@
                 </div>
             `;
         }
+                    ${!appState.shareCode ? `
+                        <div class="card">
+                            <h2 class="card-title">👥 Paylaşımlı Liste</h2>
+                            <p style="margin-bottom: 16px; color: var(--text-light);">
+                                Eşiniz veya ev arkadaşınızla aynı alışveriş listesini paylaşın!
+                            </p>
+                            <div style="display: flex; gap: 12px;">
+                                <button class="btn-primary" onclick="createSharedList()" style="flex: 1;">
+                                    📱 Liste Oluştur
+                                </button>
+                                <button class="btn-secondary" onclick="joinSharedList()" style="flex: 1;">
+                                    🔗 Listeye Katıl
+                                </button>
+                            </div>
+                        </div>
+                    ` : `
+                        <div class="card">
+                            <h2 class="card-title">👥 Paylaşımlı Liste</h2>
+                            <p style="margin-bottom: 12px;">
+                                <strong>Paylaşım Kodu:</strong> <span style="background: var(--primary-color); color: white; padding: 4px 8px; border-radius: 8px; font-weight: bold;">${appState.shareCode}</span>
+                            </p>
+                            <p style="margin-bottom: 16px; color: var(--text-light);">
+                                <strong>Katılımcılar:</strong> ${appState.sharedUsers.map(user => user.name + (user.isOwner ? ' (Sahibi)' : '')).join(', ')}
+                            </p>
+                            <button class="btn-secondary" onclick="leaveSharedList()" style="background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);">
+                                👋 Listeden Ayrıl
+                            </button>
+                        </div>
+                    `}
 
         function renderHome() {
             const totalItems = appState.shoppingList.length;
@@ -1217,7 +1315,11 @@
                                 <span style="font-size: 24px;">${item.emoji}</span>
                                 <div class="shopping-item-content">
                                     <div class="shopping-item-name">${item.name}</div>
-                                    <div class="shopping-item-meta">${item.quantity} • ${item.addedAt}</div>
+                                                                        <div class="shopping-item-meta">
+                                        ${item.quantity} • ${item.addedBy} ekledi
+                                        ${item.completed ? ` • ${item.completedBy} aldı` : ''}
+                                    </div>
+
                                 </div>
                                 <button class="delete-btn" onclick="deleteItemFromList('${item.id}')">🗑️</button>
                             </div>
