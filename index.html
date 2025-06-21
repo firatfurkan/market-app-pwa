@@ -669,19 +669,19 @@
         }
 
         // Global state
-        let appState = {
-            user: null,
-            currentPage: 'home',
-            shoppingList: JSON.parse(localStorage.getItem('akilliMarket_shoppingList') || '[]'),
-            newItem: '',
-            newQuantity: '1',
-            newUnit: 'adet',
-            aiQuery: '',
-            aiSuggestions: [],
-            aiBotResponse: '',
-            chefName: localStorage.getItem('akilliMarket_chefName') || 'Aşçı Bey',
-            settings: JSON.parse(localStorage.getItem('akilliMarket_settings') || '{"darkMode":false,"highContrast":false,"largeText":false}')
-        };
+               const newShoppingItem = {
+                id: Date.now() + Math.random(),
+                name: name,
+                quantity: displayQuantity,
+                displayName: `${name} (${displayQuantity})`,
+                emoji: emoji,
+                completed: false,
+                completedBy: null,
+                addedBy: appState.user?.name,
+                category: categorizeItem(name),
+                addedAt: new Date().toLocaleString('tr-TR')
+            };
+
 
         // AI Aşçı Yemek Veritabanı
         const chefMealDatabase = {
@@ -983,21 +983,32 @@
             showNotification(`${emoji} ${name} (${displayQuantity}) listeye eklendi! ✅`);
         }
 
-        function toggleItemComplete(id) {
+              function toggleItemComplete(id) {
             const updatedList = appState.shoppingList.map(item => {
                 if (String(item.id) === String(id)) {
-                    return { ...item, completed: !item.completed };
+                    const newCompleted = !item.completed;
+                    return { 
+                        ...item, 
+                        completed: newCompleted,
+                        completedBy: newCompleted ? appState.user.name : null,
+                        completedAt: newCompleted ? new Date().toLocaleString('tr-TR') : null
+                    };
                 }
                 return item;
             });
             
             updateState({ shoppingList: updatedList });
             
-            const item = appState.shoppingList.find(item => String(item.id) === String(id));
+            const item = updatedList.find(item => String(item.id) === String(id));
             if (item) {
-                showNotification(item.completed ? `${item.emoji} ${item.name} alındı! ✅` : `${item.emoji} ${item.name} tekrar listeye eklendi! 🔄`);
+                if (item.completed) {
+                    showNotification(`${item.emoji} ${item.name} ${item.completedBy} tarafından alındı! ✅`);
+                } else {
+                    showNotification(`${item.emoji} ${item.name} tekrar listeye eklendi! 🔄`);
+                }
             }
         }
+
 
         function deleteItemFromList(id) {
             const item = appState.shoppingList.find(item => String(item.id) === String(id));
@@ -1166,43 +1177,75 @@
                 </header>
 
                 <div class="main-content">
-                    <div class="stats-grid">
-                        <div class="stat-card">
-                            <span class="stat-number">${totalItems}</span>
-                            <span class="stat-label">Ürün</span>
-                        </div>
-                        <div class="stat-card">
-                            <span class="stat-number">${completedItems}</span>
-                            <span class="stat-label">Alındı</span>
-                        </div>
-                        <div class="stat-card">
-                            <span class="stat-number">${categories}</span>
-                            <span class="stat-label">Kategori</span>
-                        </div>
+                                  <div class="stats-grid">
+                    <div class="stat-card">
+                        <span class="stat-number">${totalItems}</span>
+                        <span class="stat-label">Ürün</span>
                     </div>
+                    <div class="stat-card">
+                        <span class="stat-number">${completedItems}</span>
+                        <span class="stat-label">Alındı</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-number">${categories}</span>
+                        <span class="stat-label">Kategori</span>
+                    </div>
+                </div>
 
+                ${!appState.shareCode ? `
                     <div class="card">
-                        <h2 class="card-title">✨ Ürün Ekle</h2>
-                        <div class="two-column-input">
-                            <input type="text" id="newItemInput" placeholder="Ürün adı (örn: Zeytinyağı)" value="${appState.newItem}">
-                            <div style="display: flex; gap: 12px;">
-                                <input type="number" id="newQuantityInput" placeholder="Miktar" value="${appState.newQuantity}" style="width: 80px;">
-                                <select id="newUnitSelect" style="width: 100px;">
-                                    <option value="adet" ${appState.newUnit === 'adet' ? 'selected' : ''}>Adet</option>
-                                    <option value="kg" ${appState.newUnit === 'kg' ? 'selected' : ''}>Kg</option>
-                                    <option value="g" ${appState.newUnit === 'g' ? 'selected' : ''}>Gram</option>
-                                    <option value="l" ${appState.newUnit === 'l' ? 'selected' : ''}>Litre</option>
-                                    <option value="ml" ${appState.newUnit === 'ml' ? 'selected' : ''}>ML</option>
-                                    <option value="paket" ${appState.newUnit === 'paket' ? 'selected' : ''}>Paket</option>
-                                    <option value="şişe" ${appState.newUnit === 'şişe' ? 'selected' : ''}>Şişe</option>
-                                </select>
-                            </div>
-                        </div>
-                        <button class="btn-primary" style="width: 100%;" onclick="addNewItem()">🛒 Ürün Ekle</button>
-                        <p style="font-size: 13px; color: var(--text-light); margin-top: 12px; text-align: center; opacity: 0.8;">
-                            💡 Örnek: "Zeytinyağı" - "1" - "Şişe"
+                        <h2 class="card-title">👥 Aile Listesi</h2>
+                        <p style="margin-bottom: 16px; color: var(--text-light);">
+                            Aileniz, eşiniz veya ev arkadaşınızla aynı alışveriş listesini paylaşın!
                         </p>
+                        <div style="display: flex; gap: 12px;">
+                            <button class="btn-primary" onclick="createSharedList()" style="flex: 1;">
+                                📱 Liste Oluştur
+                            </button>
+                            <button class="btn-secondary" onclick="joinSharedList()" style="flex: 1;">
+                                🔗 Listeye Katıl
+                            </button>
+                        </div>
                     </div>
+                ` : `
+                    <div class="card">
+                        <h2 class="card-title">👥 Aile Listesi</h2>
+                        <p style="margin-bottom: 12px;">
+                            <strong>Paylaşım Kodu:</strong> <span style="background: var(--primary-color); color: white; padding: 4px 8px; border-radius: 8px; font-weight: bold;">${appState.shareCode}</span>
+                        </p>
+                        <p style="margin-bottom: 16px; color: var(--text-light);">
+                            <strong>Katılımcılar:</strong> ${appState.sharedUsers.map(user => user.name + (user.isOwner ? ' (Sahibi)' : '')).join(', ')}
+                        </p>
+                        <button class="btn-secondary" onclick="leaveSharedList()" style="background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);">
+                            👋 Listeden Ayrıl
+                        </button>
+                    </div>
+                `}
+
+                              <div class="card">
+                    <h2 class="card-title">✨ Ürün Ekle</h2>
+                    <div class="two-column-input">
+                        <input type="text" id="newItemInput" placeholder="Ürün adı (örn: Zeytinyağı)" value="${appState.newItem}">
+                        <div style="display: flex; gap: 12px;">
+                            <input type="number" id="newQuantityInput" placeholder="Miktar" value="${appState.newQuantity}" style="width: 80px;">
+                            <select id="newUnitSelect" style="width: 100px;">
+                                <option value="adet" ${appState.newUnit === 'adet' ? 'selected' : ''}>Adet</option>
+                                <option value="kg" ${appState.newUnit === 'kg' ? 'selected' : ''}>Kg</option>
+                                <option value="g" ${appState.newUnit === 'g' ? 'selected' : ''}>Gram</option>
+                                <option value="l" ${appState.newUnit === 'l' ? 'selected' : ''}>Litre</option>
+                                <option value="ml" ${appState.newUnit === 'ml' ? 'selected' : ''}>ML</option>
+                                <option value="paket" ${appState.newUnit === 'paket' ? 'selected' : ''}>Paket</option>
+                                <option value="şişe" ${appState.newUnit === 'şişe' ? 'selected' : ''}>Şişe</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button class="btn-primary" style="width: 100%;" onclick="addNewItem()">🛒 Ürün Ekle</button>
+                    <p style="font-size: 13px; color: var(--text-light); margin-top: 12px; text-align: center; opacity: 0.8;">
+                        💡 Örnek: "Zeytinyağı" - "1" - "Şişe"
+                    </p>
+                </div>
+
+
 
                     ${Object.keys(groupedItems).length > 0 ? Object.keys(groupedItems).map(category => `
                         <div class="category-header">
@@ -1217,7 +1260,10 @@
                                 <span style="font-size: 24px;">${item.emoji}</span>
                                 <div class="shopping-item-content">
                                     <div class="shopping-item-name">${item.name}</div>
-                                    <div class="shopping-item-meta">${item.quantity} • ${item.addedAt}</div>
+                                                                      <div class="shopping-item-meta">
+                                        ${item.quantity} • ${item.addedBy} ekledi
+                                        ${item.completed ? ` • ${item.completedBy} aldı` : ''}
+                                    </div>
                                 </div>
                                 <button class="delete-btn" onclick="deleteItemFromList('${item.id}')">🗑️</button>
                             </div>
