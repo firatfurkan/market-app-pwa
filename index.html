@@ -1224,9 +1224,12 @@ let appState = {
                         <p style="margin-bottom: 16px; color: var(--text-light);">
                             <strong>Katılımcılar:</strong> ${appState.sharedUsers.map(user => user.name + (user.isOwner ? ' (Sahibi)' : '')).join(', ')}
                         </p>
-                        <button class="btn-secondary" onclick="leaveSharedList()" style="background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);">
-                            👋 Listeden Ayrıl
-                        </button>
+                         <button class="btn-secondary" onclick="generateQRCode()" style="background: linear-gradient(135deg, #10B981 0%, #059669 100%); margin-bottom: 12px;">
+                                📱 Paylaş
+                            </button>
+                            <button class="btn-secondary" onclick="leaveSharedList()" style="background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);">
+                                👋 Listeden Ayrıl
+                            </button>
                     </div>
                 `}
 
@@ -1458,7 +1461,7 @@ let appState = {
         }
 
         // Global functions
-          // Paylaşım Fonksiyonları
+                  // Paylaşım Fonksiyonları
         function generateShareCode() {
             return Math.random().toString(36).substring(2, 8).toUpperCase();
         }
@@ -1507,7 +1510,8 @@ let appState = {
             if (code) joinSharedList(code.toUpperCase());
         };
         window.leaveSharedList = leaveSharedList;
-// Tab Senkronizasyonu - YENİ EKLEME
+
+        // Tab Senkronizasyonu
         function syncWithOtherTabs() {
             window.addEventListener('storage', (e) => {
                 if (e.key === 'akilliMarket_shoppingList') {
@@ -1525,16 +1529,15 @@ let appState = {
                 }
             });
         }
-        // QR Kod Paylaşımı - YENİ EKLEME
+
+        // QR Kod Paylaşımı
         function generateQRCode() {
             const url = `${window.location.origin}${window.location.pathname}?shareCode=${appState.shareCode}`;
             const qrText = `AkıllıMarket Listesi\nKod: ${appState.shareCode}\nLink: ${url}`;
             
-            // Basit QR kod alternatifi - kopyalama
             navigator.clipboard.writeText(qrText).then(() => {
                 showNotification('Liste bilgileri panoya kopyalandı! 📋');
             }).catch(() => {
-                // Fallback
                 const textArea = document.createElement('textarea');
                 textArea.value = qrText;
                 document.body.appendChild(textArea);
@@ -1547,6 +1550,8 @@ let appState = {
 
         window.generateQRCode = generateQRCode;
 
+        // Global functions ← Buradan sonra eski kodlar devam eder
+        window.handleLoginClick = function() {
 
         // Global functions ← Buradan sonra eski kodlar devam eder
         window.handleLoginClick = function() {
@@ -1555,8 +1560,6 @@ let appState = {
                 handleLogin(input.value.trim());
             }
         };
-
-        
         window.addNewItem = function() {
             const nameInput = document.getElementById('newItemInput');
             const quantityInput = document.getElementById('newQuantityInput');
@@ -1742,8 +1745,9 @@ let appState = {
             }
         }
 
-        // Initialize app
+    // Initialize app
         render();
+        syncWithOtherTabs();
     </script>
 </body>
 </html>
