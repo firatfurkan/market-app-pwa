@@ -840,225 +840,329 @@ let appState = {
 };
 
 
-        // AI Aşçı Yemek Veritabanı
-        const chefMealDatabase = {
-"mercimek çorbası": {
-        ingredients: ["Kırmızı mercimek", "Soğan", "Havuç", "Patates", "Zeytinyağı", "Tuz", "Karabiber"],
-        response: "🍲 Besleyici mercimek çorbası! Protein açısından zengin ve sağlıklı bir seçim."            
-
-
-'makarna': {
-    ingredients: [
-        { name: 'makarna', quantity: '500g' },
-        { name: 'domates sosu', quantity: '1 adet' },
-        { name: 'parmesan peyniri', quantity: '100g' },
-        { name: 'zeytinyağı', quantity: '1 şişe' }
-    ],
-    response: "🍝 Makarna için gerekli malzemeler hazırlandı! Klasik bir İtalyan lezzeti için bu malzemeler yeterli."
-},  // ← VİRGÜL EKLENDİ
+    // AI Aşçı Yemek Veritabanı - Düzeltilmiş Versiyon
+const chefMealDatabase = {
+    "mercimek çorbası": {
+        ingredients: [
+            { name: 'kırmızı mercimek', quantity: '1 su bardağı' },
+            { name: 'soğan', quantity: '1 adet' },
+            { name: 'havuç', quantity: '1 adet' },
+            { name: 'patates', quantity: '1 adet' },
+            { name: 'tereyağı', quantity: '50g' },
+            { name: 'un', quantity: '1 yemek kaşığı' },
+            { name: 'tuz', quantity: '1 paket' }
+        ],
+        response: "🍲 Besleyici mercimek çorbası! Protein açısından zengin ve sağlıklı bir seçim."
+    },
     
-'omlet': {
-
-                ingredients: [
-                    { name: 'yumurta', quantity: '6 adet' },
-                    { name: 'süt', quantity: '1 litre' },
-                    { name: 'peynir', quantity: '200g' },
-                    { name: 'tereyağı', quantity: '250g' }
-                ],
-                response: "🍳 Mükemmel bir omlet için gerekli malzemeler! Protein açısından zengin ve doyurucu bir kahvaltı."
-                       },
-            'salata': {
-                // ... salata ingredients
-                response: "🥗 Taze ve sağlıklı salata malzemeleri! Vitamin açısından zengin bir öğün için ideal."
-            },
-            'çorba': {
-                // ... çorba ingredients  
-                response: "🍲 Besleyici tavuk çorbası malzemeleri! Hasta olduğunuzda veya soğuk havalarda ideal."
-            }  // ← VİRGÜL EKLENDİ
-        };
-
-            'çorba': {
-                ingredients: [
-                    { name: 'tavuk eti', quantity: '1 kg' },
-                    { name: 'havuç', quantity: '500g' },
-                    { name: 'soğan', quantity: '3 adet' },
-                    { name: 'pirinç', quantity: '500g' },
-                    { name: 'tuz', quantity: '1 paket' }
-                ],
-                response: "🍲 Besleyici tavuk çorbası malzemeleri! Hasta olduğunuzda veya soğuk havalarda ideal."
-            },
-            'pizza': {
-                ingredients: [
-                    { name: 'pizza hamuru', quantity: '2 adet' },
-                    { name: 'domates sosu', quantity: '1 adet' },
-                    { name: 'mozzarella peyniri', quantity: '300g' },
-                    { name: 'sucuk', quantity: '200g' },
-                    { name: 'mantar', quantity: '250g' }
-                ],
-                response: "🍕 Ev yapımı pizza malzemeleri! Ailenizle birlikte eğlenceli bir yemek deneyimi."
-            },
-            'tavuklu pilav': {
-                ingredients: [
-                    { name: 'tavuk eti', quantity: '1 kg' },
-                    { name: 'pirinç', quantity: '2 su bardağı' },
-                    { name: 'soğan', quantity: '2 adet' },
-                    { name: 'tereyağı', quantity: '100g' },
-                    { name: 'tavuk suyu', quantity: '3 su bardağı' },
-                    { name: 'tuz', quantity: '1 paket' },
-                    { name: 'karabiber', quantity: '1 paket' }
-                ],
-                response: "🍚 Geleneksel tavuklu pilav malzemeleri! Türk mutfağının vazgeçilmez lezzeti."
-            },
-            'karnıyarık': {
-                ingredients: [
-                    { name: 'patlıcan', quantity: '6 adet' },
-                    { name: 'kıyma', quantity: '500g' },
-                    { name: 'soğan', quantity: '2 adet' },
-                    { name: 'domates', quantity: '3 adet' },
-                    { name: 'biber', quantity: '2 adet' },
-                    { name: 'zeytinyağı', quantity: '1 şişe' },
-                    { name: 'maydanoz', quantity: '1 demet' }
-                ],
-                response: "🍆 Enfes karnıyarık malzemeleri! Türk mutfağının en sevilen yemeklerinden biri."
-            },
-            'menemen': {
-                ingredients: [
-                    { name: 'yumurta', quantity: '4 adet' },
-                    { name: 'domates', quantity: '3 adet' },
-                    { name: 'biber', quantity: '2 adet' },
-                    { name: 'soğan', quantity: '1 adet' },
-                    { name: 'zeytinyağı', quantity: '1 şişe' },
-                    { name: 'tuz', quantity: '1 paket' }
-                ],
-                response: "🍳 Lezzetli menemen malzemeleri! Türk kahvaltısının vazgeçilmez lezzeti."
-            },
-            'köfte': {
-                ingredients: [
-                    { name: 'kıyma', quantity: '500g' },
-                    { name: 'soğan', quantity: '1 adet' },
-                    { name: 'ekmek içi', quantity: '2 dilim' },
-                    { name: 'yumurta', quantity: '1 adet' },
-                    { name: 'maydanoz', quantity: '1 demet' },
-                    { name: 'tuz', quantity: '1 paket' },
-                    { name: 'karabiber', quantity: '1 paket' }
-                ],
-                response: "🥩 Ev yapımı köfte malzemeleri! Herkesin sevdiği klasik lezzet."
-            },
-            'mercimek çorbası': {
-                ingredients: [
-                    { name: 'kırmızı mercimek', quantity: '1 su bardağı' },
-                    { name: 'soğan', quantity: '1 adet' },
-                    { name: 'havuç', quantity: '1 adet' },
-                    { name: 'patates', quantity: '1 adet' },
-                    { name: 'tereyağı', quantity: '50g' },
-                    { name: 'un', quantity: '1 yemek kaşığı' },
-                    { name: 'tuz', quantity: '1 paket' }
-                ],
-                response: "🍲 Besleyici mercimek çorbası malzemeleri! Sağlıklı ve doyurucu bir çorba."
-            },
-            'döner': {
-                ingredients: [
-                    { name: 'tavuk eti', quantity: '1 kg' },
-                    { name: 'lavash', quantity: '6 adet' },
-                    { name: 'domates', quantity: '2 adet' },
-                    { name: 'salatalık', quantity: '1 adet' },
-                    { name: 'soğan', quantity: '1 adet' },
-                    { name: 'marul', quantity: '1 adet' },
-                    { name: 'sos', quantity: '2 adet' }
-                ],
-                response: "🌯 Ev yapımı döner malzemeleri! Sokak lezzetini evinizde yapın."
-            },
-            'mantı': {
-                ingredients: [
-                    { name: 'mantı', quantity: '500g' },
-                    { name: 'kıyma', quantity: '300g' },
-                    { name: 'yoğurt', quantity: '500g' },
-                    { name: 'sarımsak', quantity: '3 diş' },
-                    { name: 'tereyağı', quantity: '100g' },
-                    { name: 'domates salçası', quantity: '1 kaşık' },
-                    { name: 'nane', quantity: '1 demet' }
-                ],
-"ezogelin çorbası": {
-        ingredients: ["Kırmızı mercimek", "Bulgur", "Pirinç", "Soğan", "Salça", "Tereyağı", "Nane", "Tuz"],
+    "makarna": {
+        ingredients: [
+            { name: 'makarna', quantity: '500g' },
+            { name: 'domates sosu', quantity: '1 adet' },
+            { name: 'parmesan peyniri', quantity: '100g' },
+            { name: 'zeytinyağı', quantity: '1 şişe' }
+        ],
+        response: "🍝 Makarna için gerekli malzemeler hazırlandı! Klasik bir İtalyan lezzeti için bu malzemeler yeterli."
+    },
+    
+    "omlet": {
+        ingredients: [
+            { name: 'yumurta', quantity: '6 adet' },
+            { name: 'süt', quantity: '1 litre' },
+            { name: 'peynir', quantity: '200g' },
+            { name: 'tereyağı', quantity: '250g' }
+        ],
+        response: "🍳 Mükemmel bir omlet için gerekli malzemeler! Protein açısından zengin ve doyurucu bir kahvaltı."
+    },
+    
+    "salata": {
+        ingredients: [
+            { name: 'marul', quantity: '1 adet' },
+            { name: 'domates', quantity: '2 adet' },
+            { name: 'salatalık', quantity: '1 adet' },
+            { name: 'zeytinyağı', quantity: '3 yemek kaşığı' },
+            { name: 'limon', quantity: '1 adet' }
+        ],
+        response: "🥗 Taze ve sağlıklı salata malzemeleri! Vitamin açısından zengin bir öğün için ideal."
+    },
+    
+    "tavuk çorbası": {
+        ingredients: [
+            { name: 'tavuk eti', quantity: '1 kg' },
+            { name: 'havuç', quantity: '500g' },
+            { name: 'soğan', quantity: '3 adet' },
+            { name: 'pirinç', quantity: '500g' },
+            { name: 'tuz', quantity: '1 paket' }
+        ],
+        response: "🍲 Besleyici tavuk çorbası malzemeleri! Hasta olduğunuzda veya soğuk havalarda ideal."
+    },
+    
+    "pizza": {
+        ingredients: [
+            { name: 'pizza hamuru', quantity: '2 adet' },
+            { name: 'domates sosu', quantity: '1 adet' },
+            { name: 'mozzarella peyniri', quantity: '300g' },
+            { name: 'sucuk', quantity: '200g' },
+            { name: 'mantar', quantity: '250g' }
+        ],
+        response: "🍕 Ev yapımı pizza malzemeleri! Ailenizle birlikte eğlenceli bir yemek deneyimi."
+    },
+    
+    "tavuklu pilav": {
+        ingredients: [
+            { name: 'tavuk eti', quantity: '1 kg' },
+            { name: 'pirinç', quantity: '2 su bardağı' },
+            { name: 'soğan', quantity: '2 adet' },
+            { name: 'tereyağı', quantity: '100g' },
+            { name: 'tavuk suyu', quantity: '3 su bardağı' },
+            { name: 'tuz', quantity: '1 paket' },
+            { name: 'karabiber', quantity: '1 paket' }
+        ],
+        response: "🍚 Geleneksel tavuklu pilav malzemeleri! Türk mutfağının vazgeçilmez lezzeti."
+    },
+    
+    "karnıyarık": {
+        ingredients: [
+            { name: 'patlıcan', quantity: '6 adet' },
+            { name: 'kıyma', quantity: '500g' },
+            { name: 'soğan', quantity: '2 adet' },
+            { name: 'domates', quantity: '3 adet' },
+            { name: 'biber', quantity: '2 adet' },
+            { name: 'zeytinyağı', quantity: '1 şişe' },
+            { name: 'maydanoz', quantity: '1 demet' }
+        ],
+        response: "🍆 Enfes karnıyarık malzemeleri! Türk mutfağının en sevilen yemeklerinden biri."
+    },
+    
+    "menemen": {
+        ingredients: [
+            { name: 'yumurta', quantity: '4 adet' },
+            { name: 'domates', quantity: '3 adet' },
+            { name: 'biber', quantity: '2 adet' },
+            { name: 'soğan', quantity: '1 adet' },
+            { name: 'zeytinyağı', quantity: '1 şişe' },
+            { name: 'tuz', quantity: '1 paket' }
+        ],
+        response: "🍳 Lezzetli menemen malzemeleri! Türk kahvaltısının vazgeçilmez lezzeti."
+    },
+    
+    "köfte": {
+        ingredients: [
+            { name: 'kıyma', quantity: '500g' },
+            { name: 'soğan', quantity: '1 adet' },
+            { name: 'ekmek içi', quantity: '2 dilim' },
+            { name: 'yumurta', quantity: '1 adet' },
+            { name: 'maydanoz', quantity: '1 demet' },
+            { name: 'tuz', quantity: '1 paket' },
+            { name: 'karabiber', quantity: '1 paket' }
+        ],
+        response: "🥩 Ev yapımı köfte malzemeleri! Herkesin sevdiği klasik lezzet."
+    },
+    
+    "döner": {
+        ingredients: [
+            { name: 'tavuk eti', quantity: '1 kg' },
+            { name: 'lavash', quantity: '6 adet' },
+            { name: 'domates', quantity: '2 adet' },
+            { name: 'salatalık', quantity: '1 adet' },
+            { name: 'soğan', quantity: '1 adet' },
+            { name: 'marul', quantity: '1 adet' },
+            { name: 'sos', quantity: '2 adet' }
+        ],
+        response: "🌯 Ev yapımı döner malzemeleri! Sokak lezzetini evinizde yapın."
+    },
+    
+    "mantı": {
+        ingredients: [
+            { name: 'un', quantity: '500g' },
+            { name: 'yumurta', quantity: '2 adet' },
+            { name: 'kıyma', quantity: '300g' },
+            { name: 'soğan', quantity: '1 adet' },
+            { name: 'yoğurt', quantity: '500g' },
+            { name: 'sarımsak', quantity: '3 diş' },
+            { name: 'tereyağı', quantity: '100g' }
+        ],
+        response: "🥟 Geleneksel mantı malzemeleri! Türk mutfağının en özel lezzetlerinden."
+    },
+    
+    "ezogelin çorbası": {
+        ingredients: [
+            { name: 'kırmızı mercimek', quantity: '1 su bardağı' },
+            { name: 'bulgur', quantity: '1/2 su bardağı' },
+            { name: 'pirinç', quantity: '2 yemek kaşığı' },
+            { name: 'soğan', quantity: '1 adet' },
+            { name: 'salça', quantity: '1 yemek kaşığı' },
+            { name: 'tereyağı', quantity: '50g' },
+            { name: 'nane', quantity: '1 çay kaşığı' },
+            { name: 'tuz', quantity: '1 çay kaşığı' }
+        ],
         response: "🥣 Ezogelin çorbası! Geleneksel Türk mutfağının en sevilen çorbalarından."
     },
+    
     "tarhana çorbası": {
-        ingredients: ["Tarhana", "Su", "Tereyağı", "Tuz"],
+        ingredients: [
+            { name: 'tarhana', quantity: '3 yemek kaşığı' },
+            { name: 'su', quantity: '4 su bardağı' },
+            { name: 'tereyağı', quantity: '50g' },
+            { name: 'tuz', quantity: '1 çay kaşığı' }
+        ],
         response: "🍜 Tarhana çorbası! Kış aylarının vazgeçilmez sıcacık lezzeti."
     },
+    
     "domates çorbası": {
-        ingredients: ["Domates", "Un", "Tereyağı", "Süt", "Şeker", "Tuz"],
+        ingredients: [
+            { name: 'domates', quantity: '1 kg' },
+            { name: 'un', quantity: '2 yemek kaşığı' },
+            { name: 'tereyağı', quantity: '50g' },
+            { name: 'süt', quantity: '1 su bardağı' },
+            { name: 'şeker', quantity: '1 çay kaşığı' },
+            { name: 'tuz', quantity: '1 çay kaşığı' }
+        ],
         response: "🍅 Domates çorbası! Çocukların en sevdiği hafif ve lezzetli çorba."
     },
-    "karnıyarık": {
-        ingredients: ["Patlıcan", "Kıyma", "Soğan", "Domates", "Biber", "Sarımsak", "Maydanoz"],
-        response: "🍆 Karnıyarık! Türk mutfağının en ünlü patlıcan yemeklerinden."
-    },
+    
     "imam bayıldı": {
-        ingredients: ["Patlıcan", "Soğan", "Sarımsak", "Domates", "Maydanoz", "Zeytinyağı"],
+        ingredients: [
+            { name: 'patlıcan', quantity: '6 adet' },
+            { name: 'soğan', quantity: '3 adet' },
+            { name: 'sarımsak', quantity: '4 diş' },
+            { name: 'domates', quantity: '2 adet' },
+            { name: 'maydanoz', quantity: '1 demet' },
+            { name: 'zeytinyağı', quantity: '1 su bardağı' }
+        ],
         response: "🫒 İmam Bayıldı! Zeytinyağlı sebze yemeklerinin kralı."
     },
+    
     "kuru fasulye": {
-        ingredients: ["Kuru fasulye", "Et", "Soğan", "Domates", "Salça", "Zeytinyağı"],
+        ingredients: [
+            { name: 'kuru fasulye', quantity: '500g' },
+            { name: 'et', quantity: '300g' },
+            { name: 'soğan', quantity: '2 adet' },
+            { name: 'domates', quantity: '2 adet' },
+            { name: 'salça', quantity: '2 yemek kaşığı' },
+            { name: 'zeytinyağı', quantity: '3 yemek kaşığı' }
+        ],
         response: "🫘 Kuru fasulye! Pilav ile birlikte Türk mutfağının klasiği."
     },
-    "köfte": {
-        ingredients: ["Kıyma", "Soğan", "Ekmek içi", "Yumurta", "Maydanoz", "Tuz", "Karabiber"],
-        response: "🥩 Ev yapımı köfte! Herkesin sevdiği pratik ve lezzetli yemek."
-    },
+    
     "pilav": {
-        ingredients: ["Pirinç", "Tereyağı", "Su", "Tuz"],
+        ingredients: [
+            { name: 'pirinç', quantity: '2 su bardağı' },
+            { name: 'tereyağı', quantity: '50g' },
+            { name: 'su', quantity: '3 su bardağı' },
+            { name: 'tuz', quantity: '1 çay kaşığı' }
+        ],
         response: "🍚 Pilav! Türk mutfağının vazgeçilmez yan yemeği."
     },
+    
     "bulgur pilavı": {
-        ingredients: ["Bulgur", "Soğan", "Tereyağı", "Su", "Tuz"],
+        ingredients: [
+            { name: 'bulgur', quantity: '2 su bardağı' },
+            { name: 'soğan', quantity: '1 adet' },
+            { name: 'tereyağı', quantity: '50g' },
+            { name: 'su', quantity: '3 su bardağı' },
+            { name: 'tuz', quantity: '1 çay kaşığı' }
+        ],
         response: "🌾 Bulgur pilavı! Sağlıklı ve doyurucu bir alternatif."
     },
+    
     "kısır": {
-        ingredients: ["İnce bulgur", "Domates", "Salatalık", "Maydanoz", "Nane", "Limon", "Zeytinyağı"],
+        ingredients: [
+            { name: 'ince bulgur', quantity: '2 su bardağı' },
+            { name: 'domates', quantity: '3 adet' },
+            { name: 'salatalık', quantity: '2 adet' },
+            { name: 'maydanoz', quantity: '1 demet' },
+            { name: 'nane', quantity: '1/2 demet' },
+            { name: 'limon', quantity: '2 adet' },
+            { name: 'zeytinyağı', quantity: '4 yemek kaşığı' }
+        ],
         response: "🥗 Kısır! Hafif ve ferahlatıcı Türk salatası."
     },
-   'çoban salata': {
-    ingredients: ["Domates", "Salatalık", "Soğan", "Biber", "Maydanoz", "Limon", "Zeytinyağı"],
-    response: "🥒 Çoban salata! Taze ve vitamin dolu klasik salata."
-},  // ← VİRGÜL EKLENDİ
-"mücver": {
-        ingredients: ["Kabak", "Yumurta", "Un", "Dereotu", "Soğan", "Tuz"],
+    
+    "çoban salata": {
+        ingredients: [
+            { name: 'domates', quantity: '4 adet' },
+            { name: 'salatalık', quantity: '2 adet' },
+            { name: 'soğan', quantity: '1 adet' },
+            { name: 'biber', quantity: '2 adet' },
+            { name: 'maydanoz', quantity: '1 demet' },
+            { name: 'limon', quantity: '1 adet' },
+            { name: 'zeytinyağı', quantity: '3 yemek kaşığı' }
+        ],
+        response: "🥒 Çoban salata! Taze ve vitamin dolu klasik salata."
+    },
+    
+    "mücver": {
+        ingredients: [
+            { name: 'kabak', quantity: '3 adet' },
+            { name: 'yumurta', quantity: '2 adet' },
+            { name: 'un', quantity: '3 yemek kaşığı' },
+            { name: 'dereotu', quantity: '1 demet' },
+            { name: 'soğan', quantity: '1 adet' },
+            { name: 'tuz', quantity: '1 çay kaşığı' }
+        ],
         response: "🥒 Kabak mücveri! Sebze sevmeyenlerin bile bayılacağı lezzet."
     },
+    
     "lahmacun": {
-        ingredients: ["Un", "Kıyma", "Soğan", "Domates", "Biber", "Maydanoz", "Baharat"],
+        ingredients: [
+            { name: 'un', quantity: '500g' },
+            { name: 'kıyma', quantity: '300g' },
+            { name: 'soğan', quantity: '2 adet' },
+            { name: 'domates', quantity: '2 adet' },
+            { name: 'biber', quantity: '1 adet' },
+            { name: 'maydanoz', quantity: '1 demet' },
+            { name: 'baharat', quantity: '1 paket' }
+        ],
         response: "🫓 Lahmacun! Türk pizzası olarak bilinen enfes lezzet."
     },
-    "mantı": {
-        ingredients: ["Un", "Yumurta", "Kıyma", "Soğan", "Yoğurt", "Sarımsak", "Tereyağı"],
-        response: "🥟 Mantı! Türk mutfağının en özel ve emek isteyen yemeklerinden."
-    },
-    "menemen": {
-        ingredients: ["Yumurta", "Domates", "Biber", "Soğan", "Zeytinyağı", "Tuz"],
-        response: "🍳 Menemen! Kahvaltının vazgeçilmez lezzeti."
-    },
+    
     "börek": {
-        ingredients: ["Yufka", "Peynir", "Yumurta", "Süt", "Zeytinyağı"],
+        ingredients: [
+            { name: 'yufka', quantity: '10 adet' },
+            { name: 'peynir', quantity: '400g' },
+            { name: 'yumurta', quantity: '3 adet' },
+            { name: 'süt', quantity: '2 su bardağı' },
+            { name: 'zeytinyağı', quantity: '1/2 su bardağı' }
+        ],
         response: "🥧 Su böreği! Türk mutfağının en sevilen hamur işi."
     },
+    
     "gözleme": {
-        ingredients: ["Un", "Su", "Tuz", "Peynir", "Ispanak", "Tereyağı"],
+        ingredients: [
+            { name: 'un', quantity: '3 su bardağı' },
+            { name: 'su', quantity: '1 su bardağı' },
+            { name: 'tuz', quantity: '1 çay kaşığı' },
+            { name: 'peynir', quantity: '200g' },
+            { name: 'ıspanak', quantity: '500g' },
+            { name: 'tereyağı', quantity: '100g' }
+        ],
         response: "🫓 Gözleme! Köy kahvaltılarının vazgeçilmez lezzeti."
     },
+    
     "tavuk şiş": {
-        ingredients: ["Tavuk", "Soğan", "Biber", "Zeytinyağı", "Baharat"],
+        ingredients: [
+            { name: 'tavuk', quantity: '1 kg' },
+            { name: 'soğan', quantity: '2 adet' },
+            { name: 'biber', quantity: '3 adet' },
+            { name: 'zeytinyağı', quantity: '3 yemek kaşığı' },
+            { name: 'baharat', quantity: '1 paket' }
+        ],
         response: "🍗 Tavuk şiş! Mangalın en sağlıklı seçeneği."
     },
-    "izgara balık": {
-        ingredients: ["Balık", "Limon", "Zeytinyağı", "Tuz", "Karabiber"],
+    
+    "ızgara balık": {
+        ingredients: [
+            { name: 'balık', quantity: '1 kg' },
+            { name: 'limon', quantity: '2 adet' },
+            { name: 'zeytinyağı', quantity: '3 yemek kaşığı' },
+            { name: 'tuz', quantity: '1 çay kaşığı' },
+            { name: 'karabiber', quantity: '1 çay kaşığı' }
+        ],
         response: "🐟 Izgara balık! Omega-3 açısından zengin sağlıklı seçim."
     }
 };
 
-                response: "🥟 Geleneksel mantı malzemeleri! Türk mutfağının en özel lezzetlerinden."
-            }
-        };
 // YENİ EKLENDİ - Akıllı Ürün Öneri Veritabanı
 const productDatabase = [
     // 🍞 EKMEK VE UNLU MAMULLERİ
