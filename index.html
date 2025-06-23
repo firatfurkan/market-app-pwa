@@ -1272,26 +1272,28 @@ function categorizeItem(item) {
         ]
     };
     
-    const itemLower = item.toLowerCase();
-    
-    for (const [category, items] of Object.entries(categories)) {
-        for (const keyword of items) {
-            if (itemLower.includes(keyword)) {
-                return category;
+        function categorizeItem(item) {  // ← EKSİK FONKSİYON BAŞLANGICI EKLENDİ
+            const itemLower = item.toLowerCase();
+            
+            for (const [category, items] of Object.entries(categories)) {
+                for (const keyword of items) {
+                    if (itemLower.includes(keyword)) {
+                        return category;
+                    }
+                }
             }
+            return '📦 Diğer';
         }
-    }
-    return '📦 Diğer';
-}
 
         // Save to localStorage
-       function saveToStorage() {
-    localStorage.setItem('akilliMarket_shoppingList', JSON.stringify(appState.shoppingList));
-    localStorage.setItem('akilliMarket_settings', JSON.stringify(appState.settings));
-    localStorage.setItem('akilliMarket_chefName', appState.chefName);
-    localStorage.setItem('akilliMarket_sharedUsers', JSON.stringify(appState.sharedUsers));
-    localStorage.setItem('akilliMarket_shareCode', appState.shareCode);
-}
+        function saveToStorage() {
+            localStorage.setItem('akilliMarket_shoppingList', JSON.stringify(appState.shoppingList));
+            localStorage.setItem('akilliMarket_settings', JSON.stringify(appState.settings));
+            localStorage.setItem('akilliMarket_chefName', appState.chefName);
+            localStorage.setItem('akilliMarket_sharedUsers', JSON.stringify(appState.sharedUsers));
+            localStorage.setItem('akilliMarket_shareCode', appState.shareCode);
+        }
+
 
 
         // Notification System
