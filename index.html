@@ -840,7 +840,7 @@ let appState = {
 };
 
 
-    // AI Aşçı Yemek Veritabanı - Düzeltilmiş Versiyon
+       // AI Aşçı Yemek Veritabanı - Düzeltilmiş Versiyon
 const chefMealDatabase = {
     "mercimek çorbası": {
         ingredients: [
@@ -850,7 +850,7 @@ const chefMealDatabase = {
             { name: 'patates', quantity: '1 adet' },
             { name: 'tereyağı', quantity: '50g' },
             { name: 'un', quantity: '1 yemek kaşığı' },
-            { name: 'tuz', quantity: '1 paket' }
+            { name: 'tuz', quantity: '1 çay kaşığı' } // "1 paket" yerine "1 çay kaşığı"
         ],
         response: "🍲 Besleyici mercimek çorbası! Protein açısından zengin ve sağlıklı bir seçim."
     },
@@ -858,19 +858,19 @@ const chefMealDatabase = {
     "makarna": {
         ingredients: [
             { name: 'makarna', quantity: '500g' },
-            { name: 'domates sosu', quantity: '1 adet' },
+            { name: 'domates sosu', quantity: '1 kutu' }, // "1 adet" yerine "1 kutu"
             { name: 'parmesan peyniri', quantity: '100g' },
-            { name: 'zeytinyağı', quantity: '1 şişe' }
+            { name: 'zeytinyağı', quantity: '3 yemek kaşığı' } // "1 şişe" yerine "3 yemek kaşığı"
         ],
         response: "🍝 Makarna için gerekli malzemeler hazırlandı! Klasik bir İtalyan lezzeti için bu malzemeler yeterli."
     },
     
     "omlet": {
         ingredients: [
-            { name: 'yumurta', quantity: '6 adet' },
-            { name: 'süt', quantity: '1 litre' },
-            { name: 'peynir', quantity: '200g' },
-            { name: 'tereyağı', quantity: '250g' }
+            { name: 'yumurta', quantity: '3 adet' }, // 6 adet çok fazla
+            { name: 'süt', quantity: '3 yemek kaşığı' }, // 1 litre çok fazla
+            { name: 'peynir', quantity: '100g' }, // 200g çok fazla
+            { name: 'tereyağı', quantity: '1 yemek kaşığı' } // 250g çok fazla
         ],
         response: "🍳 Mükemmel bir omlet için gerekli malzemeler! Protein açısından zengin ve doyurucu bir kahvaltı."
     },
@@ -888,11 +888,11 @@ const chefMealDatabase = {
     
     "tavuk çorbası": {
         ingredients: [
-            { name: 'tavuk eti', quantity: '1 kg' },
-            { name: 'havuç', quantity: '500g' },
-            { name: 'soğan', quantity: '3 adet' },
-            { name: 'pirinç', quantity: '500g' },
-            { name: 'tuz', quantity: '1 paket' }
+            { name: 'tavuk eti', quantity: '500g' }, // 1 kg çok fazla
+            { name: 'havuç', quantity: '2 adet' }, // 500g yerine 2 adet
+            { name: 'soğan', quantity: '1 adet' }, // 3 adet çok fazla
+            { name: 'pirinç', quantity: '1/2 su bardağı' }, // 500g çok fazla
+            { name: 'tuz', quantity: '1 çay kaşığı' } // "1 paket" yerine "1 çay kaşığı"
         ],
         response: "🍲 Besleyici tavuk çorbası malzemeleri! Hasta olduğunuzda veya soğuk havalarda ideal."
     },
@@ -900,7 +900,7 @@ const chefMealDatabase = {
     "pizza": {
         ingredients: [
             { name: 'pizza hamuru', quantity: '2 adet' },
-            { name: 'domates sosu', quantity: '1 adet' },
+            { name: 'domates sosu', quantity: '1 kutu' }, // "1 adet" yerine "1 kutu"
             { name: 'mozzarella peyniri', quantity: '300g' },
             { name: 'sucuk', quantity: '200g' },
             { name: 'mantar', quantity: '250g' }
@@ -910,13 +910,13 @@ const chefMealDatabase = {
     
     "tavuklu pilav": {
         ingredients: [
-            { name: 'tavuk eti', quantity: '1 kg' },
+            { name: 'tavuk eti', quantity: '500g' }, // 1 kg çok fazla
             { name: 'pirinç', quantity: '2 su bardağı' },
-            { name: 'soğan', quantity: '2 adet' },
-            { name: 'tereyağı', quantity: '100g' },
+            { name: 'soğan', quantity: '1 adet' }, // 2 adet çok fazla
+            { name: 'tereyağı', quantity: '50g' }, // 100g çok fazla
             { name: 'tavuk suyu', quantity: '3 su bardağı' },
-            { name: 'tuz', quantity: '1 paket' },
-            { name: 'karabiber', quantity: '1 paket' }
+            { name: 'tuz', quantity: '1 çay kaşığı' }, // "1 paket" yerine "1 çay kaşığı"
+            { name: 'karabiber', quantity: '1 çay kaşığı' } // "1 paket" yerine "1 çay kaşığı"
         ],
         response: "🍚 Geleneksel tavuklu pilav malzemeleri! Türk mutfağının vazgeçilmez lezzeti."
     },
@@ -928,7 +928,7 @@ const chefMealDatabase = {
             { name: 'soğan', quantity: '2 adet' },
             { name: 'domates', quantity: '3 adet' },
             { name: 'biber', quantity: '2 adet' },
-            { name: 'zeytinyağı', quantity: '1 şişe' },
+            { name: 'zeytinyağı', quantity: '1/2 su bardağı' }, // "1 şişe" yerine "1/2 su bardağı"
             { name: 'maydanoz', quantity: '1 demet' }
         ],
         response: "🍆 Enfes karnıyarık malzemeleri! Türk mutfağının en sevilen yemeklerinden biri."
@@ -940,8 +940,8 @@ const chefMealDatabase = {
             { name: 'domates', quantity: '3 adet' },
             { name: 'biber', quantity: '2 adet' },
             { name: 'soğan', quantity: '1 adet' },
-            { name: 'zeytinyağı', quantity: '1 şişe' },
-            { name: 'tuz', quantity: '1 paket' }
+            { name: 'zeytinyağı', quantity: '3 yemek kaşığı' }, // "1 şişe" yerine "3 yemek kaşığı"
+            { name: 'tuz', quantity: '1 çay kaşığı' } // "1 paket" yerine "1 çay kaşığı"
         ],
         response: "🍳 Lezzetli menemen malzemeleri! Türk kahvaltısının vazgeçilmez lezzeti."
     },
@@ -953,8 +953,8 @@ const chefMealDatabase = {
             { name: 'ekmek içi', quantity: '2 dilim' },
             { name: 'yumurta', quantity: '1 adet' },
             { name: 'maydanoz', quantity: '1 demet' },
-            { name: 'tuz', quantity: '1 paket' },
-            { name: 'karabiber', quantity: '1 paket' }
+            { name: 'tuz', quantity: '1 çay kaşığı' }, // "1 paket" yerine "1 çay kaşığı"
+            { name: 'karabiber', quantity: '1 çay kaşığı' } // "1 paket" yerine "1 çay kaşığı"
         ],
         response: "🥩 Ev yapımı köfte malzemeleri! Herkesin sevdiği klasik lezzet."
     },
@@ -967,7 +967,7 @@ const chefMealDatabase = {
             { name: 'salatalık', quantity: '1 adet' },
             { name: 'soğan', quantity: '1 adet' },
             { name: 'marul', quantity: '1 adet' },
-            { name: 'sos', quantity: '2 adet' }
+            { name: 'sos', quantity: '2 çeşit' } // "2 adet" yerine "2 çeşit"
         ],
         response: "🌯 Ev yapımı döner malzemeleri! Sokak lezzetini evinizde yapın."
     },
@@ -1089,9 +1089,9 @@ const chefMealDatabase = {
             { name: 'limon', quantity: '1 adet' },
             { name: 'zeytinyağı', quantity: '3 yemek kaşığı' }
         ],
-        response: "🥒 Çoban salata! Taze ve vitamin dolu klasik salata."
+        response: "🥗 Çoban salata! Taze ve vitamin dolu klasik salata."
     },
-    
+
     "mücver": {
         ingredients: [
             { name: 'kabak', quantity: '3 adet' },
@@ -1101,8 +1101,8 @@ const chefMealDatabase = {
             { name: 'soğan', quantity: '1 adet' },
             { name: 'tuz', quantity: '1 çay kaşığı' }
         ],
-        response: "🥒 Kabak mücveri! Sebze sevmeyenlerin bile bayılacağı lezzet."
-    },
+        response: "🥬 Kabak mücveri! Sebze sevmeyenlerin bile bayılacağı lezzet."
+    }, // Eksik virgül eklendi
     
     "lahmacun": {
         ingredients: [
@@ -1112,7 +1112,7 @@ const chefMealDatabase = {
             { name: 'domates', quantity: '2 adet' },
             { name: 'biber', quantity: '1 adet' },
             { name: 'maydanoz', quantity: '1 demet' },
-            { name: 'baharat', quantity: '1 paket' }
+            { name: 'baharat karışımı', quantity: '1 çay kaşığı' } // "1 paket" yerine "1 çay kaşığı"
         ],
         response: "🫓 Lahmacun! Türk pizzası olarak bilinen enfes lezzet."
     },
@@ -1146,7 +1146,7 @@ const chefMealDatabase = {
             { name: 'soğan', quantity: '2 adet' },
             { name: 'biber', quantity: '3 adet' },
             { name: 'zeytinyağı', quantity: '3 yemek kaşığı' },
-            { name: 'baharat', quantity: '1 paket' }
+            { name: 'baharat karışımı', quantity: '1 çay kaşığı' } // "1 paket" yerine "1 çay kaşığı"
         ],
         response: "🍗 Tavuk şiş! Mangalın en sağlıklı seçeneği."
     },
@@ -1161,6 +1161,39 @@ const chefMealDatabase = {
         ],
         response: "🐟 Izgara balık! Omega-3 açısından zengin sağlıklı seçim."
     }
+};
+
+// Emoji Haritası - Eksik olan fonksiyon tanımlandı
+const emojiMap = {
+    'domates': '🍅',
+    'salatalık': '🥒',
+    'elma': '🍎',
+    'muz': '🍌',
+    'patates': '🥔',
+    'soğan': '🧅',
+    'marul': '🥬',
+    'limon': '🍋',
+    'havuç': '🥕',
+    'biber': '🌶️',
+    'patlıcan': '🍆',
+    'kabak': '🥒',
+    'tavuk': '🍗',
+    'dana eti': '🥩',
+    'balık': '🐟',
+    'süt': '🥛',
+    'yoğurt': '🥛',
+    'peynir': '🧀',
+    'yumurta': '🥚',
+    'ekmek': '🍞',
+    'pirinç': '🍚',
+    'makarna': '🍝',
+    'un': '🌾',
+    'şeker': '🍬',
+    'tuz': '🧂',
+    'zeytinyağı': '🫒',
+    'su': '💧',
+    'deterjan': '🧴',
+    'sabun': '🧼'
 };
 
 // YENİ EKLENDİ - Akıllı Ürün Öneri Veritabanı
@@ -1185,150 +1218,71 @@ const productDatabase = [
     '🥬 Lahana', '🥬 Marul', '🥬 Ispanak', '🥬 Roka', '🌿 Maydanoz', '🌿 Dereotu', '🌿 Nane',
     '🥦 Brokoli', '🥦 Karnabahar', '🍄 Mantar', '🥒 Kabak', '🫛 Bamya', '🫛 Fasulye', '🫛 Bezelye',
     '🌽 Mısır', '🥬 Kereviz', '🥬 Pırasa', '🥬 Enginar', '🥬 Kuşkonmaz', '🥬 Brüksel Lahanası',
-    '🥕 Turp', '🥕 Pancar', '🥕 Şalgam', '🌿 Tere', '🌿 Semizotu', '🌿 Ebegümeci',
-
-    // 🍎 MEYVELER
-    '🍎 Elma', '🍌 Muz', '🍊 Portakal', '🍋 Limon', '🥝 Kivi', '🍓 Çilek', '🍊 Mandalina',
-    '🍉 Karpuz', '🍈 Kavun', '🍍 Ananas', '🥑 Avokado', '🍇 Üzüm', '🍐 Armut', '🍑 Şeftali',
-    '🍑 Erik', '🍑 Kayısı', '🍒 Kiraz', '🍒 Vişne', '🥭 İncir', '🍇 Nar', '🌰 Hurma',
-    '🍑 Kuru Kayısı', '🍇 Kuru Üzüm', '🥭 Kuru İncir', '🌰 Kuru Hurma',
-
-    // 🥩 ET VE BALIK
-    '🥩 Kıyma', '🥩 Dana Eti', '🥩 Kuzu Eti', '🍗 Tavuk', '🍗 Tavuk Göğsü', '🍗 Tavuk Budu',
-    '🍗 Hindi Eti', '🥩 Köfte', '🐟 Balık', '🐟 Somon', '🐟 Levrek', '🐟 Çupra', '🐟 Hamsi',
-    '🐟 Sardalya', '🐟 Uskumru', '🦐 Karides', '🦑 Kalamar', '🦪 Midye',
-
-    // 🍚 TAHILLAR VE BAKLİYAT
-    '🍚 Pirinç', '🌾 Bulgur', '🌾 Mercimek', '🌾 Kırmızı Mercimek', '🌾 Yeşil Mercimek', '🌾 Nohut',
-    '🌾 Barbunya', '🌾 Börülce', '🌾 Soya Fasulyesi', '🌾 Yulaf', '🌾 Kinoa', '🌾 Çavdar',
-    '🌾 Arpa', '🍝 Makarna', '🍝 Spagetti', '🍝 Penne', '🍝 Fusilli',
-
-    // 🌾 UN VE UNLU MAMULLERİ
-    '🌾 Un', '🌾 Tam Buğday Unu', '🌾 Mısır Unu', '🌾 Çavdar Unu', '🌾 Pirinç Unu', '🌾 Yulaf Unu',
-    '🥣 Mısır Gevreği', '🥣 Kahvaltılık Gevrek', '🥣 Granola', '🥣 Müsli',
-
-    // 🥜 KURUYEMIŞ
-    '🥜 Fındık', '🥜 Ceviz', '🥜 Badem', '🥜 Fıstık', '🥜 Antep Fıstığı', '🥜 Kaju', '🌻 Ay Çekirdeği',
-    '🎃 Kabak Çekirdeği', '🌰 Susam', '🌰 Keten Tohumu', '🌰 Chia Tohumu', '🥜 Kuruyemiş Karışımı',
-
-    // 🫗 İÇECEKLER
-    '💧 Su', '🥤 Kola', '🥤 Gazoz', '🥤 Soda', '🥤 Maden Suyu', '🧃 Meyve Suyu', '🧃 Portakal Suyu',
-    '🧃 Elma Suyu', '🧃 Vişne Suyu', '☕ Kahve', '☕ Türk Kahvesi', '☕ Filtre Kahve', '☕ Espresso',
-    '🍵 Çay', '🍵 Yeşil Çay', '🍵 Bitki Çayı', '🥛 Smoothie', '🥤 Protein Shake', '🥤 Enerji İçeceği',
-
-    // 🧂 BAHARAT VE ÇEŞNI
-    '🧂 Tuz', '⚫ Karabiber', '🌶️ Pul Biber', '🌿 Kekik', '🌿 Nane', '🌿 Fesleğen', '🌿 Biberiye',
-    '🧄 Sarımsak Tozu', '🧅 Soğan Tozu', '🌶️ Kimyon', '🌶️ Kırmızı Toz Biber', '🌶 Baharat Karışımı',
-    '🍋 Sumak', '🌰 Susam', '🌿 Defne Yaprağı', '🌿 Kişniş', '🌿 Anason',
-
-    // 🛢️ YAĞLAR VE SİRKELER
-    '🫒 Zeytinyağı', '🌻 Ayçiçek Yağı', '🌽 Mısır Yağı', '🥥 Hindistan Cevizi Yağı', '🫒 Sızma Zeytinyağı',
-    '🍶 Sirke', '🍶 Elma Sirkesi', '🍶 Üzüm Sirkesi', '🍶 Nar Ekşisi', '🍶 Limon Suyu',
-
-    // 🍅 SOSLAR VE ÇEŞNI
-    '🍅 Salça', '🍅 Domates Sosu', '🥄 Mayonez', '🍅 Ketçap', '🌭 Hardal', '🌶️ Acı Sos', '🧄 Sarımsak Sosu',
-    '🥗 Salata Sosu', '🍖 Barbekü Sosu', '🍝 Makarna Sosu', '🍛 Soya Sosu', '🍯 Teriyaki Sosu',
-
-    // 🍭 ŞEKERLEMELER VE ATIŞTIRILMALAR
-    '🍬 Şeker', '🍯 Bal', '🍫 Çikolata', '🍫 Bitter Çikolata', '🍫 Sütlü Çikolata', '🍬 Şekerleme',
-    '🍭 Lolipop', '🍪 Kurabiye', '🥨 Cips', '🍿 Patlamış Mısır', '🥜 Çerez', '🍘 Kraker',
-
-    // 🧊 DONUK ÜRÜNLER
-    '🧊 Donuk Sebze', '🧊 Donuk Meyve', '🍕 Donuk Pizza', '🥟 Donuk Börek', '🐟 Donuk Balık',
-    '🍗 Donuk Tavuk', '🍟 Donuk Patates', '🧊 Donuk Karışım', '🍦 Dondurma Çeşitleri',
-
-    // 🧴 TEMİZLİK ÜRÜNLERİ
-    '🧴 Deterjan', '🧴 Çamaşır Deterjanı', '🧴 Bulaşık Deterjanı', '🧴 Yumuşatıcı', '🧴 Çamaşır Suyu',
-    '🧴 Cam Temizleyici', '🧴 Banyo Temizleyici', '🧴 Mutfak Temizleyici', '🧴 Dezenfektan',
-    '🧽 Sünger', '🧹 Süpürge', '🧻 Kağıt Havlu', '🧻 Tuvalet Kağıdı', '🧻 Peçete',
-
-    // 🧴 KİŞİSEL BAKIM
-    '🧴 Şampuan', '🧴 Saç Kremi', '🧼 Sabun', '🧴 Duş Jeli', '🪥 Diş Macunu', '🪥 Diş Fırçası',
-    '🧴 Ağız Gargarası', '🧴 Deodorant', '🧴 Parfüm', '🧴 Krem', '🧴 Güneş Kremi', '🧻 Islak Mendil',
-
-    // 👶 BEBEK ÜRÜNLERİ
-    '🍼 Bebek Maması', '🍼 Bebek Sütü', '👶 Bebek Bezi', '🧻 Islak Mendil', '🧴 Bebek Şampuanı',
-    '🧴 Bebek Kremi', '🍼 Biberon', '🥄 Bebek Kaşığı',
-
-    // 🏠 EV GEREKLERI
-    '🕯️ Mum', '🔋 Pil', '💡 Ampul', '🧲 Mıknatıs', '📎 Ataş', '✂️ Makas', '📏 Cetvel',
-    '🔧 Vida', '🔨 Çivi', '🧰 Tamir Malzemesi', '🧤 Eldiven', '🎒 Poşet', '📦 Kutu',
-
-    // 🌱 ORGANİK ÜRÜNLER
-    '🌱 Organik Sebze', '🌱 Organik Meyve', '🌱 Organik Süt', '🌱 Organik Yumurta', '🌱 Organik Et',
-    '🌱 Organik Tahıl', '🌱 Organik Bal', '🌱 Organik Çay', '🌱 Organik Kahve',
-
-    // 🎂 PASTA VE TATLI MALZEMELERİ
-    '🎂 Pasta', '🧁 Cupcake', '🍰 Kek', '🥧 Tart', '🍮 Puding', '🍯 Şurup', '🍫 Çikolata Parçacığı',
-    '🥥 Hindistan Cevizi', '🍒 Vişne Kurusu', '🍓 Çilek Kurusu', '🧈 Pasta Kreması',
-
-    // 🍱 HAZIR YEMEKLER
-    '🍱 Hazır Yemek', '🥘 Konserve Yemek', '🍜 Hazır Çorba', '🍝 Hazır Makarna', '🍛 Pilav',
-    '🥗 Hazır Salata', '🌯 Wrap', '🥪 Sandviç', '🌮 Taco', '🍕 Pizza'
+    '🥕 Turp', '🥕 Pancar', '🥕 Şalgam', '🌿 Tere', '🌿 Semizotu', '🌿 Ebegümeci'
 ];
 
-
-            
-            const itemLower = item.toLowerCase();
-            
-            if (emojiMap[itemLower]) {
-                return emojiMap[itemLower];
-            }
-            
-            for (const [keyword, emoji] of Object.entries(emojiMap)) {
-                if (itemLower.includes(keyword) || keyword.includes(itemLower)) {
-                    return emoji;
-                }
-            }
-            
-            return '🛒';
+// Yardımcı fonksiyonlar
+function getItemEmoji(item) {
+    const itemLower = item.toLowerCase();
+    
+    if (emojiMap[itemLower]) {
+        return emojiMap[itemLower];
+    }
+    
+    for (const [keyword, emoji] of Object.entries(emojiMap)) {
+        if (itemLower.includes(keyword) || keyword.includes(itemLower)) {
+            return emoji;
         }
+    }
+    
+    return '🛒';
+}
 
-        // Kategori belirleme fonksiyonu
-        function categorizeItem(item) {
-            const categories = {
-                '🥬 Sebze & Meyve': [
-                    'domates', 'salatalık', 'elma', 'muz', 'patates', 'soğan', 
-                    'marul', 'limon', 'havuç', 'biber', 'patlıcan', 'kabak',
-                    'portakal', 'üzüm', 'çilek', 'kiraz', 'armut', 'brokoli', 'mantar',
-                    'sarımsak', 'maydanoz', 'nane', 'dereotu', 'yeşil soğan'
-                ],
-                '🥩 Et & Süt': [
-                    'tavuk', 'dana eti', 'balık', 'süt', 'yoğurt', 
-                    'peynir', 'yumurta', 'tereyağı', 'kıyma', 'sosis', 'sucuk',
-                    'kaşar', 'beyaz peynir', 'tavuk eti', 'mozzarella peyniri', 
-                    'parmesan peyniri', 'tavuk suyu'
-                ],
-                '🍞 Temel Gıda': [
-                    'ekmek', 'pirinç', 'makarna', 'un', 'şeker', 'tuz', 
-                    'zeytinyağı', 'mercimek', 'nohut', 'bulgur', 'yulaf',
-                    'bal', 'reçel', 'çay', 'kahve', 'domates sosu', 'pizza hamuru',
-                    'kırmızı mercimek', 'ekmek içi', 'lavash', 'mantı', 'domates salçası',
-                    'karabiber', 'sos', 'salça', 'baharat'
-                ],
-                '💧 İçecekler': [
-                    'su', 'meyve suyu', 'kola', 'ayran', 'gazoz', 'şarap', 'bira',
-                    'cola', 'fanta', 'sprite', 'icetea', 'ice tea', 'limonata', 
-                    'portakal suyu', 'elma suyu', 'energy drink', 'enerji içeceği', 
-                    'soda', 'pepsi', 'coca cola', 'redbull'
-                ],
-                '🧽 Temizlik & Hijyen': [
-                    'deterjan', 'sabun', 'şampuan', 'diş macunu', 'çöp poşeti', 
-                    'tuvalet kağıdı'
-                ]
-            };
-            
-            const itemLower = item.toLowerCase();
-            
-            for (const [category, items] of Object.entries(categories)) {
-                for (const keyword of items) {
-                    if (itemLower.includes(keyword)) {
-                        return category;
-                    }
-                }
+// Kategori belirleme fonksiyonu
+function categorizeItem(item) {
+    const categories = {
+        '🥬 Sebze & Meyve': [
+            'domates', 'salatalık', 'elma', 'muz', 'patates', 'soğan', 
+            'marul', 'limon', 'havuç', 'biber', 'patlıcan', 'kabak',
+            'portakal', 'üzüm', 'çilek', 'kiraz', 'armut', 'brokoli', 'mantar',
+            'sarımsak', 'maydanoz', 'nane', 'dereotu', 'yeşil soğan'
+        ],
+        '🥩 Et & Süt': [
+            'tavuk', 'dana eti', 'balık', 'süt', 'yoğurt', 
+            'peynir', 'yumurta', 'tereyağı', 'kıyma', 'sosis', 'sucuk',
+            'kaşar', 'beyaz peynir', 'tavuk eti', 'mozzarella peyniri', 
+            'parmesan peyniri', 'tavuk suyu'
+        ],
+        '🍞 Temel Gıda': [
+            'ekmek', 'pirinç', 'makarna', 'un', 'şeker', 'tuz', 
+            'zeytinyağı', 'mercimek', 'nohut', 'bulgur', 'yulaf',
+            'bal', 'reçel', 'çay', 'kahve', 'domates sosu', 'pizza hamuru',
+            'kırmızı mercimek', 'ekmek içi', 'lavash', 'mantı', 'domates salçası',
+            'karabiber', 'sos', 'salça', 'baharat'
+        ],
+        '💧 İçecekler': [
+            'su', 'meyve suyu', 'kola', 'ayran', 'gazoz', 'şarap', 'bira',
+            'cola', 'fanta', 'sprite', 'icetea', 'ice tea', 'limonata', 
+            'portakal suyu', 'elma suyu', 'energy drink', 'enerji içeceği', 
+            'soda', 'pepsi', 'coca cola', 'redbull'
+        ],
+        '🧽 Temizlik & Hijyen': [
+            'deterjan', 'sabun', 'şampuan', 'diş macunu', 'çöp poşeti', 
+            'tuvalet kağıdı'
+        ]
+    };
+    
+    const itemLower = item.toLowerCase();
+    
+    for (const [category, items] of Object.entries(categories)) {
+        for (const keyword of items) {
+            if (itemLower.includes(keyword)) {
+                return category;
             }
-            return '📦 Diğer';
         }
+    }
+    return '📦 Diğer';
+}
 
         // Save to localStorage
        function saveToStorage() {
