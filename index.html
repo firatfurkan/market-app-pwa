@@ -1409,43 +1409,42 @@ const productDatabase = [
                     </div>
                 `}
 
-                           // ...renderHome fonksiyonunun diğer kodları (önceki html kısımları)
-
-                <div class="card"> // ← BU KARTIN BAŞLANGICI
-                    <h2 class="card-title">✨ Ürün Ekle</h2>
-                    <div style="display: flex; align-items: flex-start; gap: 10px;">
-                        <div class="suggestions-container">
-                            <div class="two-column-input" style="margin-bottom: 0;">
-                                <input 
-                                    type="text" 
-                                    id="newItemInput" 
-                                    placeholder="Ürün adı yazın veya mikrofona basın" 
-                                    value="${appState.newItem}"
-                                    oninput="showSuggestions()" // ← YENİ: Yazarken öneri gösterme
-                                    autocomplete="off">
-                                <div style="display: flex; gap: 12px;">
-                                    <input type="number" id="newQuantityInput" placeholder="Miktar" value="${appState.newQuantity}" style="width: 80px;">
-                                    <select id="newUnitSelect" style="width: 100px;">
-                                        <option value="adet" ${appState.newUnit === 'adet' ? 'selected' : ''}>Adet</option>
-                                        <option value="kg" ${appState.newUnit === 'kg' ? 'selected' : ''}>Kg</option>
-                                        <option value="g" ${appState.newUnit === 'g' ? 'selected' : ''}>Gram</option>
-                                        <option value="l" ${appState.newUnit === 'l' ? 'selected' : ''}>Litre</option>
-                                        <option value="ml" ${appState.newUnit === 'ml' ? 'selected' : ''}>ML</option>
-                                        <option value="paket" ${appState.newUnit === 'paket' ? 'selected' : ''}>Paket</option>
-                                        <option value="şişe" ${appState.newUnit === 'şişe' ? 'selected' : ''}>Şişe</option>
-                                    </select>
+                                            <div class="card">
+                        <h2 class="card-title">✨ Ürün Ekle</h2>
+                        <div style="display: flex; align-items: flex-start; gap: 10px;">
+                            <div class="suggestions-container" style="flex-grow: 1;">
+                                <div class="two-column-input" style="margin-bottom: 0;">
+                                    <input 
+                                        type="text" 
+                                        id="newItemInput" 
+                                        placeholder="Ürün adı yazın veya mikrofona basın" 
+                                        value="${appState.newItem}"
+                                        oninput="showSuggestions()"
+                                        autocomplete="off">
+                                    <div style="display: flex; gap: 12px;">
+                                        <input type="number" id="newQuantityInput" placeholder="Miktar" value="${appState.newQuantity}" style="width: 80px;">
+                                        <select id="newUnitSelect" style="width: 100px;">
+                                            <option value="adet" ${appState.newUnit === 'adet' ? 'selected' : ''}>Adet</option>
+                                            <option value="kg" ${appState.newUnit === 'kg' ? 'selected' : ''}>Kg</option>
+                                            <option value="g" ${appState.newUnit === 'g' ? 'selected' : ''}>Gram</option>
+                                            <option value="l" ${appState.newUnit === 'l' ? 'selected' : ''}>Litre</option>
+                                            <option value="ml" ${appState.newUnit === 'ml' ? 'selected' : ''}>ML</option>
+                                            <option value="paket" ${appState.newUnit === 'paket' ? 'selected' : ''}>Paket</option>
+                                            <option value="şişe" ${appState.newUnit === 'şişe' ? 'selected' : ''}>Şişe</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div id="product-suggestions">
+                                    ${appState.productSuggestions.map(item => `
+                                        <div class="suggestion-item" onclick="selectSuggestion('${item}')">${item}</div>
+                                    `).join('')}
                                 </div>
                             </div>
-                           <div id="product-suggestions"> <!-- YENİ: Önerilerin gösterileceği yer -->
-                                ${appState.productSuggestions.map(item => `
-                                    <div class="suggestion-item" onclick="selectSuggestion('${item}')">${item}</div>
-                                `).join('')}
-                            </div>
+                            <button id="voiceBtn" class="voice-btn" onclick="startVoiceRecognition()">🎤</button>
                         </div>
-                        <button id="voiceBtn" class="voice-btn" onclick="startVoiceRecognition()">🎤</button> // ← YENİ: Sesli komut butonu
+                        <button class="btn-primary" style="width: 100%; margin-top: 24px;" onclick="addNewItem()">🛒 Ürün Ekle</button>
                     </div>
-                    <button class="btn-primary" style="width: 100%; margin-top: 24px;" onclick="addNewItem()">🛒 Ürün Ekle</button>
-                </div> <!-- BU KARTIN SONU -->
+
 
                 ${Object.keys(groupedItems).length > 0 ? Object.keys(groupedItems).map(category => `
                         <div class="category-header">
