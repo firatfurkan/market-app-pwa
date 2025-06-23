@@ -848,15 +848,17 @@ let appState = {
 
 
 'makarna': {
-                ingredients: [
-                    { name: 'makarna', quantity: '500g' },
-                    { name: 'domates sosu', quantity: '1 adet' },
-                    { name: 'parmesan peyniri', quantity: '100g' },
-                    { name: 'zeytinyağı', quantity: '1 şişe' }
-                ],
-                response: "🍝 Makarna için gerekli malzemeler hazırlandı! Klasik bir İtalyan lezzeti için bu malzemeler yeterli."
-            },
-            'omlet': {
+    ingredients: [
+        { name: 'makarna', quantity: '500g' },
+        { name: 'domates sosu', quantity: '1 adet' },
+        { name: 'parmesan peyniri', quantity: '100g' },
+        { name: 'zeytinyağı', quantity: '1 şişe' }
+    ],
+    response: "🍝 Makarna için gerekli malzemeler hazırlandı! Klasik bir İtalyan lezzeti için bu malzemeler yeterli."
+},  // ← VİRGÜL EKLENDİ
+    
+'omlet': {
+
                 ingredients: [
                     { name: 'yumurta', quantity: '6 adet' },
                     { name: 'süt', quantity: '1 litre' },
@@ -864,17 +866,17 @@ let appState = {
                     { name: 'tereyağı', quantity: '250g' }
                 ],
                 response: "🍳 Mükemmel bir omlet için gerekli malzemeler! Protein açısından zengin ve doyurucu bir kahvaltı."
-            },
+                       },
             'salata': {
-                ingredients: [
-                    { name: 'marul', quantity: '1 adet' },
-                    { name: 'domates', quantity: '500g' },
-                    { name: 'salatalık', quantity: '3 adet' },
-                    { name: 'zeytinyağı', quantity: '1 şişe' },
-                    { name: 'limon', quantity: '2 adet' }
-                ],
+                // ... salata ingredients
                 response: "🥗 Taze ve sağlıklı salata malzemeleri! Vitamin açısından zengin bir öğün için ideal."
             },
+            'çorba': {
+                // ... çorba ingredients  
+                response: "🍲 Besleyici tavuk çorbası malzemeleri! Hasta olduğunuzda veya soğuk havalarda ideal."
+            }  // ← VİRGÜL EKLENDİ
+        };
+
             'çorba': {
                 ingredients: [
                     { name: 'tavuk eti', quantity: '1 kg' },
@@ -1016,11 +1018,11 @@ let appState = {
         ingredients: ["İnce bulgur", "Domates", "Salatalık", "Maydanoz", "Nane", "Limon", "Zeytinyağı"],
         response: "🥗 Kısır! Hafif ve ferahlatıcı Türk salatası."
     },
-    "çoban salata": {
-        ingredients: ["Domates", "Salatalık", "Soğan", "Biber", "Maydanoz", "Limon", "Zeytinyağı"],
-        response: "🥒 Çoban salata! Taze ve vitamin dolu klasik salata."
-    },
-    "mücver": {
+   'çoban salata': {
+    ingredients: ["Domates", "Salatalık", "Soğan", "Biber", "Maydanoz", "Limon", "Zeytinyağı"],
+    response: "🥒 Çoban salata! Taze ve vitamin dolu klasik salata."
+},  // ← VİRGÜL EKLENDİ
+"mücver": {
         ingredients: ["Kabak", "Yumurta", "Un", "Dereotu", "Soğan", "Tuz"],
         response: "🥒 Kabak mücveri! Sebze sevmeyenlerin bile bayılacağı lezzet."
     },
