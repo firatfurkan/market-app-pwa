@@ -516,14 +516,55 @@
         }
 
         /* AI Suggestions */
+               /* AI Suggestions - Hem açık hem koyu mod için optimize edildi */
         .ai-suggestions {
-            background: linear-gradient(135deg, #EEF2FF 0%, #F0F9FF 100%);
+            background: var(--card-background);
+            border: 1px solid var(--border-color);
             padding: 24px;
             border-radius: 20px;
             border-left: 5px solid var(--primary-color);
             margin-bottom: 24px;
             animation: slideIn 0.5s ease-out;
+            box-shadow: var(--shadow);
+            color: var(--text-color);
         }
+
+        /* Dark mode için özel AI suggestions stili */
+        [data-theme='dark'] .ai-suggestions {
+            background: #2D3748; /* Arama sonuçlarında önerilen dark gray */
+            border-color: #4A5568;
+            color: #E2E8F0; /* Yüksek kontrast beyaz */
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+        }
+
+        /* AI suggestions içindeki malzeme öğeleri için ek kontrast */
+        .ai-suggestions h3 {
+            color: var(--text-color);
+            margin-bottom: 16px;
+        }
+
+        [data-theme='dark'] .ai-suggestions h3 {
+            color: #F7FAFC; /* Daha parlak başlık */
+        }
+
+        /* Malzeme listesi öğeleri için stil */
+        .ai-suggestions div[style*="display: flex"] {
+            color: var(--text-color);
+        }
+
+        [data-theme='dark'] .ai-suggestions div[style*="display: flex"] {
+            color: #E2E8F0;
+        }
+
+        /* Malzeme miktarları için stil */
+        .ai-suggestions span[style*="color: var(--text-light)"] {
+            color: var(--text-light) !important;
+        }
+
+        [data-theme='dark'] .ai-suggestions span[style*="color: var(--text-light)"] {
+            color: #A0AEC0 !important; /* Daha okunabilir gri */
+        }
+
 
         /* AI Bot Response */
                 .ai-bot-response {
