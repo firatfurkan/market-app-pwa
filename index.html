@@ -572,11 +572,9 @@
             color: #CBD5E0;
         }
 
-    </style> <!-- DÜZELTİLDİ: Stil etiketi burada doğru şekilde kapanıyor -->
 
-    <script> <!-- DÜZELTİLDİ: JavaScript burada yeniden başlıyor -->
 
-        @keyframes fadeIn {
+@keyframes fadeIn {
             from { opacity: 0; transform: translateY(15px); }
             to { opacity: 1; transform: translateY(0); }
         }
@@ -586,6 +584,9 @@
             to { opacity: 1; transform: translateX(0); }
         }
 
+
+
+    
         /* Settings */
         .setting-item {
             display: flex;
@@ -778,7 +779,8 @@
             });
         }
 
-                // Global state
+        // Global state
+
 let appState = {
     user: null,
     currentPage: 'home',
@@ -1794,25 +1796,18 @@ function showSuggestions() {
             });
         }
 
-        window.generateQRCode = generateQRCode;
+                window.generateQRCode = generateQRCode;
+        window.startVoiceRecognition = startVoiceRecognition;
+        window.selectSuggestion = selectSuggestion;
+        window.showSuggestions = showSuggestions;
 
-
-// YENİ EKLENDİ - Global Fonksiyonlar
-window.startVoiceRecognition = startVoiceRecognition;
-window.selectSuggestion = selectSuggestion;
-window.showSuggestions = showSuggestions;
-// YENİ EKLENDİ BİTİŞ
-
-// ...eski kodunuz devam eder (window.handleLoginClick, window.addNewItem vs.)
-
-
-        // Global functions ← Buradan sonra eski kodlar devam eder
         window.handleLoginClick = function() {
             const input = document.getElementById('loginInput');
             if (input && input.value.trim()) {
                 handleLogin(input.value.trim());
             }
         };
+        
         window.addNewItem = function() {
             const nameInput = document.getElementById('newItemInput');
             const quantityInput = document.getElementById('newQuantityInput');
@@ -1822,13 +1817,6 @@ window.showSuggestions = showSuggestions;
                 const name = nameInput.value.trim();
                 const quantity = quantityInput ? quantityInput.value : '1';
                 const unit = unitSelect ? unitSelect.value : 'adet';
-                
-                updateState({
-                    newItem: name,
-                    newQuantity: quantity,
-                    newUnit: unit
-                });
-                
                 addItem(name, quantity, unit);
             }
         };
@@ -1853,102 +1841,12 @@ window.showSuggestions = showSuggestions;
             updateState({ currentPage: page });
         };
 
-               // Global functions - DÜZELTİLMİŞ
         window.toggleItemComplete = toggleItemComplete;
-             window.deleteItemFromList = function(id) {
-            const item = appState.shoppingList.find(item => String(item.id) === String(id));
-            if (!item) {
-                showNotification('Ürün bulunamadı!', 'error');
-                return;
-            }
-            
-            const updatedList = appState.shoppingList.filter(item => String(item.id) !== String(id));
-            updateState({ shoppingList: updatedList });
-            showNotification(`${item.emoji} ${item.name} listeden silindi! 🗑️`);
-        };
-
-        window.addAiSuggestionsToList = function() {
-            if (!appState.aiSuggestions || appState.aiSuggestions.length === 0) {
-                showNotification('Eklenecek malzeme bulunamadı!', 'error');
-                return;
-            }
-            
-            const newItems = [];
-            
-            appState.aiSuggestions.forEach(item => {
-                const emoji = getProductEmoji(item.name);
-                const newItem = {
-                    id: Date.now() + Math.random(),
-                    name: item.name,
-                    quantity: item.quantity || '1 adet',
-                    displayName: `${item.name} (${item.quantity || '1 adet'})`,
-                    emoji: emoji,
-                    completed: false,
-                    completedBy: null,
-                    addedBy: appState.user?.name,
-                    category: categorizeItem(item.name),
-                    addedAt: new Date().toLocaleString('tr-TR')
-                };
-                newItems.push(newItem);
-            });
-            
-            const updatedShoppingList = [...appState.shoppingList, ...newItems];
-            
-            updateState({
-                shoppingList: updatedShoppingList,
-                aiSuggestions: [],
-                aiBotResponse: '',
-                aiQuery: '',
-                currentPage: 'home'
-            });
-            
-            showNotification(`${newItems.length} malzeme anasayfaya eklendi! 🛒`);
-        };
-
-        window.toggleDarkModeFunction = function() {
-            const newDarkMode = !appState.settings.darkMode;
-            const newSettings = { ...appState.settings, darkMode: newDarkMode };
-            updateState({ settings: newSettings });
-            
-            if (newDarkMode) {
-                document.documentElement.setAttribute('data-theme', 'dark');
-            } else {
-                document.documentElement.removeAttribute('data-theme');
-            }
-            
-            showNotification(newDarkMode ? 'Gece modu açıldı 🌙' : 'Gündüz modu açıldı ☀️');
-        };
-
-        window.toggleSetting = function(settingName) {
-            const newSettings = { 
-                ...appState.settings, 
-                [settingName]: !appState.settings[settingName] 
-            };
-            
-            updateState({ settings: newSettings });
-            
-            if (settingName === 'highContrast') {
-                if (newSettings.highContrast) {
-                    document.body.classList.add('high-contrast');
-                    showNotification('Yüksek kontrast açıldı 🔆');
-                } else {
-                    document.body.classList.remove('high-contrast');
-                    showNotification('Yüksek kontrast kapatıldı');
-                }
-            }
-            
-            if (settingName === 'largeText') {
-                if (newSettings.largeText) {
-                    document.body.classList.add('large-text');
-                    showNotification('Büyük yazı açıldı 📝');
-                } else {
-                    document.body.classList.remove('large-text');
-                    showNotification('Normal yazı boyutu');
-                }
-            }
-        };
-
-
+        window.deleteItemFromList = deleteItemFromList;
+        window.addAiSuggestionsToList = addAiSuggestionsToList;
+    
+        window.toggleDarkModeFunction = toggleDarkModeFunction;
+        window.toggleSetting = toggleSetting;
 
         window.clearAllData = function() {
             if (confirm('Tüm veriler silinecek. Emin misiniz?')) {
@@ -1961,6 +1859,7 @@ window.showSuggestions = showSuggestions;
             localStorage.clear();
             location.reload();
         };
+
 
         // Render function
         function render() {
