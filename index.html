@@ -2101,8 +2101,8 @@ function showSuggestions() {
         };
 
 
-        // Render function
-        function render() {
+                // Render function
+        function render() {  // ← EKSİK OLAN BAŞLANGIÇ
             const app = document.getElementById('app');
             if (!app) return;
 
@@ -2136,7 +2136,8 @@ function showSuggestions() {
                 document.body.classList.add('large-text');
             }
         }
-    // Initialize app
+
+        // Initialize app
         render();
         syncWithOtherTabs();
     </script>
