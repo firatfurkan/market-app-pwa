@@ -1047,7 +1047,7 @@ const productDatabase = [
             showNotification(`Hoş geldin ${username}! 🎉`);
         }
 
-        function addItem(name, quantity, unit) {
+              function addItem(name, quantity, unit) {
             const emoji = getProductEmoji(name);
             const displayQuantity = `${quantity} ${unit}`;
             
@@ -1064,22 +1064,23 @@ const productDatabase = [
                 addedAt: new Date().toLocaleString('tr-TR')
             };
             
-        function addItem(name, quantity, unit) {
-    // ... (fonksiyonun mevcut içeriği)
+            updateState({
+                shoppingList: [...appState.shoppingList, newShoppingItem],
+                newItem: '',
+                newQuantity: '1',
+                newUnit: 'adet'
+            });
 
-    updateState({
-        shoppingList: [...appState.shoppingList, newShoppingItem],
-        newItem: '',
-        newQuantity: '1',
-        newUnit: 'adet'
-    });
+            // Öneri listesini manuel olarak temizle
+            appState.productSuggestions = [];
+            const suggestionsEl = document.getElementById('product-suggestions');
+            if (suggestionsEl) {
+                suggestionsEl.innerHTML = '';
+            }
 
-    // YENİ EKLENDİ: Öneri listesini manuel olarak temizle
-    appState.productSuggestions = [];
-    document.getElementById('product-suggestions').innerHTML = '';
+            showNotification(`${emoji} ${name} (${displayQuantity}) listeye eklendi! ✅`);
+        }
 
-    showNotification(`${emoji} ${name} (${displayQuantity}) listeye eklendi! ✅`);
-}
 
               function toggleItemComplete(id) {
             const updatedList = appState.shoppingList.map(item => {
