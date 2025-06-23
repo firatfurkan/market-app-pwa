@@ -842,7 +842,12 @@ let appState = {
 
         // AI Aşçı Yemek Veritabanı
         const chefMealDatabase = {
-            'makarna': {
+"mercimek çorbası": {
+        ingredients: ["Kırmızı mercimek", "Soğan", "Havuç", "Patates", "Zeytinyağı", "Tuz", "Karabiber"],
+        response: "🍲 Besleyici mercimek çorbası! Protein açısından zengin ve sağlıklı bir seçim."            
+
+
+'makarna': {
                 ingredients: [
                     { name: 'makarna', quantity: '500g' },
                     { name: 'domates sosu', quantity: '1 adet' },
@@ -971,60 +976,192 @@ let appState = {
                     { name: 'domates salçası', quantity: '1 kaşık' },
                     { name: 'nane', quantity: '1 demet' }
                 ],
+"ezogelin çorbası": {
+        ingredients: ["Kırmızı mercimek", "Bulgur", "Pirinç", "Soğan", "Salça", "Tereyağı", "Nane", "Tuz"],
+        response: "🥣 Ezogelin çorbası! Geleneksel Türk mutfağının en sevilen çorbalarından."
+    },
+    "tarhana çorbası": {
+        ingredients: ["Tarhana", "Su", "Tereyağı", "Tuz"],
+        response: "🍜 Tarhana çorbası! Kış aylarının vazgeçilmez sıcacık lezzeti."
+    },
+    "domates çorbası": {
+        ingredients: ["Domates", "Un", "Tereyağı", "Süt", "Şeker", "Tuz"],
+        response: "🍅 Domates çorbası! Çocukların en sevdiği hafif ve lezzetli çorba."
+    },
+    "karnıyarık": {
+        ingredients: ["Patlıcan", "Kıyma", "Soğan", "Domates", "Biber", "Sarımsak", "Maydanoz"],
+        response: "🍆 Karnıyarık! Türk mutfağının en ünlü patlıcan yemeklerinden."
+    },
+    "imam bayıldı": {
+        ingredients: ["Patlıcan", "Soğan", "Sarımsak", "Domates", "Maydanoz", "Zeytinyağı"],
+        response: "🫒 İmam Bayıldı! Zeytinyağlı sebze yemeklerinin kralı."
+    },
+    "kuru fasulye": {
+        ingredients: ["Kuru fasulye", "Et", "Soğan", "Domates", "Salça", "Zeytinyağı"],
+        response: "🫘 Kuru fasulye! Pilav ile birlikte Türk mutfağının klasiği."
+    },
+    "köfte": {
+        ingredients: ["Kıyma", "Soğan", "Ekmek içi", "Yumurta", "Maydanoz", "Tuz", "Karabiber"],
+        response: "🥩 Ev yapımı köfte! Herkesin sevdiği pratik ve lezzetli yemek."
+    },
+    "pilav": {
+        ingredients: ["Pirinç", "Tereyağı", "Su", "Tuz"],
+        response: "🍚 Pilav! Türk mutfağının vazgeçilmez yan yemeği."
+    },
+    "bulgur pilavı": {
+        ingredients: ["Bulgur", "Soğan", "Tereyağı", "Su", "Tuz"],
+        response: "🌾 Bulgur pilavı! Sağlıklı ve doyurucu bir alternatif."
+    },
+    "kısır": {
+        ingredients: ["İnce bulgur", "Domates", "Salatalık", "Maydanoz", "Nane", "Limon", "Zeytinyağı"],
+        response: "🥗 Kısır! Hafif ve ferahlatıcı Türk salatası."
+    },
+    "çoban salata": {
+        ingredients: ["Domates", "Salatalık", "Soğan", "Biber", "Maydanoz", "Limon", "Zeytinyağı"],
+        response: "🥒 Çoban salata! Taze ve vitamin dolu klasik salata."
+    },
+    "mücver": {
+        ingredients: ["Kabak", "Yumurta", "Un", "Dereotu", "Soğan", "Tuz"],
+        response: "🥒 Kabak mücveri! Sebze sevmeyenlerin bile bayılacağı lezzet."
+    },
+    "lahmacun": {
+        ingredients: ["Un", "Kıyma", "Soğan", "Domates", "Biber", "Maydanoz", "Baharat"],
+        response: "🫓 Lahmacun! Türk pizzası olarak bilinen enfes lezzet."
+    },
+    "mantı": {
+        ingredients: ["Un", "Yumurta", "Kıyma", "Soğan", "Yoğurt", "Sarımsak", "Tereyağı"],
+        response: "🥟 Mantı! Türk mutfağının en özel ve emek isteyen yemeklerinden."
+    },
+    "menemen": {
+        ingredients: ["Yumurta", "Domates", "Biber", "Soğan", "Zeytinyağı", "Tuz"],
+        response: "🍳 Menemen! Kahvaltının vazgeçilmez lezzeti."
+    },
+    "börek": {
+        ingredients: ["Yufka", "Peynir", "Yumurta", "Süt", "Zeytinyağı"],
+        response: "🥧 Su böreği! Türk mutfağının en sevilen hamur işi."
+    },
+    "gözleme": {
+        ingredients: ["Un", "Su", "Tuz", "Peynir", "Ispanak", "Tereyağı"],
+        response: "🫓 Gözleme! Köy kahvaltılarının vazgeçilmez lezzeti."
+    },
+    "tavuk şiş": {
+        ingredients: ["Tavuk", "Soğan", "Biber", "Zeytinyağı", "Baharat"],
+        response: "🍗 Tavuk şiş! Mangalın en sağlıklı seçeneği."
+    },
+    "izgara balık": {
+        ingredients: ["Balık", "Limon", "Zeytinyağı", "Tuz", "Karabiber"],
+        response: "🐟 Izgara balık! Omega-3 açısından zengin sağlıklı seçim."
+    }
+};
+
                 response: "🥟 Geleneksel mantı malzemeleri! Türk mutfağının en özel lezzetlerinden."
             }
         };
 // YENİ EKLENDİ - Akıllı Ürün Öneri Veritabanı
 const productDatabase = [
-    'Ekmek', 'Süt', 'Yumurta', 'Peynir', 'Zeytin', 'Domates', 'Salatalık',
-    'Biber', 'Soğan', 'Patates', 'Elma', 'Muz', 'Portakal', 'Limon', 'Kıyma',
-    'Tavuk', 'Balık', 'Makarna', 'Pirinç', 'Bulgur', 'Mercimek', 'Nohut',
-    'Zeytinyağı', 'Ayçiçek Yağı', 'Tereyağı', 'Yoğurt', 'Ayran', 'Su', 'Kola',
-    'Meyve Suyu', 'Çay', 'Kahve', 'Şeker', 'Tuz', 'Un', 'Salça', 'Deterjan',
-    'Sabun', 'Şampuan', 'Diş Macunu', 'Tuvalet Kağıdı', 'Kağıt Havlu', 'Çikolata',
-    'Bisküvi', 'Cips', 'Kek', 'Kuruyemiş', 'Sucuk', 'Sosis', 'Salam', 'Kaşar Peyniri',
-    'Beyaz Peynir', 'Krem Peynir', 'Bal', 'Reçel', 'Tahin', 'Pekmez', 'Sirke', 'Nar Ekşisi',
-    'Baharat', 'Karabiber', 'Pul Biber', 'Nane', 'Kekik', 'Mayonez', 'Ketçap', 'Hardal',
-    'Marul', 'Havuç', 'Brokoli', 'Ispanak', 'Mantar', 'Sarımsak', 'Dereotu'
+    // 🍞 EKMEK VE UNLU MAMULLERİ
+    '🍞 Ekmek', '🥖 Somun Ekmek', '🥯 Simit', '🧈 Tost Ekmeği', '🥐 Croissant', '🍰 Kek', '🧁 Muffin', 
+    '🍪 Bisküvi', '🍘 Galeta', '🥨 Kraker', '🍩 Donut', '🥧 Börek', '🫓 Gözleme', '🥞 Pankek',
+
+    // 🥛 SÜT ÜRÜNLERİ
+    '🥛 Süt', '🧀 Peynir', '🧀 Kaşar Peyniri', '🧀 Beyaz Peynir', '🧀 Krem Peynir', '🧀 Lor Peyniri', 
+    '🧀 Tulum Peyniri', '🧀 Rokfor Peyniri', '🧀 Çökelek', '🧀 Mozzarella', '🧀 Parmesan', '🧀 Çheddar',
+    '🥛 Yoğurt', '🥛 Süzme Yoğurt', '🥛 Ayran', '🥛 Kefir', '🧈 Tereyağı', '🧈 Margarin', '🍦 Dondurma',
+    '🥛 Krema', '🥛 Smetana', '🥛 Labne', '🥛 Mascarpone',
+
+    // 🥚 YUMURTA VE KAHVALTILIK
+    '🥚 Yumurta', '🍯 Bal', '🍓 Reçel', '🥜 Tahin', '🍇 Pekmez', '🫒 Zeytin', '🫒 Yeşil Zeytin', 
+    '🫒 Siyah Zeytin', '🥓 Sucuk', '🌭 Sosis', '🥩 Salam', '🥩 Pastırma', '🥩 Kavurma',
+
+    // 🍅 SEBZELER
+    '🍅 Domates', '🥒 Salatalık', '🧅 Soğan', '🧄 Sarımsak', '🥔 Patates', '🥕 Havuç', '🌶️ Biber',
+    '🌶️ Kırmızı Biber', '🌶️ Yeşil Biber', '🌶️ Sivri Biber', '🌶️ Dolmalık Biber', '🍆 Patlıcan',
+    '🥬 Lahana', '🥬 Marul', '🥬 Ispanak', '🥬 Roka', '🌿 Maydanoz', '🌿 Dereotu', '🌿 Nane',
+    '🥦 Brokoli', '🥦 Karnabahar', '🍄 Mantar', '🥒 Kabak', '🫛 Bamya', '🫛 Fasulye', '🫛 Bezelye',
+    '🌽 Mısır', '🥬 Kereviz', '🥬 Pırasa', '🥬 Enginar', '🥬 Kuşkonmaz', '🥬 Brüksel Lahanası',
+    '🥕 Turp', '🥕 Pancar', '🥕 Şalgam', '🌿 Tere', '🌿 Semizotu', '🌿 Ebegümeci',
+
+    // 🍎 MEYVELER
+    '🍎 Elma', '🍌 Muz', '🍊 Portakal', '🍋 Limon', '🥝 Kivi', '🍓 Çilek', '🍊 Mandalina',
+    '🍉 Karpuz', '🍈 Kavun', '🍍 Ananas', '🥑 Avokado', '🍇 Üzüm', '🍐 Armut', '🍑 Şeftali',
+    '🍑 Erik', '🍑 Kayısı', '🍒 Kiraz', '🍒 Vişne', '🥭 İncir', '🍇 Nar', '🌰 Hurma',
+    '🍑 Kuru Kayısı', '🍇 Kuru Üzüm', '🥭 Kuru İncir', '🌰 Kuru Hurma',
+
+    // 🥩 ET VE BALIK
+    '🥩 Kıyma', '🥩 Dana Eti', '🥩 Kuzu Eti', '🍗 Tavuk', '🍗 Tavuk Göğsü', '🍗 Tavuk Budu',
+    '🍗 Hindi Eti', '🥩 Köfte', '🐟 Balık', '🐟 Somon', '🐟 Levrek', '🐟 Çupra', '🐟 Hamsi',
+    '🐟 Sardalya', '🐟 Uskumru', '🦐 Karides', '🦑 Kalamar', '🦪 Midye',
+
+    // 🍚 TAHILLAR VE BAKLİYAT
+    '🍚 Pirinç', '🌾 Bulgur', '🌾 Mercimek', '🌾 Kırmızı Mercimek', '🌾 Yeşil Mercimek', '🌾 Nohut',
+    '🌾 Barbunya', '🌾 Börülce', '🌾 Soya Fasulyesi', '🌾 Yulaf', '🌾 Kinoa', '🌾 Çavdar',
+    '🌾 Arpa', '🍝 Makarna', '🍝 Spagetti', '🍝 Penne', '🍝 Fusilli',
+
+    // 🌾 UN VE UNLU MAMULLERİ
+    '🌾 Un', '🌾 Tam Buğday Unu', '🌾 Mısır Unu', '🌾 Çavdar Unu', '🌾 Pirinç Unu', '🌾 Yulaf Unu',
+    '🥣 Mısır Gevreği', '🥣 Kahvaltılık Gevrek', '🥣 Granola', '🥣 Müsli',
+
+    // 🥜 KURUYEMIŞ
+    '🥜 Fındık', '🥜 Ceviz', '🥜 Badem', '🥜 Fıstık', '🥜 Antep Fıstığı', '🥜 Kaju', '🌻 Ay Çekirdeği',
+    '🎃 Kabak Çekirdeği', '🌰 Susam', '🌰 Keten Tohumu', '🌰 Chia Tohumu', '🥜 Kuruyemiş Karışımı',
+
+    // 🫗 İÇECEKLER
+    '💧 Su', '🥤 Kola', '🥤 Gazoz', '🥤 Soda', '🥤 Maden Suyu', '🧃 Meyve Suyu', '🧃 Portakal Suyu',
+    '🧃 Elma Suyu', '🧃 Vişne Suyu', '☕ Kahve', '☕ Türk Kahvesi', '☕ Filtre Kahve', '☕ Espresso',
+    '🍵 Çay', '🍵 Yeşil Çay', '🍵 Bitki Çayı', '🥛 Smoothie', '🥤 Protein Shake', '🥤 Enerji İçeceği',
+
+    // 🧂 BAHARAT VE ÇEŞNI
+    '🧂 Tuz', '⚫ Karabiber', '🌶️ Pul Biber', '🌿 Kekik', '🌿 Nane', '🌿 Fesleğen', '🌿 Biberiye',
+    '🧄 Sarımsak Tozu', '🧅 Soğan Tozu', '🌶️ Kimyon', '🌶️ Kırmızı Toz Biber', '🌶 Baharat Karışımı',
+    '🍋 Sumak', '🌰 Susam', '🌿 Defne Yaprağı', '🌿 Kişniş', '🌿 Anason',
+
+    // 🛢️ YAĞLAR VE SİRKELER
+    '🫒 Zeytinyağı', '🌻 Ayçiçek Yağı', '🌽 Mısır Yağı', '🥥 Hindistan Cevizi Yağı', '🫒 Sızma Zeytinyağı',
+    '🍶 Sirke', '🍶 Elma Sirkesi', '🍶 Üzüm Sirkesi', '🍶 Nar Ekşisi', '🍶 Limon Suyu',
+
+    // 🍅 SOSLAR VE ÇEŞNI
+    '🍅 Salça', '🍅 Domates Sosu', '🥄 Mayonez', '🍅 Ketçap', '🌭 Hardal', '🌶️ Acı Sos', '🧄 Sarımsak Sosu',
+    '🥗 Salata Sosu', '🍖 Barbekü Sosu', '🍝 Makarna Sosu', '🍛 Soya Sosu', '🍯 Teriyaki Sosu',
+
+    // 🍭 ŞEKERLEMELER VE ATIŞTIRILMALAR
+    '🍬 Şeker', '🍯 Bal', '🍫 Çikolata', '🍫 Bitter Çikolata', '🍫 Sütlü Çikolata', '🍬 Şekerleme',
+    '🍭 Lolipop', '🍪 Kurabiye', '🥨 Cips', '🍿 Patlamış Mısır', '🥜 Çerez', '🍘 Kraker',
+
+    // 🧊 DONUK ÜRÜNLER
+    '🧊 Donuk Sebze', '🧊 Donuk Meyve', '🍕 Donuk Pizza', '🥟 Donuk Börek', '🐟 Donuk Balık',
+    '🍗 Donuk Tavuk', '🍟 Donuk Patates', '🧊 Donuk Karışım', '🍦 Dondurma Çeşitleri',
+
+    // 🧴 TEMİZLİK ÜRÜNLERİ
+    '🧴 Deterjan', '🧴 Çamaşır Deterjanı', '🧴 Bulaşık Deterjanı', '🧴 Yumuşatıcı', '🧴 Çamaşır Suyu',
+    '🧴 Cam Temizleyici', '🧴 Banyo Temizleyici', '🧴 Mutfak Temizleyici', '🧴 Dezenfektan',
+    '🧽 Sünger', '🧹 Süpürge', '🧻 Kağıt Havlu', '🧻 Tuvalet Kağıdı', '🧻 Peçete',
+
+    // 🧴 KİŞİSEL BAKIM
+    '🧴 Şampuan', '🧴 Saç Kremi', '🧼 Sabun', '🧴 Duş Jeli', '🪥 Diş Macunu', '🪥 Diş Fırçası',
+    '🧴 Ağız Gargarası', '🧴 Deodorant', '🧴 Parfüm', '🧴 Krem', '🧴 Güneş Kremi', '🧻 Islak Mendil',
+
+    // 👶 BEBEK ÜRÜNLERİ
+    '🍼 Bebek Maması', '🍼 Bebek Sütü', '👶 Bebek Bezi', '🧻 Islak Mendil', '🧴 Bebek Şampuanı',
+    '🧴 Bebek Kremi', '🍼 Biberon', '🥄 Bebek Kaşığı',
+
+    // 🏠 EV GEREKLERI
+    '🕯️ Mum', '🔋 Pil', '💡 Ampul', '🧲 Mıknatıs', '📎 Ataş', '✂️ Makas', '📏 Cetvel',
+    '🔧 Vida', '🔨 Çivi', '🧰 Tamir Malzemesi', '🧤 Eldiven', '🎒 Poşet', '📦 Kutu',
+
+    // 🌱 ORGANİK ÜRÜNLER
+    '🌱 Organik Sebze', '🌱 Organik Meyve', '🌱 Organik Süt', '🌱 Organik Yumurta', '🌱 Organik Et',
+    '🌱 Organik Tahıl', '🌱 Organik Bal', '🌱 Organik Çay', '🌱 Organik Kahve',
+
+    // 🎂 PASTA VE TATLI MALZEMELERİ
+    '🎂 Pasta', '🧁 Cupcake', '🍰 Kek', '🥧 Tart', '🍮 Puding', '🍯 Şurup', '🍫 Çikolata Parçacığı',
+    '🥥 Hindistan Cevizi', '🍒 Vişne Kurusu', '🍓 Çilek Kurusu', '🧈 Pasta Kreması',
+
+    // 🍱 HAZIR YEMEKLER
+    '🍱 Hazır Yemek', '🥘 Konserve Yemek', '🍜 Hazır Çorba', '🍝 Hazır Makarna', '🍛 Pilav',
+    '🥗 Hazır Salata', '🌯 Wrap', '🥪 Sandviç', '🌮 Taco', '🍕 Pizza'
 ];
 
 
-        // Ürün emoji belirleme fonksiyonu
-        function getProductEmoji(item) {
-            const emojiMap = {
-                // Sebze & Meyve
-                'domates': '🍅', 'salatalık': '🥒', 'elma': '🍎', 'muz': '🍌', 'patates': '🥔',
-                'soğan': '🧅', 'marul': '🥬', 'limon': '🍋', 'havuç': '🥕', 'biber': '🌶️',
-                'patlıcan': '🍆', 'kabak': '🥒', 'portakal': '🍊', 'üzüm': '🍇', 'çilek': '🍓',
-                'kiraz': '🍒', 'armut': '🍐', 'brokoli': '🥦', 'mantar': '🍄', 'sarımsak': '🧄',
-                'maydanoz': '🌿', 'nane': '🌿', 'dereotu': '🌿', 'yeşil soğan': '🌿',
-                
-                // Et & Süt
-                'tavuk': '🐔', 'dana eti': '🥩', 'balık': '🐟', 'süt': '🥛', 'yoğurt': '🥛',
-                'peynir': '🧀', 'yumurta': '🥚', 'tereyağı': '🧈', 'kıyma': '🥩', 'sosis': '🌭',
-                'sucuk': '🌭', 'kaşar': '🧀', 'beyaz peynir': '🧀', 'tavuk eti': '🐔',
-                'mozzarella peyniri': '🧀', 'parmesan peyniri': '🧀', 'tavuk suyu': '🍲',
-                
-                // Temel Gıda
-                'ekmek': '🍞', 'pirinç': '🍚', 'makarna': '🍝', 'un': '🌾', 'şeker': '🍯',
-                'tuz': '🧂', 'zeytinyağı': '🫒', 'mercimek': '🌰', 'nohut': '🌰', 'bulgur': '🌾',
-                'yulaf': '🌾', 'bal': '🍯', 'reçel': '🍯', 'çay': '🍵', 'kahve': '☕',
-                'domates sosu': '🍅', 'pizza hamuru': '🍕', 'kırmızı mercimek': '🌰',
-                'ekmek içi': '🍞', 'lavash': '🫓', 'mantı': '🥟', 'domates salçası': '🍅',
-                'karabiber': '🌶️', 'sos': '🥫', 'salça': '🍅', 'baharat': '🌶️',
-                
-                // İçecekler - GENİŞLETİLDİ
-                'su': '💧', 'meyve suyu': '🧃', 'kola': '🥤', 'ayran': '🥛',
-                'gazoz': '🥤', 'şarap': '🍷', 'bira': '🍺',
-                'cola': '🥤', 'fanta': '🍊', 'sprite': '🟢', 'icetea': '🧊', 
-                'ice tea': '🧊', 'limonata': '🍋', 'portakal suyu': '🍊', 'elma suyu': '🍎',
-                'energy drink': '⚡', 'enerji içeceği': '⚡', 'soda': '🥤',
-                'pepsi': '🥤', 'coca cola': '🥤', 'redbull': '⚡',
-                
-                // Temizlik
-                'deterjan': '🧽', 'sabun': '🧼', 'şampuan': '🧴', 'diş macunu': '🦷',
-                'çöp poşeti': '🗑️', 'tuvalet kağıdı': '🧻'
-            };
             
             const itemLower = item.toLowerCase();
             
