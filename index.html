@@ -527,14 +527,50 @@
 
         /* AI Bot Response */
         .ai-bot-response {
-            background: linear-gradient(135deg, #F3E8FF 0%, #EEF2FF 100%);
-            padding: 24px;
-            border-radius: 20px;
-            border-left: 5px solid #A855F7;
-            margin-bottom: 24px;
-            animation: fadeIn 0.6s ease-in;
+            background: var(--card-background);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 20px;
+            margin: 16px 0;
+            font-size: 15px;
+            line-height: 1.6;
+            color: var(--text-color);
+            box-shadow: var(--shadow);
         }
 
+        /* AI Bot Response için özel dark mode iyileştirmesi */
+        [data-theme='dark'] .ai-bot-response {
+            background: #1E1E1E;
+            border: 1px solid #404040;
+            color: #E0E0E0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        /* AI Bot içindeki ürün listesi için ek kontrast */
+        .ai-bot-response strong {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        [data-theme='dark'] .ai-bot-response strong {
+            color: #8B9FFF;
+        }
+
+ /* AI Bot ürün önerileri için liste stili */
+        .ai-bot-response ul,
+        .ai-bot-response ol {
+            margin: 12px 0;
+            padding-left: 20px;
+        }
+
+        .ai-bot-response li {
+            margin: 8px 0;
+            color: var(--text-color);
+        }
+
+        [data-theme='dark'] .ai-bot-response li {
+            color: #D0D0D0;
+        }
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(15px); }
             to { opacity: 1; transform: translateY(0); }
