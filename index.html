@@ -1064,16 +1064,22 @@ const productDatabase = [
                 addedAt: new Date().toLocaleString('tr-TR')
             };
             
-         updateState({
-    shoppingList: [...appState.shoppingList, newShoppingItem],
-    newItem: '',
-    newQuantity: '1',
-    newUnit: 'adet',
-    productSuggestions: [] // ← BU SATIRI EKLEYİN
-});
-            
-            showNotification(`${emoji} ${name} (${displayQuantity}) listeye eklendi! ✅`);
-        }
+        function addItem(name, quantity, unit) {
+    // ... (fonksiyonun mevcut içeriği)
+
+    updateState({
+        shoppingList: [...appState.shoppingList, newShoppingItem],
+        newItem: '',
+        newQuantity: '1',
+        newUnit: 'adet'
+    });
+
+    // YENİ EKLENDİ: Öneri listesini manuel olarak temizle
+    appState.productSuggestions = [];
+    document.getElementById('product-suggestions').innerHTML = '';
+
+    showNotification(`${emoji} ${name} (${displayQuantity}) listeye eklendi! ✅`);
+}
 
               function toggleItemComplete(id) {
             const updatedList = appState.shoppingList.map(item => {
@@ -1296,24 +1302,34 @@ const productDatabase = [
             }
         }
 
-        // --- YENİ EKLENDİ - Akıllı Ürün Öneri Fonksiyonları ---
-        function showSuggestions() {
-            const inputElement = document.getElementById('newItemInput');
-            if (!inputElement) return;
-            const value = inputElement.value.toLowerCase();
-            
-            updateState({ newItem: inputElement.value });
+        // --- GÜNCELLENDİ - Akıllı Ürün Öneri Fonksiyonları ---
+function showSuggestions() {
+    const inputElement = document.getElementById('newItemInput');
+    const suggestionsContainer = document.getElementById('product-suggestions');
 
-            if (!value) {
-                updateState({ productSuggestions: [] });
-                return;
-            }
-            const suggestions = productDatabase.filter(item =>
-                item.toLowerCase().startsWith(value)
-            ).slice(0, 5);
+    if (!inputElement || !suggestionsContainer) return;
 
-            updateState({ productSuggestions: suggestions });
-        }
+    const value = inputElement.value.toLowerCase();
+    appState.newItem = inputElement.value; // newItem'ı doğrudan güncelle
+
+    if (!value) {
+        appState.productSuggestions = []; // Önerileri temizle
+        suggestionsContainer.innerHTML = ''; // HTML'i de temizle
+        return;
+    }
+
+    const suggestions = productDatabase.filter(item =>
+        item.toLowerCase().startsWith(value)
+    ).slice(0, 5);
+
+    appState.productSuggestions = suggestions; // productSuggestions'ı doğrudan güncelle
+
+    // Sadece öneri div'ini güncelle (re-render yerine)
+    suggestionsContainer.innerHTML = suggestions.map(item => `
+        <div class="suggestion-item" onclick="selectSuggestion('${item}')">${item}</div>
+    `).join('');
+}
+
 
         function selectSuggestion(itemName) {
             const nameInput = document.getElementById('newItemInput');
