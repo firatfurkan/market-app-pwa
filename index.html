@@ -648,6 +648,75 @@
                 grid-template-columns: repeat(2, 1fr);
             }
         }
+        /* YENİ EKLENDİ - Sesli Komut Butonu */
+        .voice-btn {
+            background: none;
+            border: none;
+            font-size: 28px;
+            color: var(--primary-color);
+            cursor: pointer;
+            padding: 10px;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            height: 64px;
+            width: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .voice-btn:hover {
+            background: rgba(99, 102, 241, 0.1);
+        }
+
+        .voice-btn.listening {
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.7); }
+            70% { transform: scale(1.1); box-shadow: 0 0 10px 20px rgba(99, 102, 241, 0); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(99, 102, 241, 0); }
+        }
+
+        /* YENİ EKLENDİ - Akıllı Ürün Önerileri */
+        .suggestions-container {
+            position: relative;
+            width: 100%;
+        }
+
+        #product-suggestions {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: var(--card-background);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            margin-top: 8px;
+            z-index: 1000;
+            max-height: 180px;
+            overflow-y: auto;
+            box-shadow: var(--shadow);
+        }
+
+        .suggestion-item {
+            padding: 14px 20px;
+            cursor: pointer;
+            border-bottom: 1px solid var(--border-color);
+            transition: background 0.2s ease;
+            font-weight: 500;
+        }
+
+        .suggestion-item:last-child {
+            border-bottom: none;
+        }
+
+        .suggestion-item:hover {
+            background: rgba(99, 102, 241, 0.1);
+            color: var(--primary-color);
+        }
+
     </style>
 </head>
 <body>
@@ -682,7 +751,8 @@ let appState = {
     chefName: localStorage.getItem('akilliMarket_chefName') || 'Aşçı Bey',
     sharedUsers: JSON.parse(localStorage.getItem('akilliMarket_sharedUsers') || '[]'),
     shareCode: localStorage.getItem('akilliMarket_shareCode') || null,
-    settings: JSON.parse(localStorage.getItem('akilliMarket_settings') || '{"darkMode":false,"highContrast":false,"largeText":false}')
+    settings: JSON.parse(localStorage.getItem('akilliMarket_settings') || '{"darkMode":false,"highContrast":false,"largeText":false}'),
+    productSuggestions: [] // YENİ EKLENDİ
 };
 
 
@@ -820,6 +890,20 @@ let appState = {
                 response: "🥟 Geleneksel mantı malzemeleri! Türk mutfağının en özel lezzetlerinden."
             }
         };
+// YENİ EKLENDİ - Akıllı Ürün Öneri Veritabanı
+const productDatabase = [
+    'Ekmek', 'Süt', 'Yumurta', 'Peynir', 'Zeytin', 'Domates', 'Salatalık',
+    'Biber', 'Soğan', 'Patates', 'Elma', 'Muz', 'Portakal', 'Limon', 'Kıyma',
+    'Tavuk', 'Balık', 'Makarna', 'Pirinç', 'Bulgur', 'Mercimek', 'Nohut',
+    'Zeytinyağı', 'Ayçiçek Yağı', 'Tereyağı', 'Yoğurt', 'Ayran', 'Su', 'Kola',
+    'Meyve Suyu', 'Çay', 'Kahve', 'Şeker', 'Tuz', 'Un', 'Salça', 'Deterjan',
+    'Sabun', 'Şampuan', 'Diş Macunu', 'Tuvalet Kağıdı', 'Kağıt Havlu', 'Çikolata',
+    'Bisküvi', 'Cips', 'Kek', 'Kuruyemiş', 'Sucuk', 'Sosis', 'Salam', 'Kaşar Peyniri',
+    'Beyaz Peynir', 'Krem Peynir', 'Bal', 'Reçel', 'Tahin', 'Pekmez', 'Sirke', 'Nar Ekşisi',
+    'Baharat', 'Karabiber', 'Pul Biber', 'Nane', 'Kekik', 'Mayonez', 'Ketçap', 'Hardal',
+    'Marul', 'Havuç', 'Brokoli', 'Ispanak', 'Mantar', 'Sarımsak', 'Dereotu'
+];
+
 
         // Ürün emoji belirleme fonksiyonu
         function getProductEmoji(item) {
@@ -980,12 +1064,13 @@ let appState = {
                 addedAt: new Date().toLocaleString('tr-TR')
             };
             
-            updateState({
-                shoppingList: [...appState.shoppingList, newShoppingItem],
-                newItem: '',
-                newQuantity: '1',
-                newUnit: 'adet'
-            });
+         updateState({
+    shoppingList: [...appState.shoppingList, newShoppingItem],
+    newItem: '',
+    newQuantity: '1',
+    newUnit: 'adet',
+    productSuggestions: [] // ← BU SATIRI EKLEYİN
+});
             
             showNotification(`${emoji} ${name} (${displayQuantity}) listeye eklendi! ✅`);
         }
@@ -1148,6 +1233,97 @@ let appState = {
             }
         }
 
+            // --- YENİ EKLENDİ - Sesli Komut Fonksiyonları ---
+        function startVoiceRecognition() {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if (!SpeechRecognition) {
+                showNotification('Sesli komut tarayıcınızda desteklenmiyor.', 'error');
+                return;
+            }
+
+            const recognition = new SpeechRecognition();
+            recognition.lang = 'tr-TR';
+            recognition.interimResults = false;
+            recognition.maxAlternatives = 1;
+
+            const voiceBtn = document.getElementById('voiceBtn');
+            if (voiceBtn) voiceBtn.classList.add('listening');
+
+            recognition.start();
+
+            recognition.onresult = function(event) {
+                const speechResult = event.results[0][0].transcript.toLowerCase();
+                handleVoiceCommand(speechResult);
+            };
+
+            recognition.onspeechend = function() {
+                recognition.stop();
+                if (voiceBtn) voiceBtn.classList.remove('listening');
+            };
+
+            recognition.onerror = function(event) {
+                showNotification('Ses tanımada hata oluştu: ' + event.error, 'error');
+                if (voiceBtn) voiceBtn.classList.remove('listening');
+            };
+        }
+
+        function handleVoiceCommand(command) {
+            const parts = command.split(' ');
+            let itemName = '';
+            let quantity = '1';
+            let unit = 'adet';
+            const itemParts = parts.filter(part => part !== 'ekle' && part !== 'al');
+
+            const quantityIndex = itemParts.findIndex(part => !isNaN(parseFloat(part)));
+            if(quantityIndex > -1) {
+                quantity = itemParts[quantityIndex];
+                const unitWord = itemParts[quantityIndex + 1];
+                if (['kilo', 'kg', 'gram', 'gr', 'litre', 'lt', 'paket', 'adet', 'şişe'].includes(unitWord)) {
+                    unit = unitWord;
+                    itemName = itemParts.filter((p, i) => i !== quantityIndex && i !== quantityIndex + 1).join(' ');
+                } else {
+                     itemName = itemParts.filter((p, i) => i !== quantityIndex).join(' ');
+                }
+            } else {
+                itemName = itemParts.join(' ');
+            }
+            
+            if (itemName.trim()) {
+                addItem(itemName.trim(), quantity, unit);
+                showNotification(`🎙️ Sesli komutla eklendi: ${itemName.trim()}`, 'success');
+            } else {
+                showNotification('Anlaşılamadı, lütfen "2 kilo elma ekle" gibi tekrar deneyin.', 'error');
+            }
+        }
+
+        // --- YENİ EKLENDİ - Akıllı Ürün Öneri Fonksiyonları ---
+        function showSuggestions() {
+            const inputElement = document.getElementById('newItemInput');
+            if (!inputElement) return;
+            const value = inputElement.value.toLowerCase();
+            
+            updateState({ newItem: inputElement.value });
+
+            if (!value) {
+                updateState({ productSuggestions: [] });
+                return;
+            }
+            const suggestions = productDatabase.filter(item =>
+                item.toLowerCase().startsWith(value)
+            ).slice(0, 5);
+
+            updateState({ productSuggestions: suggestions });
+        }
+
+        function selectSuggestion(itemName) {
+            const nameInput = document.getElementById('newItemInput');
+            if(nameInput) {
+                nameInput.value = itemName;
+                nameInput.focus();
+            }
+            updateState({ newItem: itemName, productSuggestions: [] });
+        }
+
         // Render functions
         function renderLogin() {
             return `
@@ -1233,32 +1409,45 @@ let appState = {
                     </div>
                 `}
 
-                              <div class="card">
+                           // ...renderHome fonksiyonunun diğer kodları (önceki html kısımları)
+
+                <div class="card"> // ← BU KARTIN BAŞLANGICI
                     <h2 class="card-title">✨ Ürün Ekle</h2>
-                    <div class="two-column-input">
-                        <input type="text" id="newItemInput" placeholder="Ürün adı (örn: Zeytinyağı)" value="${appState.newItem}">
-                        <div style="display: flex; gap: 12px;">
-                            <input type="number" id="newQuantityInput" placeholder="Miktar" value="${appState.newQuantity}" style="width: 80px;">
-                            <select id="newUnitSelect" style="width: 100px;">
-                                <option value="adet" ${appState.newUnit === 'adet' ? 'selected' : ''}>Adet</option>
-                                <option value="kg" ${appState.newUnit === 'kg' ? 'selected' : ''}>Kg</option>
-                                <option value="g" ${appState.newUnit === 'g' ? 'selected' : ''}>Gram</option>
-                                <option value="l" ${appState.newUnit === 'l' ? 'selected' : ''}>Litre</option>
-                                <option value="ml" ${appState.newUnit === 'ml' ? 'selected' : ''}>ML</option>
-                                <option value="paket" ${appState.newUnit === 'paket' ? 'selected' : ''}>Paket</option>
-                                <option value="şişe" ${appState.newUnit === 'şişe' ? 'selected' : ''}>Şişe</option>
-                            </select>
+                    <div style="display: flex; align-items: flex-start; gap: 10px;">
+                        <div class="suggestions-container">
+                            <div class="two-column-input" style="margin-bottom: 0;">
+                                <input 
+                                    type="text" 
+                                    id="newItemInput" 
+                                    placeholder="Ürün adı yazın veya mikrofona basın" 
+                                    value="${appState.newItem}"
+                                    oninput="showSuggestions()" // ← YENİ: Yazarken öneri gösterme
+                                    autocomplete="off">
+                                <div style="display: flex; gap: 12px;">
+                                    <input type="number" id="newQuantityInput" placeholder="Miktar" value="${appState.newQuantity}" style="width: 80px;">
+                                    <select id="newUnitSelect" style="width: 100px;">
+                                        <option value="adet" ${appState.newUnit === 'adet' ? 'selected' : ''}>Adet</option>
+                                        <option value="kg" ${appState.newUnit === 'kg' ? 'selected' : ''}>Kg</option>
+                                        <option value="g" ${appState.newUnit === 'g' ? 'selected' : ''}>Gram</option>
+                                        <option value="l" ${appState.newUnit === 'l' ? 'selected' : ''}>Litre</option>
+                                        <option value="ml" ${appState.newUnit === 'ml' ? 'selected' : ''}>ML</option>
+                                        <option value="paket" ${appState.newUnit === 'paket' ? 'selected' : ''}>Paket</option>
+                                        <option value="şişe" ${appState.newUnit === 'şişe' ? 'selected' : ''}>Şişe</option>
+                                    </select>
+                                </div>
+                            </div>
+                           <div id="product-suggestions"> <!-- YENİ: Önerilerin gösterileceği yer -->
+                                ${appState.productSuggestions.map(item => `
+                                    <div class="suggestion-item" onclick="selectSuggestion('${item}')">${item}</div>
+                                `).join('')}
+                            </div>
                         </div>
+                        <button id="voiceBtn" class="voice-btn" onclick="startVoiceRecognition()">🎤</button> // ← YENİ: Sesli komut butonu
                     </div>
-                    <button class="btn-primary" style="width: 100%;" onclick="addNewItem()">🛒 Ürün Ekle</button>
-                    <p style="font-size: 13px; color: var(--text-light); margin-top: 12px; text-align: center; opacity: 0.8;">
-                        💡 Örnek: "Zeytinyağı" - "1" - "Şişe"
-                    </p>
-                </div>
+                    <button class="btn-primary" style="width: 100%; margin-top: 24px;" onclick="addNewItem()">🛒 Ürün Ekle</button>
+                </div> <!-- BU KARTIN SONU -->
 
-
-
-                    ${Object.keys(groupedItems).length > 0 ? Object.keys(groupedItems).map(category => `
+                ${Object.keys(groupedItems).length > 0 ? Object.keys(groupedItems).map(category => `
                         <div class="category-header">
                             ${category}
                             <span>${groupedItems[category].length}</span>
@@ -1549,6 +1738,16 @@ let appState = {
         }
 
         window.generateQRCode = generateQRCode;
+
+
+// YENİ EKLENDİ - Global Fonksiyonlar
+window.startVoiceRecognition = startVoiceRecognition;
+window.selectSuggestion = selectSuggestion;
+window.showSuggestions = showSuggestions;
+// YENİ EKLENDİ BİTİŞ
+
+// ...eski kodunuz devam eder (window.handleLoginClick, window.addNewItem vs.)
+
 
         // Global functions ← Buradan sonra eski kodlar devam eder
         window.handleLoginClick = function() {
