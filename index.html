@@ -1163,213 +1163,162 @@ const chefMealDatabase = {
     }
 };
 
-// Emoji Haritası - Eksik olan fonksiyon tanımlandı
+// // Emoji Haritası - Düzeltilmiş ve genişletilmiş
 const emojiMap = {
-    'domates': '🍅',
-    'salatalık': '🥒',
-    'elma': '🍎',
-    'muz': '🍌',
-    'patates': '🥔',
-    'soğan': '🧅',
-    'marul': '🥬',
-    'limon': '🍋',
-    'havuç': '🥕',
-    'biber': '🌶️',
-    'patlıcan': '🍆',
-    'kabak': '🥒',
-    'tavuk': '🍗',
-    'dana eti': '🥩',
-    'balık': '🐟',
-    'süt': '🥛',
-    'yoğurt': '🥛',
-    'peynir': '🧀',
-    'yumurta': '🥚',
-    'ekmek': '🍞',
-    'pirinç': '🍚',
-    'makarna': '🍝',
-    'un': '🌾',
-    'şeker': '🍬',
-    'tuz': '🧂',
-    'zeytinyağı': '🫒',
-    'su': '💧',
-    'deterjan': '🧴',
-    'sabun': '🧼'
+    'domates': '🍅', 'salatalık': '🥒', 'elma': '🍎', 'muz': '🍌', 'patates': '🥔',
+    'soğan': '🧅', 'marul': '🥬', 'limon': '🍋', 'havuç': '🥕', 'biber': '🌶️',
+    'patlıcan': '🍆', 'kabak': '🥒', 'tavuk': '🍗', 'dana eti': '🥩', 'balık': '🐟',
+    'süt': '🥛', 'yoğurt': '🥛', 'peynir': '🧀', 'yumurta': '🥚', 'ekmek': '🍞',
+    'pirinç': '🍚', 'makarna': '🍝', 'un': '🌾', 'şeker': '🍯', 'tuz': '🧂',
+    'zeytinyağı': '🌿', 'zeytin': '🍇', 'su': '💧', 'deterjan': '🧴', 'sabun': '🧼',
+    'bal': '🍯', 'badem': '🥜', 'ceviz': '🥜', 'fındık': '🥜', 'çikolata': '🍫',
+    'çay': '☕', 'kahve': '☕', 'çilek': '🍓', 'kiraz': '🍒', 'üzüm': '🍇'
 };
 
-// YENİ EKLENDİ - Akıllı Ürün Öneri Veritabanı
+// YENİ EKLENDİ - Akıllı Ürün Öneri Veritabanı (Düzeltilmiş)
 const productDatabase = [
-    // A harfi - Genişletildi
-    '🥑 Avokado', '🍎 Elma', '🌰 Antep Fıstığı', '🥛 Ayran', '🌻 Ay Çekirdeği', '🌾 Arpa', 
-    '🥜 Badem', '🍎 Amasya Elması', '🥛 Acidophilus', '🌶️ Acı Biber', '🍯 Akasya Balı', 
-    '🥔 Arpacık Soğanı', '🥬 Arugula', '🌾 Amarant', '🥜 Antep Fıstığı Ezmesi',
+    // A harfi - Düzeltilmiş
+    '🥑 Avokado', '🍎 Amasya Elması', '🌰 Antep Fıstığı', '🥛 Ayran', '🌻 Ay Çekirdeği', 
+    '🌾 Arpa', '🌶️ Acı Biber', '🍯 Akasya Balı', '🧅 Arpacık Soğanı', '🥬 Arugula', 
+    '🌾 Amarant', '🥜 Antep Fıstığı Ezmesi',
 
-    // B harfi - Çok Genişletildi  
-    '🍯 Bal', '🐟 Balık', '🌾 Barbunya', '🥜 Badem', '🍌 Muz', '🌶️ Biber', '🥦 Brokoli', 
-    '🌾 Bulgur', '🍪 Bisküvi', '🧀 Beyaz Peynir', '🥖 Baget', '🫐 Böğürtlen', '🥩 Bonfile',
-    '🍺 Bira', '🥬 Brüksel Lahanası', '🌶️ Biber Salçası', '🧈 Butter', '🥨 Bagel', 
-    '🍌 Banana Chips', '🥩 Beefsteak', '🧀 Brie Peyniri', '🥖 Brioche', '🌾 Buğday',
+    // B harfi - Düzeltilmiş (Badem doğru yerde)
+    '🥜 Badem', '🍯 Bal', '🐟 Balık', '🌾 Barbunya', '🌶️ Biber', '🥦 Brokoli', 
+    '🌾 Bulgur', '🍪 Bisküvi', '🧀 Beyaz Peynir', '🥖 Baget', '🍇 Böğürtlen', 
+    '🥩 Bonfile', '🍺 Bira', '🥬 Brüksel Lahanası', '🌶️ Biber Salçası', '🧈 Butter', 
+    '🥨 Bagel', '🍌 Banana Chips', '🥩 Beefsteak', '🧀 Brie Peyniri', '🥖 Brioche', '🌾 Buğday',
 
-    // C harfi - Genişletildi
-    '🥜 Ceviz', '🍫 Çikolata', '🥨 Cips', '☕ Çay', '🍒 Çilek', '🥒 Çilek Reçeli', 
-    '🧀 Cheddar', '🍫 Çikolatalı Bisküvi', '🥥 Coconut', '🍒 Cherry', '🧀 Camembert',
-    '🌶️ Chili', '🍫 Cocoa', '☕ Cappuccino', '🥒 Cornichon',
+    // C harfi - Sadece C ile başlayanlar
+    '🥜 Ceviz', '🥨 Cips', '🍒 Cherry', '🧀 Cheddar', '🧀 Camembert', '🌶️ Chili', 
+    '🍫 Cocoa', '☕ Cappuccino', '🥒 Cornichon', '🥥 Coconut',
 
-    // Ç harfi - Yeni Eklendi
-    '🍒 Çilek', '🥒 Çilek Reçeli', '🍫 Çikolata', '☕ Çay', '🌿 Çemen', '🧀 Çökelek',
-    '🥜 Çam Fıstığı', '🌾 Çavdar', '🍲 Çorba', '🥒 Çilek Marmelatı',
+    // Ç harfi - Sadece Ç ile başlayanlar
+    '🍒 Çilek', '🍫 Çikolata', '☕ Çay', '🍓 Çilek Reçeli', '🍫 Çikolatalı Bisküvi', 
+    '🌿 Çemen', '🧀 Çökelek', '🌲 Çam Fıstığı', '🌾 Çavdar', '🍲 Çorba', '🍓 Çilek Marmelatı',
 
-    // D harfi - Genişletildi
+    // D harfi
     '🥩 Dana Eti', '🌿 Dereotu', '🧴 Deterjan', '🪥 Diş Macunu', '🍩 Donut', '🍅 Domates', 
-    '🦆 Ördek', '🥛 Dondurma', '🍅 Domates Salçası', '🌿 Defne Yaprağı', '🍇 Dut',
-    '🥩 Döner', '🍞 Dilim Ekmek', '🧀 Dil Peyniri', '🥛 Demirhindi',
+    '🍦 Dondurma', '🍅 Domates Salçası', '🌿 Defne Yaprağı', '🍇 Dut', '🥩 Döner', 
+    '🍞 Dilim Ekmek', '🧀 Dil Peyniri', '🥛 Demirhindi',
 
-    // E harfi - Genişletildi
+    // E harfi
     '🍞 Ekmek', '🍎 Elma', '🥬 Enginar', '🍑 Erik', '🥚 Yumurta', '🧀 Ezine Peyniri',
-    '🍎 Elma Suyu', '🍑 Elma Sirkesi', '🌿 Estragon', '🥬 Ebegümeci', '🍇 Ekşi Üzüm',
-    '🍞 Esmer Ekmek', '🧀 Emmental', '🥛 Espresso', '🌾 Erişte',
+    '🍎 Elma Suyu', '🍎 Elma Sirkesi', '🌿 Estragon', '🥬 Ebegümeci', '🍇 Ekşi Üzüm',
+    '🍞 Esmer Ekmek', '🧀 Emmental', '☕ Espresso', '🍝 Erişte',
 
-    // F harfi - Genişletildi
-    '🥜 Fındık', '🥜 Fıstık', '🫛 Fasulye', '🍓 Çilek', '🐟 Fener Balığı', '🍇 Fig',
-    '🥜 Fındık Ezmesi', '🫛 Fasulye Pilaki', '🍞 Focaccia', '🧀 Feta', '🍓 Frambuaz',
+    // F harfi - Desteklenen emojilerle
+    '🥜 Fındık', '🥜 Fıstık', '🌾 Fasulye', '🐟 Fener Balığı', '🍇 Fig',
+    '🥜 Fındık Ezmesi', '🌾 Fasulye Pilaki', '🍞 Focaccia', '🧀 Feta', '🍓 Frambuaz',
     '🥛 Frappuccino', '🍟 French Fries', '🥖 French Bread',
 
-    // G harfi - Genişletildi
-    '🍇 Üzüm', '🥛 Süt', '🧄 Sarımsak', '🥨 Galeta', '🍇 Greyfurt', '🧀 Gouda',
-    '🥛 Greek Yogurt', '🌿 Gül Yaprağı', '🍯 Gül Balı', '🥒 Gurme Turşu', '🥛 Gazoz',
-    '🌾 Granola', '🧀 Gruyere', '🍇 Grape Juice', '🌿 Ginger',
+    // G harfi
+    '🥨 Galeta', '🍊 Greyfurt', '🧀 Gouda', '🥛 Greek Yogurt', '🌹 Gül Yaprağı', 
+    '🍯 Gül Balı', '🥒 Gurme Turşu', '🥤 Gazoz', '🥣 Granola', '🧀 Gruyere', 
+    '🍇 Grape Juice', '🫚 Ginger',
 
-    // Ğ harfi - Yeni Eklendi
-    '🍇 Ğ harfi ile başlayan ürün yok',
+    // H harfi
+    '🥕 Havuç', '🦃 Hindi', '🌰 Hurma', '🥒 Hıyar', '🌭 Hardal', '🥛 Hazelnut Milk', 
+    '🍯 Heather Honey', '🧀 Halloumi', '🌺 Hibiscus', '🥕 Havuç Suyu', '🦃 Hindi Göğsü', 
+    '🌰 Hurma Ezmesi', '☕ Hot Chocolate',
 
-    // H harfi - Genişletildi
-    '🥕 Havuç', '🍯 Bal', '🍗 Hindi', '🌰 Hurma', '🥒 Hıyar', '🌿 Hardal',
-    '🥛 Hazelnut Milk', '🍯 Heather Honey', '🧀 Halloumi', '🌿 Hibiscus',
-    '🥕 Havuç Suyu', '🍗 Hindi Göğsü', '🌰 Hurma Ezmesi', '🥛 Hot Chocolate',
+    // I-İ harfi
+    '🥬 Ispanak', '🍇 İncir', '🧊 Iced Tea', '🍦 Ice Cream', '🌿 Italian Herbs',
+    '🧀 İzmir Tulum', '🍇 İncir Reçeli', '🥛 İrmik', '🌿 İtalyan Baharatı', '🍞 İtalyan Ekmeği',
 
-    // I harfi - Genişletildi
-    '🥬 Ispanak', '🍇 İncir', '🥛 Iced Tea', '🍦 Ice Cream', '🌿 Italian Herbs',
+    // J harfi
+    '🧊 Jel', '🍇 Jelly', '🧃 Juice', '🌶️ Jalapeno', '🍯 Jam',
 
-    // İ harfi - Yeni Eklendi
-    '🍇 İncir', '🥬 İspanak', '🧀 İzmir Tulum', '🍇 İncir Reçeli', '🥛 İrmik',
-    '🌿 İtalyan Baharatı', '🍞 İtalyan Ekmeği',
+    // K harfi
+    '☕ Kahve', '🥒 Kabak', '🧀 Kaşar', '🥜 Kaju', '🍉 Karpuz', '🍒 Kiraz', '🥩 Kıyma', 
+    '🥥 Hindistan Cevizi', '🧀 Krem Peynir', '🍪 Kurabiye', '🥜 Kuruyemiş', '🌶️ Kimyon',
+    '🥬 Kıvırcık', '🍋 Kireç', '🧀 Kaşkaval', '🐑 Kuzu Eti', '🍒 Kiraz Reçeli', 
+    '🥛 Kefir', '🌾 Kinoa', '🥒 Kornişon', '🍪 Kraker', '🧀 Krem Şanti', 
+    '🍫 Kakao', '🌿 Kekik', '🌿 Kapari',
 
-    // J harfi - Genişletildi
-    '🧊 Jel', '🍇 Jelly', '🥛 Juice', '🌿 Jalapeno', '🍯 Jam',
-
-    // K harfi - Çok Genişletildi
-    '☕ Kahve', '🥒 Kabak', '🧀 Kaşar', '🥜 Kaju', '🍉 Karpuz', '🥔 Patates', 
-    '🍒 Kiraz', '🥩 Kıyma', '🥥 Hindistan Cevizi', '🧀 Krem Peynir', '🍪 Kurabiye',
-    '🥜 Kuruyemiş', '🌶️ Kimyon', '🥬 Kıvırcık', '🍋 Kireç', '🧀 Kaşkaval',
-    '🥩 Kuzu Eti', '🍒 Kiraz Reçeli', '🥛 Kefir', '🌾 Kinoa', '🥒 Kornişon',
-    '🍪 Kraker', '🧀 Krem Şanti', '🥛 Kakao', '🌿 Kekik', '🥒 Kapari',
-
-    // L harfi - Genişletildi
+    // L harfi
     '🍋 Limon', '🧀 Lor Peyniri', '🥬 Lahana', '🍋 Limon Suyu', '🧀 Labne',
-    '🥛 Latte', '🥬 Leek', '🍋 Lime', '🧀 Limburger', '🍇 Lavanta Balı',
+    '☕ Latte', '🥬 Leek', '🍋 Lime', '🧀 Limburger', '🍯 Lavanta Balı',
 
-    // M harfi - Çok Genişletildi
+    // M harfi - Muz doğru yerde
     '🍝 Makarna', '🍈 Kavun', '🥛 Süt', '🍄 Mantar', '🥭 Mango', '🌿 Maydanoz', 
-    '🌽 Mısır', '🧀 Mozzarella', '🥛 Milkshake', '🍯 Manuka Balı', '🥜 Macadamia',
-    '🍈 Melon', '🧀 Mascarpone', '🥛 Matcha', '🌿 Mint', '🥩 Meatball',
-    '🍝 Macaroni', '🥛 Mocha', '🧀 Muenster', '🍄 Morel Mantarı', '🥭 Mango Suyu',
+    '🌽 Mısır', '🧀 Mozzarella', '🍌 Muz', '🥛 Milkshake', '🍯 Manuka Balı', 
+    '🥜 Macadamia', '🍈 Melon', '🧀 Mascarpone', '🍵 Matcha', '🌿 Mint', 
+    '🍖 Meatball', '🍝 Macaroni', '☕ Mocha', '🧀 Muenster', '🍄 Morel Mantarı', '🥭 Mango Suyu',
 
-    // N harfi - Genişletildi
-    '🌾 Nohut', '🌿 Nane', '🍇 Nar', '🥛 Nutella', '🥜 Nut Mix',
-    '🍇 Nar Ekşisi', '🌿 Nane Yaprağı', '🧀 Neufchatel', '🥛 Nesquik',
+    // N harfi
+    '🌾 Nohut', '🌿 Nane', '🍇 Nar', '🍫 Nutella', '🥜 Nut Mix', '🍇 Nar Ekşisi', 
+    '🌿 Nane Yaprağı', '🧀 Neufchatel', '🍫 Nesquik',
 
-    // O harfi - Genişletildi
-    '🫒 Zeytin', '🍊 Portakal', '🌿 Oregano', '🥛 Oat Milk', '🌾 Oats',
-    '🫒 Olive Oil', '🍊 Orange Juice', '🧀 Oaxaca', '🥛 Ovaltine',
+    // O harfi - Desteklenen emojilerle
+    '🍇 Zeytin', '🍊 Portakal', '🌿 Oregano', '🥛 Oat Milk', '🌾 Oats',
+    '🌿 Olive Oil', '🍊 Orange Juice', '🧀 Oaxaca', '🍫 Ovaltine',
 
-    // Ö harfi - Yeni Eklendi
-    '🦆 Ördek', '🌿 Öğütülmiş Karabiber', '🥛 Özel Süt',
+    // Ö harfi
+    '🦆 Ördek', '🌶️ Öğütülmüş Karabiber', '🥛 Özel Süt',
 
-    // P harfi - Genişletildi
+    // P harfi
     '🥔 Patates', '🧀 Peynir', '🍑 Şeftali', '🥞 Pankek', '🍕 Pizza', '🍊 Portakal', 
-    '🍿 Patlamış Mısır', '🧀 Parmesan', '🌿 Parsley', '🥛 Protein Shake',
-    '🍑 Peach', '🥜 Peanut', '🍐 Pear', '🌶️ Paprika', '🍕 Pepperoni',
-    '🥞 Pancake Mix', '🧀 Provolone', '🍇 Plum', '🥛 Pudding',
+    '🍿 Patlamış Mısır', '🧀 Parmesan', '🌿 Parsley', '🥤 Protein Shake', '🍑 Peach', 
+    '🥜 Peanut', '🍐 Pear', '🌶️ Paprika', '🍕 Pepperoni', '🥞 Pancake Mix', 
+    '🧀 Provolone', '🍇 Plum', '🍮 Pudding',
 
-    // R harfi - Genişletildi
-    '🍓 Reçel', '🌾 Pirinç', '🥬 Roka', '🍇 Raisin', '🧀 Ricotta',
-    '🌿 Rosemary', '🥛 Rice Milk', '🍓 Raspberry', '🌾 Rye Bread',
+    // R harfi
+    '🍓 Reçel', '🍚 Pirinç', '🥬 Roka', '🍇 Raisin', '🧀 Ricotta', '🌿 Rosemary', 
+    '🥛 Rice Milk', '🍓 Raspberry', '🍞 Rye Bread',
 
-    // S harfi - Çok Genişletildi
+    // S harfi
     '🧂 Tuz', '🥛 Süt', '🌭 Sosis', '🥩 Salam', '🧄 Sarımsak', '🥒 Salatalık', 
-    '🌻 Susam', '🥩 Sucuk', '💧 Su', '🍓 Strawberry', '🧀 Swiss Cheese',
-    '🥛 Soy Milk', '🌿 Sage', '🍯 Sunflower Honey', '🥜 Sunflower Seeds',
-    '🥛 Smoothie', '🧀 Stilton', '🌶️ Sriracha', '🥛 Soda', '🍝 Spaghetti',
+    '🌻 Susam', '🥩 Sucuk', '💧 Su', '🍓 Strawberry', '🧀 Swiss Cheese', '🥛 Soy Milk', 
+    '🌿 Sage', '🍯 Sunflower Honey', '🥜 Sunflower Seeds', '🥛 Smoothie', '🧀 Stilton', 
+    '🌶️ Sriracha', '🥤 Soda', '🍝 Spaghetti',
 
-    // Ş harfi - Yeni Eklendi
-    '🍑 Şeftali', '🧂 Şeker', '🍯 Şeker Pancarı', '🥛 Şekersiz Süt', '🌿 Şerbetçiotu',
-    '🧀 Şavak Peyniri', '🥛 Şıra', '🌶️ Şalgam',
+    // Ş harfi
+    '🍑 Şeftali', '🍯 Şeker', '🍯 Şeker Pancarı', '🥛 Şekersiz Süt', '🌿 Şerbetçiotu',
+    '🧀 Şavak Peyniri', '🍇 Şıra', '🥤 Şalgam',
 
-    // T harfi - Genişletildi
-    '🍗 Tavuk', '🧈 Tereyağı', '🧻 Tuvalet Kağıdı', '🥜 Tahin', '🍅 Domates', 
-    '🧂 Tuz', '🌿 Thyme', '🧀 Tilsit', '🥛 Tea', '🍅 Tomato Sauce',
-    '🍗 Turkey', '🥜 Tahini', '🌿 Turmeric', '🧀 Tulum Peyniri', '🥛 Tonic Water',
+    // T harfi
+    '🍗 Tavuk', '🧈 Tereyağı', '🧻 Tuvalet Kağıdı', '🥜 Tahin', '🍅 Domates', '🧂 Tuz', 
+    '🌿 Thyme', '🧀 Tilsit', '🍵 Tea', '🍅 Tomato Sauce', '🦃 Turkey', '🥜 Tahini', 
+    '🌿 Turmeric', '🧀 Tulum Peyniri', '🥤 Tonic Water',
 
-    // U harfi - Genişletildi
-    '🌾 Un', '🍇 Uzum', '🥛 UHT Milk', '🌿 Umami Sauce',
+    // U-Ü harfi
+    '🌾 Un', '🍇 Üzüm', '🥛 UHT Milk', '🌿 Umami Sauce', '🍇 Üzüm Suyu',
 
-    // Ü harfi - Yeni Eklendi
-    '🍇 Üzüm', '🌿 Üçgen Peynir', '🥛 Üzüm Suyu',
-
-    // V harfi - Genişletildi
-    '🍒 Vişne', '🧀 Velveeta', '🥛 Vanilla Extract', '🌿 Vanilla Bean',
-    '🍒 Vişne Suyu', '🥛 Vitamin Water',
-
-    // W harfi - Yeni Eklendi
+    // V-W-Y-Z harfi
+    '🍒 Vişne', '🧀 Velveeta', '🌿 Vanilla Extract', '🍒 Vişne Suyu', '🥛 Vitamin Water',
     '🍉 Watermelon', '🥛 Whey Protein', '🌾 Wheat', '🧀 White Cheese',
-
-    // X harfi - Yeni Eklendi
-    '🥛 Xanthan Gum',
-
-    // Y harfi - Genişletildi
-    '🥚 Yumurta', '🥛 Yoğurt', '🌾 Yulaf', '🧈 Yağ', '🌿 Yaban Mersini',
-    '🥛 Yakult', '🧀 Yak Peyniri', '🌿 Yeşil Çay', '🥜 Yer Fıstığı',
-    '🥛 Yogurt Drink', '🌾 Yeast', '🍠 Yam',
-
-    // Z harfi - Genişletildi
-    '🫒 Zeytin', '🫒 Zeytinyağı', '🌿 Zencefil', '🧀 Zürih Peyniri',
-    '🥛 Zero Calorie Drink', '🌶️ Zatar', '🍋 Zest'
-].sort((a, b) => {
-    // Türkçe alfabetik sıralama - kategori bazlı ayrımı koruyacak
+    '🥚 Yumurta', '🥛 Yoğurt', '🌾 Yulaf', '🧈 Yağ', '🍇 Yaban Mersini', '🥛 Yakult', 
+    '🧀 Yak Peyniri', '🍵 Yeşil Çay', '🥜 Yer Fıstığı', '🥛 Yogurt Drink', '🌾 Yeast', '🍠 Yam',
+    '🍇 Zeytin', '🌿 Zeytinyağı', '🫚 Zencefil', '🧀 Zürih Peyniri', '🥤 Zero Calorie Drink', 
+    '🌶️ Zatar', '🍋 Zest'
+]
+// Arama sonuçlarında [3] numaralı kaynakta belirtilen duplicate removal yöntemi
+.filter((item, index, self) => {
+    const cleanItem = item.replace(/^[^\w\s]+\s*/, '').toLowerCase();
+    return index === self.findIndex(t => t.replace(/^[^\w\s]+\s*/, '').toLowerCase() === cleanItem);
+})
+.sort((a, b) => {
     const cleanA = a.replace(/^[^\w\s]+\s*/, '').toLowerCase();
     const cleanB = b.replace(/^[^\w\s]+\s*/, '').toLowerCase();
     return cleanA.localeCompare(cleanB, 'tr');
 });
 
-
-// Yardımcı fonksiyonlar
+// TEK getItemEmoji fonksiyonu - Düzeltilmiş
 function getItemEmoji(item) {
-    const itemLower = item.toLowerCase();
+    const itemLower = item.toLowerCase().trim();
     
+    // Önce emojiMap'ten kontrol et
     if (emojiMap[itemLower]) {
         return emojiMap[itemLower];
     }
     
-    for (const [keyword, emoji] of Object.entries(emojiMap)) {
-        if (itemLower.includes(keyword) || keyword.includes(itemLower)) {
-            return emoji;
-        }
-    }
-    
-    return '🛒';
-}
-
-        // Kategori belirleme fonksiyonu
-       function getItemEmoji(item) {
-    const itemLower = item.toLowerCase().trim();
-    
-    // Arama sonuçlarında [3] numaralı kaynakta belirtilen exact matching yöntemi
-    // Önce tam eşleşmeleri kontrol et
+    // Exact matching - Bal/Balık sorunu için
     if (itemLower === 'bal') return '🍯';
     if (itemLower === 'balık') return '🐟';
     if (itemLower === 'badem') return '🥜';
     if (itemLower === 'barbunya') return '🌾';
     
-    // Sonra kısmi eşleşmeleri kontrol et (daha spesifik olanlar önce)
+    // Kısmi eşleştirme (spesifik olanlar önce)
     if (itemLower.includes('balık')) return '🐟';
     if (itemLower.includes('bal') && !itemLower.includes('balık')) return '🍯';
     
@@ -1397,9 +1346,7 @@ function getItemEmoji(item) {
     if (itemLower.includes('biber')) return '🌶️';
     if (itemLower.includes('patlıcan')) return '🍆';
     if (itemLower.includes('brokoli')) return '🥦';
-    if (itemLower.includes('lahana')) return '🥬';
-    if (itemLower.includes('ispanak')) return '🥬';
-    if (itemLower.includes('marul')) return '🥬';
+    if (itemLower.includes('lahana') || itemLower.includes('ispanak') || itemLower.includes('marul')) return '🥬';
     if (itemLower.includes('mantar')) return '🍄';
     if (itemLower.includes('mısır')) return '🌽';
     
@@ -1457,7 +1404,6 @@ function getItemEmoji(item) {
     // Varsayılan
     return '🛒';
 }
-
 
 
         // Save to localStorage
