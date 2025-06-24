@@ -1359,50 +1359,105 @@ function getItemEmoji(item) {
 }
 
         // Kategori belirleme fonksiyonu
-        function categorizeItem(item) {
-            const categories = {
-                '🥬 Sebze & Meyve': [
-                    'domates', 'salatalık', 'elma', 'muz', 'patates', 'soğan', 
-                    'marul', 'limon', 'havuç', 'biber', 'patlıcan', 'kabak',
-                    'portakal', 'üzüm', 'çilek', 'kiraz', 'armut', 'brokoli', 'mantar',
-                    'sarımsak', 'maydanoz', 'nane', 'dereotu', 'yeşil soğan'
-                ],
-                '🥩 Et & Süt': [
-                    'tavuk', 'dana eti', 'balık', 'süt', 'yoğurt', 
-                    'peynir', 'yumurta', 'tereyağı', 'kıyma', 'sosis', 'sucuk',
-                    'kaşar', 'beyaz peynir', 'tavuk eti', 'mozzarella peyniri', 
-                    'parmesan peyniri', 'tavuk suyu'
-                ],
-                '🍞 Temel Gıda': [
-                    'ekmek', 'pirinç', 'makarna', 'un', 'şeker', 'tuz', 
-                    'zeytinyağı', 'mercimek', 'nohut', 'bulgur', 'yulaf',
-                    'bal', 'reçel', 'çay', 'kahve', 'domates sosu', 'pizza hamuru',
-                    'kırmızı mercimek', 'ekmek içi', 'lavash', 'mantı', 'domates salçası',
-                    'karabiber', 'sos', 'salça', 'baharat'
-                ],
-                '💧 İçecekler': [
-                    'su', 'meyve suyu', 'kola', 'ayran', 'gazoz', 'şarap', 'bira',
-                    'cola', 'fanta', 'sprite', 'icetea', 'ice tea', 'limonata', 
-                    'portakal suyu', 'elma suyu', 'energy drink', 'enerji içeceği', 
-                    'soda', 'pepsi', 'coca cola', 'redbull'
-                ],
-                '🧽 Temizlik & Hijyen': [
-                    'deterjan', 'sabun', 'şampuan', 'diş macunu', 'çöp poşeti', 
-                    'tuvalet kağıdı'
-                ]
-            };
-            
-            const itemLower = item.toLowerCase();
-            
-            for (const [category, items] of Object.entries(categories)) {
-                for (const keyword of items) {
-                    if (itemLower.includes(keyword)) {
-                        return category;
-                    }
-                }
-            }
-            return '📦 Diğer';
-        }
+       function getItemEmoji(item) {
+    const itemLower = item.toLowerCase().trim();
+    
+    // Arama sonuçlarında [3] numaralı kaynakta belirtilen exact matching yöntemi
+    // Önce tam eşleşmeleri kontrol et
+    if (itemLower === 'bal') return '🍯';
+    if (itemLower === 'balık') return '🐟';
+    if (itemLower === 'badem') return '🥜';
+    if (itemLower === 'barbunya') return '🌾';
+    
+    // Sonra kısmi eşleşmeleri kontrol et (daha spesifik olanlar önce)
+    if (itemLower.includes('balık')) return '🐟';
+    if (itemLower.includes('bal') && !itemLower.includes('balık')) return '🍯';
+    
+    // Sebze ve Meyveler
+    if (itemLower.includes('domates')) return '🍅';
+    if (itemLower.includes('elma')) return '🍎';
+    if (itemLower.includes('muz')) return '🍌';
+    if (itemLower.includes('portakal')) return '🍊';
+    if (itemLower.includes('limon')) return '🍋';
+    if (itemLower.includes('üzüm')) return '🍇';
+    if (itemLower.includes('çilek')) return '🍓';
+    if (itemLower.includes('kiraz')) return '🍒';
+    if (itemLower.includes('şeftali') || itemLower.includes('erik')) return '🍑';
+    if (itemLower.includes('avokado')) return '🥑';
+    if (itemLower.includes('karpuz')) return '🍉';
+    if (itemLower.includes('kavun')) return '🍈';
+    if (itemLower.includes('ananas')) return '🍍';
+    if (itemLower.includes('kivi')) return '🥝';
+    if (itemLower.includes('mango')) return '🥭';
+    if (itemLower.includes('salatalık') || itemLower.includes('hıyar')) return '🥒';
+    if (itemLower.includes('havuç')) return '🥕';
+    if (itemLower.includes('patates')) return '🥔';
+    if (itemLower.includes('soğan')) return '🧅';
+    if (itemLower.includes('sarımsak')) return '🧄';
+    if (itemLower.includes('biber')) return '🌶️';
+    if (itemLower.includes('patlıcan')) return '🍆';
+    if (itemLower.includes('brokoli')) return '🥦';
+    if (itemLower.includes('lahana')) return '🥬';
+    if (itemLower.includes('ispanak')) return '🥬';
+    if (itemLower.includes('marul')) return '🥬';
+    if (itemLower.includes('mantar')) return '🍄';
+    if (itemLower.includes('mısır')) return '🌽';
+    
+    // Et ve Süt Ürünleri
+    if (itemLower.includes('tavuk')) return '🍗';
+    if (itemLower.includes('et') || itemLower.includes('dana') || itemLower.includes('kuzu')) return '🥩';
+    if (itemLower.includes('kıyma')) return '🥩';
+    if (itemLower.includes('sucuk') || itemLower.includes('sosis') || itemLower.includes('salam')) return '🌭';
+    if (itemLower.includes('süt')) return '🥛';
+    if (itemLower.includes('yoğurt') || itemLower.includes('ayran')) return '🥛';
+    if (itemLower.includes('peynir')) return '🧀';
+    if (itemLower.includes('yumurta')) return '🥚';
+    if (itemLower.includes('tereyağı') || itemLower.includes('margarin')) return '🧈';
+    
+    // Tahıllar ve Baklagiller
+    if (itemLower.includes('ekmek')) return '🍞';
+    if (itemLower.includes('pirinç')) return '🍚';
+    if (itemLower.includes('makarna')) return '🍝';
+    if (itemLower.includes('bulgur') || itemLower.includes('mercimek') || itemLower.includes('nohut')) return '🌾';
+    if (itemLower.includes('fasulye') || itemLower.includes('barbunya')) return '🌾';
+    if (itemLower.includes('un')) return '🌾';
+    
+    // Kuruyemiş
+    if (itemLower.includes('fındık') || itemLower.includes('ceviz') || itemLower.includes('badem')) return '🥜';
+    if (itemLower.includes('fıstık')) return '🥜';
+    
+    // İçecekler
+    if (itemLower.includes('su')) return '💧';
+    if (itemLower.includes('çay')) return '☕';
+    if (itemLower.includes('kahve')) return '☕';
+    if (itemLower.includes('kola') || itemLower.includes('gazoz')) return '🥤';
+    if (itemLower.includes('meyve suyu') || itemLower.includes('suyu')) return '🧃';
+    
+    // Şekerlemeler
+    if (itemLower.includes('çikolata')) return '🍫';
+    if (itemLower.includes('şeker')) return '🍯';
+    if (itemLower.includes('bisküvi') || itemLower.includes('kurabiye')) return '🍪';
+    if (itemLower.includes('cips')) return '🥨';
+    
+    // Temizlik
+    if (itemLower.includes('deterjan') || itemLower.includes('sabun')) return '🧴';
+    if (itemLower.includes('şampuan')) return '🧴';
+    if (itemLower.includes('diş macunu')) return '🪥';
+    if (itemLower.includes('tuvalet kağıdı') || itemLower.includes('kağıt havlu')) return '🧻';
+    
+    // Baharatlar
+    if (itemLower.includes('tuz')) return '🧂';
+    if (itemLower.includes('karabiber') || itemLower.includes('baharat')) return '🌶️';
+    if (itemLower.includes('nane') || itemLower.includes('maydanoz') || itemLower.includes('dereotu')) return '🌿';
+    
+    // Yağlar
+    if (itemLower.includes('zeytinyağı') || itemLower.includes('yağ')) return '🌿';
+    if (itemLower.includes('zeytin')) return '🍇';
+    
+    // Varsayılan
+    return '🛒';
+}
+
 
 
         // Save to localStorage
