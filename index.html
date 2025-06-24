@@ -1451,39 +1451,39 @@ function getItemEmoji(item) {
             showNotification(`Hoş geldin ${username}! 🎉`);
         }
 
-             function addItem(name, quantity, unit) {
-            const emoji = getItemEmoji(name);
-            const displayQuantity = `${quantity} ${unit}`;
-            
-            const newShoppingItem = {
-                id: Date.now() + Math.random(),
-                name: name,
-                quantity: displayQuantity,
-                displayName: `${name} (${displayQuantity})`,
-                emoji: emoji,
-                completed: false,
-                completedBy: null,
-                addedBy: appState.user?.name,
-                category: categorizeItem(name),
-                addedAt: new Date().toLocaleString('tr-TR')
-            };
-            
-            updateState({
-                shoppingList: [...appState.shoppingList, newShoppingItem],
-                newItem: '',
-                newQuantity: '1',
-                newUnit: 'adet'
-            });
+           function addItem(name, quantity, unit) {
+    const emoji = getItemEmoji(name);
+    const displayQuantity = `${quantity} ${unit}`;
+    
+    const newShoppingItem = {
+        id: Date.now() + Math.random(),
+        name: name,
+        quantity: displayQuantity,
+        displayName: `${name} (${displayQuantity})`,
+        emoji: emoji,
+        completed: false,
+        completedBy: null,
+        addedBy: appState.user?.name,
+        category: categorizeItem(name),
+        addedAt: new Date().toLocaleString('tr-TR')
+    };
+    
+    updateState({
+        shoppingList: [...appState.shoppingList, newShoppingItem],
+        newItem: '',
+        newQuantity: '1',
+        newUnit: 'adet'
+    });
 
-            // Öneri listesini manuel olarak temizle
-            appState.productSuggestions = [];
-            const suggestionsEl = document.getElementById('product-suggestions');
-            if (suggestionsEl) {
-                suggestionsEl.innerHTML = '';
-            }
+    appState.productSuggestions = [];
+    const suggestionsEl = document.getElementById('product-suggestions');
+    if (suggestionsEl) {
+        suggestionsEl.innerHTML = '';
+    }
 
-            showNotification(`${emoji} ${name} (${displayQuantity}) listeye eklendi! ✅`);
-        }
+    showNotification(`${emoji} ${name} (${displayQuantity}) listeye eklendi! ✅`);
+}
+
 
 
               function toggleItemComplete(id) {
@@ -1884,7 +1884,8 @@ function getItemEmoji(item) {
                             </div>
                             <button id="voiceBtn" class="voice-btn" onclick="startVoiceRecognition()">🎤</button>
                         </div>
-                        <button class="btn-primary" style="width: 100%; margin-top: 24px;" onclick="addNewItem()">🛒 Ürün Ekle</button>
+           <button class="btn-primary" style="width: 100%; margin-top: 24px;" onclick="addNewItem()">🛒 Ürün Ekle</button>
+             
                     </div>
 
 
