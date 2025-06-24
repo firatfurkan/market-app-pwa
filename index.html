@@ -1330,8 +1330,8 @@ function getItemEmoji(item) {
             showNotification(`Hoş geldin ${username}! 🎉`);
         }
 
-              function addItem(name, quantity, unit) {
-            const emoji = getProductEmoji(name);
+             function addItem(name, quantity, unit) {
+            const emoji = getItemEmoji(name);
             const displayQuantity = `${quantity} ${unit}`;
             
             const newShoppingItem = {
@@ -1451,7 +1451,7 @@ function getItemEmoji(item) {
             const newItems = [];
             
             appState.aiSuggestions.forEach(item => {
-                const emoji = getProductEmoji(item.name);
+                const emoji = getItemEmoji(item.name);
                 const newItem = {
                     id: Date.now() + Math.random(),
                     name: item.name,
@@ -1832,7 +1832,8 @@ function showSuggestions() {
                             <h3 style="margin-bottom: 16px;">🛒 Gerekli Malzemeler:</h3>
                             ${appState.aiSuggestions.map(item => `
                                 <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
-                                    <span style="font-size: 20px;">${getProductEmoji(item.name)}</span>
+                                                                       <span style="font-size: 20px;">${getItemEmoji(item.name)}</span>
+
                                     <span style="font-weight: 500;">${item.name}</span>
                                     <span style="color: var(--text-light);">(${item.quantity})</span>
                                 </div>
