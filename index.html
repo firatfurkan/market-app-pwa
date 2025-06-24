@@ -1238,41 +1238,40 @@ function getItemEmoji(item) {
     return '🛒';
 }
 
-// Kategori belirleme fonksiyonu
-function categorizeItem(item) {
-    const categories = {
-        '🥬 Sebze & Meyve': [
-            'domates', 'salatalık', 'elma', 'muz', 'patates', 'soğan', 
-            'marul', 'limon', 'havuç', 'biber', 'patlıcan', 'kabak',
-            'portakal', 'üzüm', 'çilek', 'kiraz', 'armut', 'brokoli', 'mantar',
-            'sarımsak', 'maydanoz', 'nane', 'dereotu', 'yeşil soğan'
-        ],
-        '🥩 Et & Süt': [
-            'tavuk', 'dana eti', 'balık', 'süt', 'yoğurt', 
-            'peynir', 'yumurta', 'tereyağı', 'kıyma', 'sosis', 'sucuk',
-            'kaşar', 'beyaz peynir', 'tavuk eti', 'mozzarella peyniri', 
-            'parmesan peyniri', 'tavuk suyu'
-        ],
-        '🍞 Temel Gıda': [
-            'ekmek', 'pirinç', 'makarna', 'un', 'şeker', 'tuz', 
-            'zeytinyağı', 'mercimek', 'nohut', 'bulgur', 'yulaf',
-            'bal', 'reçel', 'çay', 'kahve', 'domates sosu', 'pizza hamuru',
-            'kırmızı mercimek', 'ekmek içi', 'lavash', 'mantı', 'domates salçası',
-            'karabiber', 'sos', 'salça', 'baharat'
-        ],
-        '💧 İçecekler': [
-            'su', 'meyve suyu', 'kola', 'ayran', 'gazoz', 'şarap', 'bira',
-            'cola', 'fanta', 'sprite', 'icetea', 'ice tea', 'limonata', 
-            'portakal suyu', 'elma suyu', 'energy drink', 'enerji içeceği', 
-            'soda', 'pepsi', 'coca cola', 'redbull'
-        ],
-        '🧽 Temizlik & Hijyen': [
-            'deterjan', 'sabun', 'şampuan', 'diş macunu', 'çöp poşeti', 
-            'tuvalet kağıdı'
-        ]
-    };
-    
-        function categorizeItem(item) {  // ← EKSİK FONKSİYON BAŞLANGICI EKLENDİ
+        // Kategori belirleme fonksiyonu
+        function categorizeItem(item) {
+            const categories = {
+                '🥬 Sebze & Meyve': [
+                    'domates', 'salatalık', 'elma', 'muz', 'patates', 'soğan', 
+                    'marul', 'limon', 'havuç', 'biber', 'patlıcan', 'kabak',
+                    'portakal', 'üzüm', 'çilek', 'kiraz', 'armut', 'brokoli', 'mantar',
+                    'sarımsak', 'maydanoz', 'nane', 'dereotu', 'yeşil soğan'
+                ],
+                '🥩 Et & Süt': [
+                    'tavuk', 'dana eti', 'balık', 'süt', 'yoğurt', 
+                    'peynir', 'yumurta', 'tereyağı', 'kıyma', 'sosis', 'sucuk',
+                    'kaşar', 'beyaz peynir', 'tavuk eti', 'mozzarella peyniri', 
+                    'parmesan peyniri', 'tavuk suyu'
+                ],
+                '🍞 Temel Gıda': [
+                    'ekmek', 'pirinç', 'makarna', 'un', 'şeker', 'tuz', 
+                    'zeytinyağı', 'mercimek', 'nohut', 'bulgur', 'yulaf',
+                    'bal', 'reçel', 'çay', 'kahve', 'domates sosu', 'pizza hamuru',
+                    'kırmızı mercimek', 'ekmek içi', 'lavash', 'mantı', 'domates salçası',
+                    'karabiber', 'sos', 'salça', 'baharat'
+                ],
+                '💧 İçecekler': [
+                    'su', 'meyve suyu', 'kola', 'ayran', 'gazoz', 'şarap', 'bira',
+                    'cola', 'fanta', 'sprite', 'icetea', 'ice tea', 'limonata', 
+                    'portakal suyu', 'elma suyu', 'energy drink', 'enerji içeceği', 
+                    'soda', 'pepsi', 'coca cola', 'redbull'
+                ],
+                '🧽 Temizlik & Hijyen': [
+                    'deterjan', 'sabun', 'şampuan', 'diş macunu', 'çöp poşeti', 
+                    'tuvalet kağıdı'
+                ]
+            };
+            
             const itemLower = item.toLowerCase();
             
             for (const [category, items] of Object.entries(categories)) {
@@ -1284,6 +1283,7 @@ function categorizeItem(item) {
             }
             return '📦 Diğer';
         }
+
 
         // Save to localStorage
         function saveToStorage() {
