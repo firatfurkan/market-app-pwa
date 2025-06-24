@@ -1587,32 +1587,53 @@ function getItemEmoji(item) {
         }
 
         // --- GÜNCELLENDİ - Akıllı Ürün Öneri Fonksiyonları ---
-function showSuggestions() {
-    const inputElement = document.getElementById('newItemInput');
-    const suggestionsContainer = document.getElementById('product-suggestions');
+        // --- YENİ EKLENDİ - Akıllı Ürün Öneri Fonksiyonları ---
+        function showSuggestions() {
+            const inputElement = document.getElementById('newItemInput');
+            const suggestionsContainer = document.getElementById('product-suggestions');
 
-    if (!inputElement || !suggestionsContainer) return;
+            if (!inputElement || !suggestionsContainer) return;
 
-    const value = inputElement.value.toLowerCase();
-    appState.newItem = inputElement.value; // newItem'ı doğrudan güncelle
+            const value = inputElement.value.toLowerCase();
+            appState.newItem = inputElement.value;
 
-    if (!value) {
-        appState.productSuggestions = []; // Önerileri temizle
-        suggestionsContainer.innerHTML = ''; // HTML'i de temizle
-        return;
-    }
+            if (!value) {
+                appState.productSuggestions = [];
+                suggestionsContainer.innerHTML = '';
+                return;
+            }
 
-    const suggestions = productDatabase.filter(item =>
-        item.toLowerCase().startsWith(value)
-    ).slice(0, 5);
+            // Emoji'li ürünlerden emoji'siz versiyonu çıkarıp filtreleme
+            const suggestions = productDatabase.filter(item => {
+                const cleanItem = item.replace(/^[^\w\s]+\s*/, '').toLowerCase(); // Emoji'yi temizle
+                return cleanItem.startsWith(value);
+            }).slice(0, 8); // 8 öneri göster
 
-    appState.productSuggestions = suggestions; // productSuggestions'ı doğrudan güncelle
+            appState.productSuggestions = suggestions;
 
-    // Sadece öneri div'ini güncelle (re-render yerine)
-    suggestionsContainer.innerHTML = suggestions.map(item => `
-        <div class="suggestion-item" onclick="selectSuggestion('${item}')">${item}</div>
-    `).join('');
-}
+            // Öneri listesini güncelle
+            suggestionsContainer.innerHTML = suggestions.map(item => `
+                <div class="suggestion-item" onclick="selectSuggestion('${item.replace(/'/g, '\\\'')}')">${item}</div>
+            `).join('');
+        }
+
+        function selectSuggestion(itemName) {
+            const nameInput = document.getElementById('newItemInput');
+            const suggestionsContainer = document.getElementById('product-suggestions');
+            
+            if (nameInput) {
+                nameInput.value = itemName.replace(/^[^\w\s]+\s*/, ''); // Emoji'yi temizleyerek ekle
+                nameInput.focus();
+            }
+            
+            appState.newItem = itemName.replace(/^[^\w\s]+\s*/, '');
+            appState.productSuggestions = [];
+            
+            if (suggestionsContainer) {
+                suggestionsContainer.innerHTML = '';
+            }
+        }
+
 
 
         function selectSuggestion(itemName) {
