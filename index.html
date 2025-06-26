@@ -1450,7 +1450,313 @@ function getItemEmoji(item) {
             });
             showNotification(`Hoş geldin ${username}! 🎉`);
         }
+// Kategorileme fonksiyonu
+function categorizeItem(itemName) {
+    const name = itemName.toLowerCase().trim();
+    
+    // Kategoriler ve anahtar kelimeler
+    const categories = {
+        'Meyve & Sebze': [
+            'elma', 'armut', 'muz', 'portakal', 'limon', 'mandalina', 'üzüm', 'çilek', 'kiraz', 'şeftali',
+            'domates', 'salatalık', 'soğan', 'sarımsak', 'patates', 'havuç', 'kabak', 'patlıcan', 'biber',
+            'marul', 'roka', 'maydanoz', 'dereotu', 'nane', 'fesleğen', 'avokado', 'ananas', 'kivi',
+            'lahana', 'karnabahar', 'brokoli', 'ispanak', 'semizotu', 'bamya', 'fasulye', 'bezelye'
+        ],
+        'Et & Tavuk': [
+            'et', 'dana', 'kuzu', 'koyun', 'tavuk', 'hindi', 'balık', 'ton', 'somon', 'levrek',
+            'köfte', 'sucuk', 'salam', 'jambon', 'pastırma', 'karides', 'midye', 'ahtapot'
+        ],
+        'Süt Ürünleri': [
+            'süt', 'yoğurt', 'peynir', 'kaşar', 'beyaz peynir', 'tulum', 'lor', 'krema', 'tereyağı',
+            'margarin', 'ayran', 'kefir', 'labne', 'ricotta', 'mozzarella', 'kaşkaval'
+        ],
+        'Unlu Mamuller': [
+            'ekmek', 'somun', 'francala', 'pide', 'simit', 'poğaça', 'börek', 'makarna', 'spagetti',
+            'erişte', 'bulgur', 'pirinç', 'un', 'maya', 'galeta', 'bisküvi', 'kraker'
+        ],
+        'İçecek': [
+            'su', 'çay', 'kahve', 'kola', 'fanta', 'sprite', 'meyve suyu', 'şarap', 'bira',
+            'gazoz', 'soda', 'ayran', 'smoothie', 'enerji içeceği', 'limonata'
+        ],
+        'Temizlik': [
+            'deterjan', 'sabun', 'şampuan', 'diş macunu', 'temizlik', 'çamaşır', 'bulaşık',
+            'kağıt havlu', 'tuvalet kağıdı', 'mendil', 'çöp poşeti', 'sünger'
+        ],
+        'Bakliyat': [
+            'nohut', 'mercimek', 'fasulye', 'barbunya', 'börülce', 'bezelye', 'bakla', 'soya'
+        ],
+        'Baharat': [
+            'tuz', 'karabiber', 'kırmızı biber', 'kimyon', 'nane', 'kekik', 'defne',
+            'tarçın', 'karanfil', 'baharat', 'curry', 'zerdeçal', 'sumak'
+        ],
+        'Atıştırmalık': [
+            'cips', 'çikolata', 'gofret', 'kek', 'kurabiye', 'kraker', 'çerez', 'fındık',
+            'fıstık', 'badem', 'ceviz', 'dondurma', 'şeker', 'lokum'
+        ]
+    };
+    
+    // Her kategoriyi kontrol et
+    for (const [category, keywords] of Object.entries(categories)) {
+        for (const keyword of keywords) {
+            if (name.includes(keyword)) {
+                return category;
+            }
+        }
+    }
+    
+    return 'Diğer'; // Eğer hiç kategoriye uymuyorsa
+}
 
+// Emoji fonksiyonu (eğer yoksa)
+function getItemEmoji(itemName) {
+    const name = itemName.toLowerCase().trim();
+    
+    const emojiMap = {
+        // Meyveler
+        'elma': '🍎', 'armut': '🍐', 'muz': '🍌', 'portakal': '🍊', 'limon': '🍋',
+        'üzüm': '🍇', 'çilek': '🍓', 'kiraz': '🍒', 'şeftali': '🍑', 'ananas': '🍍',
+        'kivi': '🥝', 'avokado': '🥑', 'mandalina': '🍊',
+        
+        // Sebzeler
+        'domates': '🍅', 'salatalık': '🥒', 'havuç': '🥕', 'patates': '🥔',
+        'soğan': '🧅', 'biber': '🌶️', 'mısır': '🌽', 'brokoli': '🥦',
+        'patlıcan': '🍆', 'kabak': '🥒', 'marul': '🥬',
+        
+        // Et & Tavuk
+        'et': '🥩', 'tavuk': '🍗', 'balık': '🐟', 'köfte': '🍖',
+        'sucuk': '🌭', 'salam': '🥓',
+        
+        // Süt Ürünleri
+        'süt': '🥛', 'peynir': '🧀', 'yoğurt': '🍶', 'tereyağı': '🧈',
+        
+        // Unlu Mamuller
+        'ekmek': '🍞', 'makarna': '🍝', 'pirinç': '🍚', 'börek': '🥟',
+        
+        // İçecekler
+        'su': '💧', 'çay': '🍵', 'kahve': '☕', 'bira': '🍺',
+        'şarap': '🍷', 'kola': '🥤', 'meyve suyu': '🧃',
+        
+        // Diğer
+        'yumurta': '🥚', 'bal': '🍯', 'şeker': '🍯', 'tuz': '🧂',
+        'çikolata': '🍫', 'kek': '🍰', 'bisküvi': '🍪', 'dondurma': '🍦'
+    };
+    
+    // Tam eşleşme ara
+    if (emojiMap[name]) {
+        return emojiMap[name];
+    }
+    
+    // Kısmi eşleşme ara
+    for (const [keyword, emoji] of Object.entries(emojiMap)) {
+        if (name.includes(keyword)) {
+            return emoji;
+        }
+    }
+    
+    return '🛒'; // Varsayılan emoji
+}
+
+// Ürün ekleme fonksiyonu
+function addItem(name, quantity, unit) {
+    // Input validation
+    if (!name || !name.trim()) {
+        showNotification('❌ Lütfen ürün adı girin!', 'error');
+        return;
+    }
+    
+    if (!quantity || quantity <= 0) {
+        showNotification('❌ Lütfen geçerli bir miktar girin!', 'error');
+        return;
+    }
+    
+    const emoji = getItemEmoji(name);
+    const displayQuantity = `${quantity} ${unit}`;
+    
+    const newShoppingItem = {
+        id: Date.now() + Math.random(),
+        name: name.trim(),
+        quantity: displayQuantity,
+        displayName: `${name.trim()} (${displayQuantity})`,
+        emoji: emoji,
+        completed: false,
+        completedBy: null,
+        addedBy: appState.user?.name || 'Anonim',
+        category: categorizeItem(name),
+        addedAt: new Date().toLocaleString('tr-TR')
+    };
+    
+    // State güncelleme
+    try {
+        updateState({
+            shoppingList: [...appState.shoppingList, newShoppingItem],
+            newItem: '',
+            newQuantity: '1',
+            newUnit: 'adet'
+        });
+        
+        // Önerileri temizle
+        appState.productSuggestions = [];
+        const suggestionsEl = document.getElementById('product-suggestions');
+        if (suggestionsEl) {
+            suggestionsEl.innerHTML = '';
+        }
+        
+        // Input alanlarını temizle
+        const nameInput = document.getElementById('item-name');
+        const quantityInput = document.getElementById('item-quantity');
+        const unitSelect = document.getElementById('item-unit');
+        
+        if (nameInput) nameInput.value = '';
+        if (quantityInput) quantityInput.value = '1';
+        if (unitSelect) unitSelect.value = 'adet';
+        
+        showNotification(`${emoji} ${name.trim()} (${displayQuantity}) listeye eklendi! ✅`, 'success');
+        
+    } catch (error) {
+        console.error('Ürün eklenirken hata:', error);
+        showNotification('❌ Ürün eklenirken bir hata oluştu!', 'error');
+    }
+}
+
+// Form submit handler
+function handleAddItemSubmit(event) {
+    event.preventDefault(); // Formun varsayılan submit davranışını engelle
+    
+    const nameInput = document.getElementById('item-name');
+    const quantityInput = document.getElementById('item-quantity');
+    const unitSelect = document.getElementById('item-unit');
+    
+    if (!nameInput || !quantityInput || !unitSelect) {
+        console.error('Form elementleri bulunamadı');
+        showNotification('❌ Form elementleri bulunamadı!', 'error');
+        return;
+    }
+    
+    const name = nameInput.value.trim();
+    const quantity = parseFloat(quantityInput.value);
+    const unit = unitSelect.value;
+    
+    addItem(name, quantity, unit);
+}
+
+// Buton click handler
+function handleAddButtonClick() {
+    const nameInput = document.getElementById('item-name');
+    const quantityInput = document.getElementById('item-quantity');
+    const unitSelect = document.getElementById('item-unit');
+    
+    if (!nameInput || !quantityInput || !unitSelect) {
+        console.error('Form elementleri bulunamadı');
+        showNotification('❌ Form elementleri bulunamadı!', 'error');
+        return;
+    }
+    
+    const name = nameInput.value.trim();
+    const quantity = parseFloat(quantityInput.value);
+    const unit = unitSelect.value;
+    
+    addItem(name, quantity, unit);
+}
+
+// Event listener'ları bağlama
+document.addEventListener('DOMContentLoaded', function() {
+    // Form submit event listener
+    const addForm = document.getElementById('add-item-form');
+    if (addForm) {
+        addForm.addEventListener('submit', handleAddItemSubmit);
+    }
+    
+    // Buton click event listener
+    const addButton = document.getElementById('add-item-btn');
+    if (addButton) {
+        addButton.addEventListener('click', handleAddButtonClick);
+    }
+    
+    // Enter tuşu ile ekleme
+    const nameInput = document.getElementById('item-name');
+    if (nameInput) {
+        nameInput.addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                handleAddButtonClick();
+            }
+        });
+    }
+});
+
+// Notification fonksiyonu (eğer yoksa)
+function showNotification(message, type = 'info') {
+    // Mevcut notification varsa kaldır
+    const existingNotification = document.querySelector('.notification');
+    if (existingNotification) {
+        existingNotification.remove();
+    }
+    
+    // Yeni notification oluştur
+    const notification = document.createElement('div');
+    notification.className = `notification notification-${type}`;
+    notification.textContent = message;
+    notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        padding: 15px 20px;
+        border-radius: 8px;
+        color: white;
+        font-weight: bold;
+        z-index: 1000;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        max-width: 300px;
+        word-wrap: break-word;
+    `;
+    
+    // Tip göre renk ayarla
+    switch (type) {
+        case 'success':
+            notification.style.backgroundColor = '#4CAF50';
+            break;
+        case 'error':
+            notification.style.backgroundColor = '#f44336';
+            break;
+        default:
+            notification.style.backgroundColor = '#2196F3';
+    }
+    
+    document.body.appendChild(notification);
+    
+    // Animasyon
+    setTimeout(() => {
+        notification.style.opacity = '1';
+    }, 100);
+    
+    // Otomatik kaldırma
+    setTimeout(() => {
+        notification.style.opacity = '0';
+        setTimeout(() => {
+            if (notification.parentNode) {
+                notification.parentNode.removeChild(notification);
+            }
+        }, 300);
+    }, 3000);
+}
+
+// HTML örneği (eğer form yapınız bu şekilde değilse düzenleyin)
+/*
+<form id="add-item-form">
+    <input type="text" id="item-name" placeholder="Ürün adı" required>
+    <input type="number" id="item-quantity" value="1" min="0.1" step="0.1" required>
+    <select id="item-unit">
+        <option value="adet">Adet</option>
+        <option value="kg">Kg</option>
+        <option value="gr">Gr</option>
+        <option value="lt">Lt</option>
+        <option value="ml">Ml</option>
+    </select>
+    <button type="submit" id="add-item-btn">Ekle</button>
+</form>
+<div id="product-suggestions"></div>
+*/
           // Ürün ekleme fonksiyonu
 function addItem(name, quantity, unit) {
     // Input validation
