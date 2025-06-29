@@ -134,11 +134,11 @@
         }
 
         .login-logo {
-            width: 100px; /* Logo boyutu */
-            height: auto;
-            border-radius: 20%; /* Hafif yuvarlak köşeler */
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            font-size: 80px; /* Emoji boyutu */
+            line-height: 1; /* Satır yüksekliği */
+            margin-bottom: 10px;
         }
+
 
         .login-form h1 {
             font-size: 36px;
@@ -212,8 +212,8 @@
         }
 
         .header-logo {
-            height: 32px; /* Header logosu boyutu */
-            width: auto;
+            font-size: 32px; /* Emoji boyutu */
+            line-height: 1; /* Satır yüksekliği */
         }
 
         .user-info {
@@ -1572,7 +1572,7 @@
         const emojiMap = {
             'domates': '🍅', 'salatalık': '🥒', 'elma': '🍎', 'muz': '🍌', 'patates': '🥔',
             'soğan': '🧅', 'marul': '🥬', 'limon': '🍋', 'havuç': '🥕', 'biber': '🌶️',
-            'patlıcan': '🍆', 'kabak': '🥒', 'tavuk': '🍗', 'dana eti': '🥩', 'balık': '🐟',
+            'patlıcan': '�', 'kabak': '🥒', 'tavuk': '🍗', 'dana eti': '🥩', 'balık': '🐟',
             'süt': '🥛', 'yoğurt': '🥛', 'peynir': '🧀', 'yumurta': '🥚', 'ekmek': '🍞',
             'pirinç': '🍚', 'makarna': '🍝', 'un': '🌾', 'şeker': '🍯', 'tuz': '🧂',
             'zeytinyağı': '🌿', 'zeytin': '🍇', 'su': '💧', 'deterjan': '🧴', 'sabun': '🧼',
@@ -2256,8 +2256,7 @@
                 <div class="login-container">
                     <div class="login-form">
                         <div class="login-logo-container">
-                            <!-- Logo Image -->
-                            <img src="https://raw.githubusercontent.com/google-gemini/cookbook/main/examples/images/logo.png" alt="AkıllıMarket Logo" class="login-logo" onerror="this.onerror=null;this.src='https://placehold.co/100x100/6366F1/FFFFFF?text=Logo'">
+                            <span class="login-logo">🛍️</span>
                             <h1>AkıllıMarket</h1>
                         </div>
                         <p>Akıllı alışveriş asistanınız</p>
@@ -2284,8 +2283,7 @@
             return `
                 <header class="app-header">
                     <h1>
-                        <!-- Header Logo -->
-                        <img src="https://raw.githubusercontent.com/google-gemini/cookbook/main/examples/images/logo.png" alt="AkıllıMarket Logo" class="header-logo" onerror="this.onerror=null;this.src='https://placehold.co/32x32/6366F1/FFFFFF?text=Logo'">
+                        <span class="header-logo">🛍️</span>
                         AkıllıMarket
                     </h1>
                     <div class="user-info">
@@ -2424,8 +2422,7 @@
             return `
                 <header class="app-header">
                     <h1>
-                        <!-- Header Logo -->
-                        <img src="https://raw.githubusercontent.com/google-gemini/cookbook/main/examples/images/logo.png" alt="AkıllıMarket Logo" class="header-logo" onerror="this.onerror=null;this.src='https://placehold.co/32x32/6366F1/FFFFFF?text=Logo'">
+                        <span class="header-logo">🛍️</span>
                         ${appState.chefName}
                     </h1>
                     <div class="user-info">
@@ -2533,8 +2530,7 @@
             return `
                 <header class="app-header">
                     <h1>
-                        <!-- Header Logo -->
-                        <img src="https://raw.githubusercontent.com/google-gemini/cookbook/main/examples/images/logo.png" alt="AkıllıMarket Logo" class="header-logo" onerror="this.onerror=null;this.src='https://placehold.co/32x32/6366F1/FFFFFF?text=Logo'">
+                        <span class="header-logo">🛍️</span>
                         Ayarlar
                     </h1>
                     <div class="user-info">
@@ -2576,6 +2572,38 @@
                                 <div class="toggle-slider"></div>
                             </div>
                         </div>
+                    </div>
+
+                    <div class="card">
+                        <h2 class="card-title">📢 Sosyal Paylaşım</h2>
+                        <p style="margin-bottom: 16px; color: var(--text-light);">
+                            Başarılarınızı veya listelerinizi arkadaşlarınızla paylaşın!
+                        </p>
+                        <div style="display: flex; flex-direction: column; gap: 12px;">
+                            <button class="btn-primary" onclick="shareShoppingList()">
+                                📝 Alışveriş Listemi Paylaş
+                            </button>
+                            <button class="btn-secondary" onclick="shareAchievement()">
+                                🏆 Başarımı Paylaş
+                            </button>
+                            <button class="btn-secondary" onclick="shareFavoriteProduct()">
+                                ❤️ Favori Ürünümü Paylaş
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h2 class="card-title">🤝 Sosyal Etkileşim</h2>
+                        <p style="margin-bottom: 16px; color: var(--text-light);">
+                            Arkadaşlarınızı davet edin veya yarışmalara katılın!
+                        </p>
+                        <div class="input-group">
+                            <input type="text" id="friendInviteInput" placeholder="Arkadaşınızın adını girin">
+                            <button class="btn-primary" onclick="inviteFriend()">Davet Et</button>
+                        </div>
+                        <button class="btn-secondary" onclick="showCompetitionsInfo()">
+                            🏅 Yarışmalar (Yakında)
+                        </button>
                     </div>
 
                     <div class="card">
@@ -2797,6 +2825,74 @@
             }
         }
 
+        // --- Sosyal Paylaşım Fonksiyonları ---
+        async function shareContent(title, text) {
+            if (navigator.share) {
+                try {
+                    await navigator.share({
+                        title: title,
+                        text: text,
+                    });
+                    showNotification('İçerik başarıyla paylaşıldı! 🚀');
+                } catch (error) {
+                    if (error.name === 'AbortError') {
+                        showNotification('Paylaşma iptal edildi.', 'info');
+                    } else {
+                        console.error('İçerik paylaşılırken hata:', error);
+                        showNotification('İçerik paylaşılamadı.', 'error');
+                    }
+                }
+            } else {
+                // Fallback: Copy to clipboard
+                copyTextToClipboardFallback(`${title}\n${text}`);
+                showNotification('Paylaşım özelliği desteklenmiyor. İçerik panoya kopyalandı! 📋');
+            }
+        }
+
+        window.shareShoppingList = function() {
+            const listItems = appState.shoppingList.map(item => `${getItemEmoji(item.name)} ${item.name} (${item.quantity})`).join('\n');
+            const message = `AkıllıMarket alışveriş listem:\n${listItems}\n\n#AkıllıMarket #AlışverişListesi`;
+            shareContent('AkıllıMarket Alışveriş Listem', message);
+        };
+
+        window.shareAchievement = function() {
+            const completedCount = appState.shoppingList.filter(item => item.completed).length;
+            const totalCount = appState.shoppingList.length;
+            const message = `Bugün AkıllıMarket ile ${totalCount} üründen ${completedCount} tanesini aldım! 🚀 Harika bir alışveriş günü! #AkıllıMarket #Başarı`;
+            shareContent('AkıllıMarket Başarım', message);
+        };
+
+        window.shareFavoriteProduct = function() {
+            let favoriteProduct = 'Favori bir ürünüm yok.';
+            if (appState.shoppingList.length > 0) {
+                // For simplicity, let's pick a random item or the most recent one
+                const randomIndex = Math.floor(Math.random() * appState.shoppingList.length);
+                const item = appState.shoppingList[randomIndex];
+                favoriteProduct = `En sevdiğim ürün: ${getItemEmoji(item.name)} ${item.name} (${item.quantity})! Sizinki ne?`;
+            } else {
+                favoriteProduct = "Henüz alışveriş listemde bir ürün yok, ama çok yakında harika ürünler ekleyeceğim!";
+            }
+            const message = `${favoriteProduct}\n\n#AkıllıMarket #FavoriÜrün`;
+            shareContent('AkıllıMarket Favori Ürünüm', message);
+        };
+
+        // --- Sosyal Etkileşim Fonksiyonları (Simüle Edilmiş) ---
+        window.inviteFriend = function() {
+            const friendNameInput = document.getElementById('friendInviteInput');
+            const friendName = friendNameInput ? friendNameInput.value.trim() : '';
+
+            if (friendName) {
+                showNotification(`${friendName} adlı arkadaşına davet gönderildi! 🎉 (Simülasyon)`, 'success');
+                if (friendNameInput) friendNameInput.value = ''; // Clear input
+            } else {
+                showNotification('Lütfen davet etmek istediğiniz arkadaşınızın adını girin.', 'info');
+            }
+        };
+
+        window.showCompetitionsInfo = function() {
+            showNotification('Yarışma ve özel etkinlik özelliklerimiz çok yakında aktif olacak! Bizi takipte kalın. 🏅', 'info');
+        };
+
         // --- GEMINI API ENTEGRASYONLARI ---
 
         /**
@@ -2872,7 +2968,9 @@
                     }
                 };
 
-                const apiKey = ""; // Canvas runtime tarafından sağlanacak
+                // Canvas ortamı tarafından sağlanacak olan API anahtarı.
+                // Bu anahtar otomatik olarak enjekte edilecektir.
+                const apiKey = ""; 
                 const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
 
                 const response = await fetch(apiUrl, {
@@ -3102,3 +3200,4 @@
     </script>
 </body>
 </html>
+�
