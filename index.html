@@ -1377,7 +1377,7 @@
                     { name: 'maydanoz', quantity: '1 demet' },
                     { name: 'zeytinyağı', quantity: '1 su bardağı' }
                 ],
-                response: "🫒 İmam Bayıldı! Zeytinyağlı sebze yemeklerinin kralı.",
+                response: "� İmam Bayıldı! Zeytinyağlı sebze yemeklerinin kralı.",
                 instructions: [
                     "Patlıcanları alacalı soyup ortadan ikiye kesin ve tuzlu suda bekletin.",
                     "Soğan, sarımsak, domates ve maydanozu ince ince doğrayın.",
@@ -1572,7 +1572,7 @@
         const emojiMap = {
             'domates': '🍅', 'salatalık': '🥒', 'elma': '🍎', 'muz': '🍌', 'patates': '🥔',
             'soğan': '🧅', 'marul': '🥬', 'limon': '🍋', 'havuç': '🥕', 'biber': '🌶️',
-            'patlıcan': '�', 'kabak': '🥒', 'tavuk': '🍗', 'dana eti': '🥩', 'balık': '🐟',
+            'patlıcan': '🍆', 'kabak': '🥒', 'tavuk': '🍗', 'dana eti': '🥩', 'balık': '🐟',
             'süt': '🥛', 'yoğurt': '🥛', 'peynir': '🧀', 'yumurta': '🥚', 'ekmek': '🍞',
             'pirinç': '🍚', 'makarna': '🍝', 'un': '🌾', 'şeker': '🍯', 'tuz': '🧂',
             'zeytinyağı': '🌿', 'zeytin': '🍇', 'su': '💧', 'deterjan': '🧴', 'sabun': '🧼',
@@ -2968,9 +2968,8 @@
                     }
                 };
 
-                // Canvas ortamı tarafından sağlanacak olan API anahtarı.
-                // Bu anahtar otomatik olarak enjekte edilecektir.
-                const apiKey = ""; 
+                // Kullanıcının sağladığı API anahtarı
+                const apiKey = "AIzaSyA57iBL9SygHxlRMj2nfM5vywunDIZ3T_4"; 
                 const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
 
                 const response = await fetch(apiUrl, {
@@ -3005,10 +3004,6 @@
                     updateState({ aiGeneratedRecipe: generatedRecipe });
                     showNotification('Tarif başarıyla oluşturuldu! 🧑‍🍳', 'success');
 
-                    // Yeni render döngüsünden sonra tarifin görünür olmasını sağla
-                    // renderChef() zaten çağrıldığı için bu satıra gerek kalmayabilir,
-                    // ancak doğrudan element içeriğini güncellemeyi de düşünebiliriz.
-                    // Şimdilik renderChef() içindeki conditional rendering'e güveniyoruz.
                 } else {
                     showNotification('AI tarif oluşturamadı. Daha fazla bilgi sağlamayı deneyin.', 'info');
                 }
